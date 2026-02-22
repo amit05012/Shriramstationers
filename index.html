@@ -10,29 +10,35 @@
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; background-color: #f8fafc; }
+        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; background-color: #0f172a; color: #f8fafc; }
         .hindi-font { font-weight: 800; letter-spacing: -0.5px; }
         
         /* Smooth hover effect for service cards */
-        .service-card { transition: all 0.3s ease; }
-        .service-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1); border-color: #3b82f6; }
+        .service-card { transition: all 0.3s ease; background-color: #1e293b; border: 1px solid #334155; }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); border-color: #94a3b8; }
+        
+        /* Premium Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="text-slate-900">
+<body class="antialiased">
 
-    <nav class="bg-white/95 backdrop-blur-md py-4 px-6 shadow-sm flex justify-between items-center sticky top-0 z-50">
-        <div class="text-2xl font-bold text-blue-900 tracking-tight flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
-            <i class="fas fa-book-open text-blue-600"></i>
-            Shriram <span class="text-blue-500">Stationers</span>
+    <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
+        <div class="cursor-pointer flex items-center gap-3" onclick="window.scrollTo(0,0)">
+            <img src="logo.jpg" alt="Shriram Stationers SR Logo" class="h-12 md:h-14 object-contain rounded-md shadow-sm border border-slate-700">
+            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100">Shriram Stationers</span>
         </div>
         
-        <div class="hidden md:flex space-x-8 font-semibold text-slate-600 items-center">
-            <a href="#home" class="hover:text-blue-600 transition">Home</a>
-            <a href="#about" class="hover:text-blue-600 transition">About Us</a>
-            <a href="/pdftools" class="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white transition border border-blue-200">
-                <i class="fas fa-tools mr-1"></i> Free PDF Tools
+        <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
+            <a href="#home" class="hover:text-white transition">Home</a>
+            <a href="#about" class="hover:text-white transition">About Us</a>
+            <a href="/pdftools" class="bg-slate-800 text-slate-100 px-5 py-2 rounded-lg hover:bg-slate-700 transition border border-slate-600 shadow-inner">
+                <i class="fas fa-tools text-blue-400 mr-2"></i> Free PDF Tools
             </a>
-            <a href="#contact" class="hover:text-blue-600 transition">Contact</a>
+            <a href="#contact" class="hover:text-white transition">Contact</a>
         </div>
 
         <a href="https://wa.me/919414711702" class="md:hidden bg-green-500 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg">
@@ -40,32 +46,32 @@
         </a>
     </nav>
 
-    <header id="home" class="relative bg-blue-900 text-white overflow-hidden py-24 px-6 text-center">
-        <div class="absolute inset-0 opacity-10 pointer-events-none">
+    <header id="home" class="relative bg-slate-900 overflow-hidden py-24 px-6 text-center border-b border-slate-800">
+        <div class="absolute inset-0 opacity-5 pointer-events-none">
             <svg class="h-full w-full" fill="currentColor"><pattern id="pattern" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M0 40L40 0H20L0 20M40 40V20L20 40"></path></pattern><rect width="100%" height="100%" fill="url(#pattern)"></rect></svg>
         </div>
 
         <div class="relative max-w-4xl mx-auto">
-            <div class="inline-block bg-yellow-400 text-blue-900 font-bold px-4 py-1 rounded-full text-sm mb-6 uppercase tracking-wider">
+            <div class="inline-block bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 font-bold px-4 py-1 rounded-full text-sm mb-6 uppercase tracking-wider shadow-sm">
                 Special Offer for Students
             </div>
             
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight hindi-font">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight hindi-font text-white">
                 स्टूडेंट्स के लिए स्पेशल डिस्काउंट!<br>
                 नोट्स प्रिंट करवाएं मात्र <span class="text-yellow-400">50 पैसे / साइड</span>
             </h1>
-            <p class="text-lg md:text-xl text-blue-100 mb-10 max-w-2xl mx-auto font-medium">
-                We charge just ₹1 per paper sheet for double-sided high-speed printing. Best quality for Board Exams, REET, and Coaching Notes.
+            <p class="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto font-medium">
+                We charge just ₹1 per paper sheet for double-sided high-speed printing. Best quality for Board Exams, REET, and Coaching Notes in Dausa.
             </p>
             
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="https://wa.me/919414711702?text=Hello Shriram Stationers, I want to print my notes." target="_blank" 
-                   class="bg-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-green-600 transition transform hover:scale-105 flex items-center justify-center">
+                   class="bg-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-green-500/20 hover:bg-green-600 transition transform hover:-translate-y-1 flex items-center justify-center">
                     <i class="fab fa-whatsapp mr-3 text-2xl"></i> Send PDF on WhatsApp
                 </a>
                 <a href="/pdftools" 
-                   class="bg-white text-blue-900 px-8 py-4 rounded-xl font-bold text-lg shadow-xl hover:bg-blue-50 transition transform hover:scale-105 flex items-center justify-center">
-                    <i class="fas fa-file-pdf mr-2"></i> Edit PDF First
+                   class="bg-slate-800 text-white border border-slate-600 px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-slate-700 transition transform hover:-translate-y-1 flex items-center justify-center">
+                    <i class="fas fa-file-pdf text-blue-400 mr-2"></i> Edit PDF First
                 </a>
             </div>
         </div>
@@ -73,78 +79,78 @@
 
     <section id="about" class="max-w-6xl mx-auto py-20 px-6">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-800 mb-4">Welcome to Shriram Stationers</h2>
-            <p class="text-slate-500 max-w-2xl mx-auto">
+            <h2 class="text-3xl font-bold text-white mb-4">Welcome to Shriram Stationers</h2>
+            <p class="text-slate-400 max-w-2xl mx-auto leading-relaxed">
                 Proudly serving the students of Dausa since our inauguration on <strong>September 5, 2024</strong>. We are committed to providing top-quality stationery and lightning-fast printing services at the lowest prices.
             </p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
-            <div class="service-card bg-white p-8 rounded-2xl border border-slate-200 text-center">
-                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-print text-2xl"></i></div>
-                <h3 class="text-xl font-bold mb-3">Bulk Notes Printing</h3>
-                <p class="text-slate-500 text-sm">₹1 per sheet (50 paisa per side). Laser-sharp quality perfect for reading long coaching materials.</p>
+            <div class="service-card p-8 rounded-2xl text-center">
+                <div class="w-16 h-16 bg-slate-800 border border-slate-700 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-print text-2xl"></i></div>
+                <h3 class="text-xl font-bold mb-3 text-white">Bulk Notes Printing</h3>
+                <p class="text-slate-400 text-sm">₹1 per sheet (50 paisa per side). Laser-sharp quality perfect for reading long coaching materials.</p>
             </div>
             
-            <div class="service-card bg-white p-8 rounded-2xl border border-slate-200 text-center relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">Free</div>
-                <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-magic text-2xl"></i></div>
-                <h3 class="text-xl font-bold mb-3">Online PDF Tools</h3>
-                <p class="text-slate-500 text-sm">Merge, rotate, or clean your PDFs directly on our website before sending them to us for printing.</p>
+            <div class="service-card p-8 rounded-2xl text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-4 py-1 rounded-bl-lg">100% Free</div>
+                <div class="w-16 h-16 bg-slate-800 border border-slate-700 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-magic text-2xl"></i></div>
+                <h3 class="text-xl font-bold mb-3 text-white">Online PDF Tools</h3>
+                <p class="text-slate-400 text-sm">Merge, rotate, or clean your PDFs directly on our website before sending them to us for printing.</p>
             </div>
 
-            <div class="service-card bg-white p-8 rounded-2xl border border-slate-200 text-center">
-                <div class="w-16 h-16 bg-yellow-50 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-pen-nib text-2xl"></i></div>
-                <h3 class="text-xl font-bold mb-3">Student Stationery</h3>
-                <p class="text-slate-500 text-sm">From premium registers to pens for competitive exams, we stock everything a student needs to succeed.</p>
+            <div class="service-card p-8 rounded-2xl text-center">
+                <div class="w-16 h-16 bg-slate-800 border border-slate-700 text-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-pen-nib text-2xl"></i></div>
+                <h3 class="text-xl font-bold mb-3 text-white">Student Stationery</h3>
+                <p class="text-slate-400 text-sm">From premium registers to pens for competitive exams, we stock everything a student needs to succeed.</p>
             </div>
         </div>
     </section>
 
-    <footer id="contact" class="bg-slate-900 text-white pt-16 pb-8 px-6 border-t-4 border-blue-600">
+    <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
         <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
             
             <div>
-                <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
-                    <i class="fas fa-book-open text-blue-500"></i> Shriram Stationers
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
+                    <img src="logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
                 </h3>
-                <p class="text-slate-400 mb-6 text-sm leading-relaxed">
-                    Dausa's trusted hub for affordable student printing and quality stationery. Established Sept 5, 2024.
+                <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                    Dausa's trusted hub for affordable student printing and quality stationery.
                 </p>
                 <div class="flex gap-4">
-                    <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-pink-600 transition" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://wa.me/919414711702" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-green-500 transition" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-slate-700 transition" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-slate-700 transition" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/919414711702" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-green-600 transition text-white" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
             
             <div>
-                <h4 class="text-lg font-bold mb-6 text-blue-400 uppercase tracking-wider text-sm">Visit Our Shop</h4>
-                <ul class="space-y-4 text-slate-300">
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Our Shop</h4>
+                <ul class="space-y-4 text-slate-400">
                     <li class="flex items-start gap-3">
-                        <i class="fas fa-map-marker-alt mt-1 text-red-400"></i>
+                        <i class="fas fa-map-marker-alt mt-1 text-slate-500"></i>
                         <span>Agra Road / Lalsot Road<br>Dausa, Rajasthan</span>
                     </li>
                 </ul>
             </div>
 
             <div>
-                <h4 class="text-lg font-bold mb-6 text-blue-400 uppercase tracking-wider text-sm">Contact Us</h4>
-                <ul class="space-y-4 text-slate-300">
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Contact Us</h4>
+                <ul class="space-y-4 text-slate-400">
                     <li class="flex items-center gap-3">
-                        <i class="fas fa-phone-alt text-blue-400"></i>
-                        <span class="font-bold text-lg">9414711702</span>
+                        <i class="fas fa-phone-alt text-slate-500"></i>
+                        <span class="font-bold text-lg text-white">9414711702</span>
                     </li>
                     <li>
-                        <a href="https://wa.me/919414711702" class="inline-flex items-center gap-2 text-green-400 hover:text-green-300 font-medium">
-                            <i class="fab fa-whatsapp"></i> Message us on WhatsApp
+                        <a href="https://wa.me/919414711702" class="inline-flex items-center gap-2 text-green-500 hover:text-green-400 font-medium transition">
+                            <i class="fab fa-whatsapp text-lg"></i> Message us on WhatsApp
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
         
-        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-500 text-sm">
+        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
             &copy; 2026 Shriram Stationers. All Rights Reserved.
         </div>
     </footer>
