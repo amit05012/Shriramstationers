@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free PDF Tools - Shriram Stationers</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; background-color: #0f172a; color: #f8fafc; }
+        
+        .tool-card { transition: all 0.3s ease; background-color: #1e293b; border: 1px solid #334155; position: relative; overflow: hidden; }
+        .tool-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4); border-color: #3b82f6; }
+        .tool-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, #2563eb, #60a5fa); transform: scaleX(0); transition: transform 0.3s ease;
+        }
+        .tool-card:hover::before { transform: scaleX(1); }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
+        <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='/'">
+            <img src="../logo.jpg" alt="Shriram Stationers" class="h-10 md:h-12 object-contain rounded-md border border-slate-700">
+            <span class="text-xl font-bold tracking-tight hidden sm:block text-slate-100">Shriram Stationers</span>
+        </div>
+        
+        <div class="flex space-x-6 font-semibold text-slate-300 items-center">
+            <a href="/" class="hover:text-white transition"><i class="fas fa-home mr-1"></i> Back to Shop</a>
+            <a href="https://wa.me/919414711702" target="_blank" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition shadow-lg text-sm md:text-base">
+                <i class="fab fa-whatsapp mr-1"></i> Print Order
+            </a>
+        </div>
+    </nav>
+
+    <header class="py-16 px-6 text-center border-b border-slate-800 bg-slate-800/50">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">
+            Student <span class="text-blue-400">PDF Toolkit</span>
+        </h1>
+        <p class="text-slate-400 max-w-2xl mx-auto text-lg">
+            Organize your notes for free directly in your browser. When you are ready, send them to us for high-speed double-sided printing at just ₹1 per sheet (50 paisa per side).
+        </p>
+    </header>
+
+    <section class="max-w-7xl mx-auto py-16 px-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <div onclick="mergePDFs()" class="tool-card p-8 rounded-3xl text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-blue-900/50 text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors border border-blue-800"><i class="fas fa-layer-group text-2xl"></i></div>
+                <h3 class="font-bold text-lg text-white">Merge PDFs</h3>
+                <p class="text-xs text-slate-400 mt-2">Combine multiple chapters</p>
+            </div>
+
+            <div onclick="splitPDF()" class="tool-card p-8 rounded-3xl text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-red-900/50 text-red-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-red-500 group-hover:text-white transition-colors border border-red-800"><i class="fas fa-cut text-2xl"></i></div>
+                <h3 class="font-bold text-lg text-white">Split PDF</h3>
+                <p class="text-xs text-slate-400 mt-2">Extract specific pages</p>
+            </div>
+
+            <div onclick="imageToPDF()" class="tool-card p-8 rounded-3xl text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-green-900/50 text-green-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-green-500 group-hover:text-white transition-colors border border-green-800"><i class="fas fa-images text-2xl"></i></div>
+                <h3 class="font-bold text-lg text-white">Image to PDF</h3>
+                <p class="text-xs text-slate-400 mt-2">Convert photos of notes</p>
+            </div>
+
+            <div onclick="addPageNumbers()" class="tool-card p-8 rounded-3xl text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-purple-900/50 text-purple-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-500 group-hover:text-white transition-colors border border-purple-800"><i class="fas fa-sort-numeric-down text-2xl"></i></div>
+                <h3 class="font-bold text-lg text-white">Page Numbers</h3>
+                <p class="text-xs text-slate-400 mt-2">Organize long documents</p>
+            </div>
+
+            <div onclick="alert('Combine Slides tool is under construction! This requires advanced math logic.')" class="tool-card p-8 rounded-3xl text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-orange-900/50 text-orange-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-500 group-hover:text-white transition-colors border border-orange-800"><i class="fas fa-th-large text-2xl"></i></div>
+                <h3 class="font-bold text-lg text-white">Combine Slides</h3>
+                <p class="text-xs text-slate-400 mt-2">Multiple slides on 1 page</p>
+            </div>
+
+            <div onclick="alert('Crop PDF tool is under construction!')" class="tool-card p-8 rounded-3xl text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-teal-900/50 text-teal-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-teal-500 group-hover:text-white transition-colors border border-teal-800"><i class="fas fa-crop-alt text-2xl"></i></div>
+                <h3 class="font-bold text-lg text-white">Crop Margins</h3>
+                <p class="text-xs text-slate-400 mt-2">Remove blank borders</p>
+            </div>
+
+            <div onclick="alert('Rearrange Pages tool is under construction!')" class="tool-card p-8 rounded-3xl text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-yellow-900/50 text-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-500 group-hover:text-white transition-colors border border-yellow-800"><i class="fas fa-random text-2xl"></i></div>
+                <h3 class="font-bold text-lg text-white">Rearrange</h3>
+                <p class="text-xs text-slate-400 mt-2">Change page order</p>
+            </div>
+
+            <div onclick="alert('Compress PDF tool is under construction! Browser-based compression is coming soon.')" class="tool-card p-8 rounded-3xl text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-pink-900/50 text-pink-400 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-pink-500 group-hover:text-white transition-colors border border-pink-800"><i class="fas fa-compress-arrows-alt text-2xl"></i></div>
+                <h3 class="font-bold text-lg text-white">Compress PDF</h3>
+                <p class="text-xs text-slate-400 mt-2">Reduce MB file size</p>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="tools.js"></script>
+</body>
+</html>
+
