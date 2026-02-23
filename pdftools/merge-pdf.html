@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Professional Merge | Shriram Stationers Dausa</title>
+    <title>Shriram Stationers | Professional Merge</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,20 +14,15 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; background-color: #0f172a; color: #f8fafc; }
-        
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
-        
         #fileList { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
-        .file-item { background: #1e293b; border: 1px solid #334155; transition: 0.3s; cursor: grab; display: flex; flex-direction: column; align-items: center; padding: 1.25rem; border-radius: 1.25rem; position: relative; }
-        .file-item:hover { border-color: #3b82f6; background: #24344d; transform: translateY(-5px); }
-
-        .thumb-box { width: 130px; height: 170px; background: #0f172a; border-radius: 8px; overflow: hidden; border: 2px solid #334155; flex-shrink: 0; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4); display: flex; align-items: center; justify-content: center; }
-        .thumb-box canvas { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s ease; }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        .file-item { background: #1e293b; border: 1px solid #334155; transition: 0.3s; cursor: grab; padding: 1.25rem; border-radius: 1.25rem; position: relative; }
+        .thumb-box { width: 130px; height: 170px; background: #0f172a; border-radius: 8px; overflow: hidden; border: 2px solid #334155; display: flex; align-items: center; justify-content: center; }
+        .thumb-box canvas { width: 100%; height: 100%; object-fit: contain; }
+        
+        .password-group { position: relative; width: 100%; }
+        .eye-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #64748b; z-index: 10; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
@@ -37,84 +32,89 @@
             <img src="../logo.jpg" alt="Logo" class="h-10 md:h-12 object-contain rounded-md border border-slate-700">
             <span class="text-xl font-bold tracking-tight hidden sm:block text-slate-100 uppercase">Shriram Stationers</span>
         </div>
-        <div class="flex space-x-6 font-semibold text-slate-300 text-xs uppercase">
+        <div class="flex space-x-6 font-semibold text-slate-300 text-[10px] uppercase">
             <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
-            <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
+            <a href="index.html" class="text-blue-400">PDF Tools</a>
         </div>
     </nav>
 
     <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-12">
-        
-        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in duration-500">
-            <h2 class="text-3xl font-extrabold text-white mb-4 uppercase tracking-tighter">Module Assembled!</h2>
+        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in">
+            <h2 class="text-3xl font-extrabold text-white mb-4 uppercase">Module Created</h2>
             <div class="flex justify-center gap-4">
-                <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold hover:bg-slate-600 transition shadow-lg">Preview</button>
-                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold hover:bg-slate-200 transition shadow-lg">Download</button>
+                <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold hover:bg-slate-600 transition">Preview</button>
+                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold hover:bg-slate-200 transition">Download</button>
             </div>
-            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase font-bold tracking-widest">New Session</button>
+            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline font-bold uppercase">New Batch</button>
         </section>
 
         <div id="toolInterface">
             <div class="grid lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-1 space-y-6">
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
-                        <div id="dropZone" onclick="document.getElementById('fileInput').click()" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6 text-center text-slate-400 hover:text-blue-400 transition">
-                            <i class="fas fa-file-pdf text-4xl mb-2"></i>
-                            <p class="text-[10px] font-bold uppercase tracking-widest leading-none">Add Chapters</p>
+                        <div id="dropZone" onclick="document.getElementById('fileInput').click()" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6 text-center text-slate-400">
+                            <i class="fas fa-file-pdf text-4xl mb-2 text-blue-500"></i>
+                            <p class="text-[10px] font-bold uppercase tracking-widest">Select PDF Chapters</p>
                             <input type="file" id="fileInput" multiple accept="application/pdf" class="hidden">
                         </div>
 
                         <div class="space-y-3 mb-6">
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer group">
-                                <span class="text-[10px] font-bold text-slate-300 uppercase group-hover:text-white transition">Binding Safety (10mm)</span>
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
+                                <span class="text-[10px] font-bold text-slate-300 uppercase">Binding Safety (10mm)</span>
                                 <input type="checkbox" id="marginFix" checked class="w-5 h-5 accent-blue-500">
                             </label>
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer group">
-                                <span class="text-[10px] font-bold text-slate-300 uppercase group-hover:text-white transition">Balance Duplex</span>
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
+                                <span class="text-[10px] font-bold text-slate-300 uppercase">Balance Duplex</span>
                                 <input type="checkbox" id="balanceFix" checked class="w-5 h-5 accent-blue-500">
                             </label>
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer group">
-                                <span class="text-[10px] font-bold text-slate-300 uppercase group-hover:text-white transition">Add Page Numbers</span>
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
+                                <span class="text-[10px] font-bold text-slate-300 uppercase">Add Page Numbers</span>
                                 <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
                             </label>
                         </div>
 
-                        <button onclick="mergePDFs()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black uppercase shadow-lg text-sm transition active:scale-95">Assemble PDF</button>
+                        <button onclick="mergePDFs()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black uppercase shadow-lg text-sm tracking-tighter">Merge Documents</button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2 bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px] shadow-2xl">
                     <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-                        <h3 class="text-white font-bold text-[10px] uppercase tracking-widest">Chapter Reordering</h3>
+                        <h3 class="text-white font-bold text-[10px] uppercase tracking-widest">Reorder Chapters</h3>
                         <button onclick="sortFilesByName()" class="text-[10px] font-bold uppercase bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Natural Sort</button>
                     </div>
                     <div id="fileList"></div>
-                    <div id="emptyMsg" class="h-48 flex items-center justify-center text-slate-700 uppercase font-bold text-[10px] tracking-widest">Chapter list is empty</div>
+                    <div id="emptyMsg" class="h-48 flex items-center justify-center text-slate-700 uppercase font-bold text-[10px] tracking-widest">Add chapters to start</div>
                 </div>
             </div>
         </div>
     </main>
 
-    <div id="passwordModal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[200] flex items-center justify-center p-6 text-center">
+    <div id="passwordModal" class="hidden fixed inset-0 bg-slate-950/98 z-[200] flex items-center justify-center p-6 text-center">
         <div class="bg-slate-900 border border-slate-700 p-8 rounded-3xl max-w-sm w-full shadow-2xl">
             <i class="fas fa-lock text-4xl text-red-500 mb-4"></i>
-            <h3 class="text-xl font-bold text-white mb-2 uppercase text-sm tracking-widest">Locked Chapter</h3>
-            <p id="passwordFilename" class="text-[10px] text-slate-400 mb-4 truncate italic"></p>
-            <p id="passwordError" class="text-[10px] text-red-500 font-bold mb-4 hidden uppercase tracking-widest">Access Denied - Retry</p>
-            <input type="password" id="pdfPasswordInput" placeholder="Enter Password" class="w-full bg-slate-800 border border-slate-700 text-white p-4 rounded-xl mb-4 outline-none text-center focus:border-blue-500">
+            <h3 class="text-xl font-bold text-white mb-1 uppercase text-sm tracking-widest">Locked File</h3>
+            <p id="passwordFilename" class="text-[10px] text-slate-500 mb-4 truncate italic"></p>
+            
+            <p id="passwordError" class="text-[10px] text-red-500 font-black mb-4 hidden uppercase tracking-widest">Wrong Password - Re-enter</p>
+            
+            <div class="password-group mb-6">
+                <input type="password" id="pdfPasswordInput" oninput="clearError()" placeholder="Enter Password" class="w-full bg-slate-800 border border-slate-700 text-white p-4 rounded-xl outline-none text-center focus:border-blue-500">
+                <span class="eye-toggle" onclick="togglePass()"><i id="eyeIcon" class="fas fa-eye"></i></span>
+            </div>
+
             <div class="flex gap-3">
-                <button onclick="handleUnlockSubmit()" class="flex-grow bg-blue-600 text-white py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest">Unlock</button>
-                <button onclick="cancelPassword()" class="px-4 bg-slate-800 text-slate-400 py-3 rounded-xl font-bold uppercase text-[10px] tracking-widest">Skip</button>
+                <button id="unlockBtn" onclick="handleUnlockSubmit()" class="flex-grow bg-blue-600 text-white py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">Unlock & Merge</button>
+                <button onclick="cancelPassword()" class="px-4 bg-slate-800 text-slate-400 py-4 rounded-xl font-bold uppercase text-[10px] tracking-widest">Skip</button>
             </div>
         </div>
     </div>
 
     <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10 text-center">
-        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Processing...</h2>
+        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Assembling...</h2>
         <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700 shadow-2xl">
             <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
         </div>
-        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-4 uppercase tracking-[0.2em]">Safe Scale Assembly Active</p>
+        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-4 uppercase tracking-[0.2em]">Safe Scale Layer Active</p>
     </div>
 
     <div id="footer-placeholder"></div>
@@ -171,18 +171,17 @@
                 const v = page.getViewport({ scale: 0.5 });
                 canvas.height = v.height; canvas.width = v.width;
                 await page.render({ canvasContext: canvas.getContext('2d'), viewport: v }).promise;
-            } catch (e) { console.log("Locked (No Preview)"); }
+            } catch (e) { console.log("Locked PDF Preview Skipped"); }
         }
 
         function rotateItem(id) {
             const item = pdfQueue.find(p => p.id == id);
             item.rotation = (item.rotation + 90) % 360;
-            const canvas = document.querySelector(`[data-canvas-id="${id}"]`);
-            canvas.style.transform = `rotate(${item.rotation}deg)`;
+            document.querySelector(`[data-canvas-id="${id}"]`).style.transform = `rotate(${item.rotation}deg)`;
         }
 
         function sortFilesByName() {
-            pdfQueue.sort((a, b) => a.file.name.localeCompare(b.name, undefined, {numeric: true}));
+            pdfQueue.sort((a, b) => a.file.name.localeCompare(b.file.name, undefined, {numeric: true}));
             document.getElementById('fileList').innerHTML = '';
             pdfQueue.forEach(item => { renderItem(item); generateThumb(item); });
         }
@@ -193,16 +192,36 @@
             if(!pdfQueue.length) document.getElementById('emptyMsg').style.display = 'flex';
         }
 
-        // --- PASSWORD MODAL HANDLERS [cite: 2026-02-23] ---
-        function handleUnlockSubmit() { const v = document.getElementById('pdfPasswordInput').value; if(currentResolver) currentResolver(v); }
-        function cancelPassword() { document.getElementById('passwordModal').classList.add('hidden'); if(currentResolver) currentResolver(null); }
+        // --- PASSWORD TWEAKS [cite: 2026-02-23] ---
+        function clearError() { document.getElementById('passwordError').classList.add('hidden'); }
+        
+        function togglePass() {
+            const input = document.getElementById('pdfPasswordInput');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.className = "fas fa-eye-slash";
+            } else {
+                input.type = "password";
+                icon.className = "fas fa-eye";
+            }
+        }
 
-        // --- THE "PAPERKNIFE" MERGE ENGINE [cite: 2026-02-23] ---
+        function handleUnlockSubmit() { 
+            const val = document.getElementById('pdfPasswordInput').value; 
+            if(currentResolver) currentResolver(val); 
+        }
+
+        function cancelPassword() { 
+            document.getElementById('passwordModal').classList.add('hidden'); 
+            if(currentResolver) currentResolver(null); 
+        }
+
+        // --- PAPERKNIFE ASSEMBLY LOGIC [cite: 2026-02-23] ---
         async function mergePDFs() {
             if(!pdfQueue.length) return alert("Select chapters first!");
             document.getElementById('loader').classList.remove('hidden');
             const bar = document.getElementById('progressBar');
-            const statText = document.getElementById('stats');
 
             const mergedDoc = await PDFDocument.create();
             const fontI = await mergedDoc.embedFont(StandardFonts.HelveticaOblique);
@@ -215,13 +234,12 @@
                 let item = pdfQueue[i];
                 let percent = Math.round((i / pdfQueue.length) * 100);
                 bar.style.width = percent + '%';
-                statText.innerText = `Merging: ${item.file.name}`;
                 await new Promise(r => setTimeout(r, 10));
 
                 let doc = null;
                 const buffer = await item.file.arrayBuffer();
                 
-                // --- PAPERKNIFE MODULE TECHNIQUE: PASSWORD LOOP [cite: 2026-02-23] ---
+                // --- PAPERKNIFE PASSWORD LOOP [cite: 2026-02-23] ---
                 while (!doc) {
                     try {
                         doc = await PDFDocument.load(buffer);
@@ -230,19 +248,18 @@
                             document.getElementById('passwordModal').classList.remove('hidden');
                             document.getElementById('passwordFilename').innerText = item.file.name;
                             
-                            // Wait for user to click "Unlock" [cite: 2026-02-23]
                             const pass = await new Promise(res => { currentResolver = res; });
-                            if (pass === null) break; // User skipped file
+                            if (pass === null) break;
 
                             try {
+                                // Explicitly load with password string [cite: 2026-02-23]
                                 doc = await PDFDocument.load(buffer, { password: pass });
                                 document.getElementById('passwordModal').classList.add('hidden');
-                                document.getElementById('passwordError').classList.add('hidden');
                                 document.getElementById('pdfPasswordInput').value = '';
                             } catch (retryErr) {
                                 document.getElementById('passwordError').classList.remove('hidden');
                                 document.getElementById('pdfPasswordInput').value = '';
-                                doc = null; // Forces loop to repeat
+                                doc = null; // Re-trigger loop
                             }
                         } else { break; }
                     }
@@ -255,44 +272,32 @@
                     totalPageCounter++;
                     const [embeddedPage] = await mergedDoc.embedPages([doc.getPage(idx)]);
                     const { width, height } = embeddedPage;
-                    
                     const newPage = mergedDoc.addPage([width, height]);
                     const isOdd = totalPageCounter % 2 !== 0;
 
-                    // Perfect Layout Math with 2mm buffer [cite: 2026-02-23]
                     let scale = useMargin ? 0.95 : 1.0;
                     let marginWidth = useMargin ? 28 : 0; 
                     let xOffset = isOdd ? marginWidth : (width * (1 - scale) - marginWidth);
 
                     newPage.drawPage(embeddedPage, {
                         x: xOffset,
-                        y: ((height * (1 - scale)) / 2) + 5.6, // 2mm Buffer Shift
+                        y: ((height * (1 - scale)) / 2) + 5.6, // 2mm Buffer
                         width: width * scale,
                         height: height * scale,
                         rotate: degrees(item.rotation)
                     });
 
-                    // Watermark & Numbers (Solid Black)
-                    const watermarkY = 15;
                     const bColor = rgb(0, 0, 0);
-
-                    newPage.drawText("Pdf created on Shriramstationers.in", {
-                        x: 20, y: watermarkY, size: 8, font: fontI, color: bColor
-                    });
-
+                    newPage.drawText("Pdf created on Shriramstationers.in", { x: 20, y: 15, size: 8, font: fontI, color: bColor });
                     if (usePageNum) {
-                        newPage.drawText(`${totalPageCounter}`, {
-                            x: width - 40, y: watermarkY, size: 10, font: fontI, color: bColor
-                        });
+                        newPage.drawText(`${totalPageCounter}`, { x: width - 40, y: 15, size: 10, font: fontI, color: bColor });
                     }
                 }
                 
                 if(document.getElementById('balanceFix').checked && sourceIndices.length % 2 !== 0) {
                     totalPageCounter++;
                     const blank = mergedDoc.addPage([595, 842]);
-                    blank.drawText("Pdf created on Shriramstationers.in", {
-                        x: 20, y: 15, size: 8, font: fontI, color: bColor
-                    });
+                    blank.drawText("Pdf created on Shriramstationers.in", { x: 20, y: 15, size: 8, font: fontI, color: bColor });
                 }
             }
             
