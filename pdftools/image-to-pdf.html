@@ -4,121 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image to PDF | Shriram Stationers Dausa</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; background-color: #0f172a; color: #f8fafc; }
-        
-        /* Tool UI Elements */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; background-color: #0f172a; color: #f8fafc; }
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
-        #previewGrid .sortable-ghost { opacity: 0.4; border: 2px solid #60a5fa; }
-        .img-container { position: relative; cursor: grab; transition: transform 0.2s; }
-        .img-container:active { cursor: grabbing; }
-        .page-badge { position: absolute; top: 4px; left: 4px; background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; z-index: 10; shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .img-container { position: relative; cursor: grab; }
+        .page-badge { position: absolute; top: 4px; left: 4px; background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; z-index: 10; }
         .remove-btn { position: absolute; top: 4px; right: 4px; background: #ef4444; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; z-index: 10; }
-
-        /* Social Glows for Footer */
-        .social-icon { transition: all 0.4s ease; color: #475569; }
-        .fa-facebook-f:hover { color: #1877F2; filter: drop-shadow(0 0 10px #1877F2); }
-        .fa-instagram:hover { color: #E1306C; filter: drop-shadow(0 0 10px #E1306C); }
-        .fa-telegram-plane:hover { color: #0088cc; filter: drop-shadow(0 0 10px #0088cc); }
+        .social-icon { transition: 0.4s; color: #475569; }
         .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
 
     <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
         <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='https://www.shriramstationers.in'">
-            <img src="../logo.jpg" alt="Shriram Stationers Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
-            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100">Shriram Stationers</span>
+            <img src="../logo.jpg" alt="Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
+            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100 uppercase">Shriram Stationers</span>
         </div>
-        
         <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
             <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
-            <a href="https://www.shriramstationers.in#about" class="hover:text-white transition">About Us</a>
             <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
-            <a href="#contact" class="hover:text-white transition">Contact</a>
         </div>
-        
-        <a href="#contact" class="md:hidden text-slate-300 hover:text-white font-semibold">Contact</a>
     </nav>
 
-    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
-        
-        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in zoom-in duration-500">
-            <div class="mb-8">
-                <i class="fas fa-check-double text-6xl text-blue-400 mb-4"></i>
-                <h2 class="text-3xl font-extrabold text-white">Conversion Complete</h2>
-                <p class="text-slate-400 mt-2">Your document is ready for high-speed laser printing at **50 paisa per side**.</p>
+    <main class="flex-grow max-w-6xl mx-auto w-full px-6 py-12">
+        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in duration-500">
+            <h2 class="text-3xl font-extrabold text-white mb-4">Conversion Success!</h2>
+            <div class="flex justify-center gap-4">
+                <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold hover:bg-slate-600 transition">Preview</button>
+                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold hover:bg-slate-200 transition">Download</button>
             </div>
-
-            <div class="flex flex-wrap justify-center gap-6 mb-8">
-                <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:bg-slate-600 transition shadow-xl">
-                    <i class="fas fa-eye text-xl"></i> Preview Document
-                </button>
-                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:bg-slate-200 transition shadow-xl">
-                    <i class="fas fa-file-download text-xl"></i> Download PDF
-                </button>
-            </div>
-            
-            <button onclick="location.reload()" class="text-slate-500 hover:text-blue-400 text-xs font-bold uppercase tracking-widest transition">
-                <i class="fas fa-redo-alt mr-2"></i> Start New Conversion
-            </button>
+            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline font-bold uppercase tracking-widest">Create New</button>
         </section>
 
         <div id="toolInterface">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">Image to PDF</h1>
-                <p class="text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                    Arrange your images manually for the perfect sequence. Optimized for bulk coaching notes and exam materials.
-                </p>
-            </div>
-
             <div class="grid lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-1 space-y-6">
-                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 shadow-2xl">
-                        <div id="dropZone" class="drop-zone rounded-2xl py-14 flex flex-col items-center justify-center cursor-pointer mb-8">
-                            <i class="fas fa-folder-plus text-5xl text-blue-500 mb-3"></i>
-                            <p class="text-sm font-bold text-white uppercase tracking-wider">Select Images</p>
+                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
+                        <div id="dropZone" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6 text-center">
+                            <i class="fas fa-image text-4xl text-blue-500 mb-2"></i>
+                            <p class="text-[10px] font-bold text-white uppercase tracking-widest">Add Images</p>
                             <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
                         </div>
-
-                        <div class="space-y-4 mb-8">
-                            <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
-                                <span class="text-xs font-bold text-slate-300 group-hover:text-white transition">Add Page Numbers</span>
-                                <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
+                        <div class="space-y-4 mb-6">
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
+                                <input type="checkbox" id="pageNum" checked class="w-4 h-4 accent-blue-500">
                             </label>
-                            <div class="p-3 bg-slate-900/30 rounded-xl border border-slate-800 flex items-center gap-3">
-                                <i class="fas fa-shield-halved text-slate-600 text-xs"></i>
-                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">Watermark: Shriramstationers.in</span>
-                            </div>
                         </div>
-
-                        <button id="mainBtn" onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95 disabled:opacity-50">
-                            GENERATE PDF
-                        </button>
+                        <button id="mainBtn" onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-black text-xl shadow-lg transition">GENERATE PDF</button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2">
-                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 min-h-[500px] shadow-2xl">
-                        <h3 class="text-slate-100 font-bold mb-6 flex items-center gap-3">
-                            <i class="fas fa-sort text-blue-500"></i> Page Sorting Area
-                        </h3>
+                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 min-h-[500px]">
+                        <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
+                            <h3 class="text-white font-bold flex items-center gap-2">Image Sequence</h3>
+                            <button onclick="sortImagesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition">Sort by Name</button>
+                        </div>
                         <div id="previewGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
-                        <div id="emptyMsg" class="h-80 flex flex-col items-center justify-center text-slate-700">
-                            <i class="fas fa-layer-group text-5xl mb-4"></i>
-                            <p class="font-bold uppercase tracking-widest text-sm">Waiting for uploads...</p>
+                        <div id="emptyMsg" class="h-64 flex flex-col items-center justify-center text-slate-700">
+                            <i class="fas fa-images text-4xl mb-3"></i>
+                            <p class="font-bold uppercase text-xs tracking-widest">No images selected</p>
                         </div>
                     </div>
                 </div>
@@ -129,166 +82,37 @@
     <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
         <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12 text-left">
             <div>
-                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
-                    <img src="../logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
-                </h3>
-                <p class="text-slate-500 mb-6 text-sm leading-relaxed">
-                    Dausa's trusted hub for affordable student printing and quality stationery.
-                </p>
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white"><img src="../logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers</h3>
+                <p class="text-slate-500 mb-6 text-sm leading-relaxed">Trusted since Sept 5, 2024 for Dausa students.</p>
                 <div class="flex gap-4">
-                    <a href="https://www.facebook.com/Shriramstationers5/" target="_blank" class="social-icon text-xl" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/shriramstationers" target="_blank" class="social-icon text-xl" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://telegram.me/ShriramStationers" target="_blank" class="social-icon text-xl" aria-label="Telegram"><i class="fab fa-telegram-plane text-lg"></i></a>
-                    <a href="https://wa.me/919414711702" target="_blank" class="social-icon text-xl" aria-label="WhatsApp"><i class="fab fa-whatsapp text-lg"></i></a>
+                    <a href="https://wa.me/919414711702" target="_blank" class="social-icon text-xl"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
-            
             <div>
-                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Our Shop</h4>
-                <ul class="space-y-4 text-slate-400">
-                    <li class="flex items-start gap-3">
-                        <i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
-                        <a href="https://share.google/fATJWy2Udk4xxdVbc" target="_blank" class="hover:text-blue-400 transition cursor-pointer">
-                            <span>Opposite S.B.I. Bank<br>Agra Road, Dausa<br>Rajasthan</span><br>
-                            <span class="text-xs text-blue-500 font-semibold mt-1 inline-block font-bold">Directions →</span>
-                        </a>
-                    </li>
-                </ul>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Shop Address</h4>
+                <p class="text-sm text-slate-400">Opposite S.B.I. Bank, Agra Road, Dausa</p>
             </div>
-
-            <div>
-                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Contact Us</h4>
-                <ul class="space-y-4 text-slate-400">
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-phone-alt text-slate-500"></i>
-                        <span class="font-bold text-lg text-white">9414711702</span>
-                    </li>
-                    <li class="flex items-center gap-3 text-sm">
-                        <i class="fas fa-envelope text-slate-500"></i>
-                        <a href="mailto:shriramstationers05@gmail.com" class="hover:text-blue-400 transition">shriramstationers05@gmail.com</a>
-                    </li>
-                    <li class="pt-2 text-xs uppercase tracking-widest text-blue-400 font-bold">
-                        Established Sept 5, 2024
-                    </li>
-                </ul>
+            <div class="md:text-right">
+                <p class="text-xl font-bold text-white">9414711702</p>
+                <p class="text-xs text-blue-500 font-bold uppercase">50 Paisa Per Side Printing</p>
             </div>
-        </div>
-        
-        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
-            © 2026 Shriram Stationers. All Rights Reserved.
         </div>
     </footer>
-
-    <div id="loader" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
-        <h2 class="text-white text-3xl font-black mb-4">Processing Images...</h2>
-        <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
-            <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
-        </div>
-        <p id="stats" class="text-blue-400 text-xs font-bold mt-4 uppercase tracking-[0.2em]">0 / 0 Processed</p>
-    </div>
 
     <script>
         const previewGrid = document.getElementById('previewGrid');
         const emptyMsg = document.getElementById('emptyMsg');
         const fileInput = document.getElementById('fileInput');
-        const loader = document.getElementById('loader');
-        const bar = document.getElementById('progressBar');
-        const stats = document.getElementById('stats');
-        const resultHub = document.getElementById('resultHub');
-        const toolInterface = document.getElementById('toolInterface');
-
         let imageList = [];
         let finalPDF = null;
 
-        // Sorting Logic
-        new Sortable(previewGrid, {
-            animation: 150,
-            ghostClass: 'sortable-ghost',
-            onEnd: () => {
-                const newOrder = Array.from(previewGrid.children).map(child => child.dataset.id);
-                imageList = newOrder.map(id => imageList.find(img => img.id == id));
-                renderPreview();
-            }
-        });
+        new Sortable(previewGrid, { animation: 150, onEnd: () => { syncImageOrder(); } });
 
-        document.getElementById('dropZone').onclick = () => fileInput.click();
-        fileInput.onchange = (e) => handleFiles(e.target.files);
-
-        async function handleFiles(files) {
-            for (let file of files) {
-                if (!file.type.startsWith('image/')) continue;
-                const r = new FileReader();
-                r.onload = e => {
-                    imageList.push({ id: Date.now() + Math.random(), data: e.target.result });
-                    renderPreview();
-                };
-                r.readAsDataURL(file);
-            }
-        }
-
-        function renderPreview() {
-            previewGrid.innerHTML = '';
-            emptyMsg.style.display = imageList.length ? 'none' : 'flex';
-            imageList.forEach((img, index) => {
-                const div = document.createElement('div');
-                div.className = 'img-container bg-slate-900 rounded-lg overflow-hidden border border-slate-700 aspect-[3/4]';
-                div.dataset.id = img.id;
-                div.innerHTML = `
-                    <div class="page-badge">${index + 1}</div>
-                    <div class="remove-btn" onclick="removeItem('${img.id}')"><i class="fas fa-times"></i></div>
-                    <img src="${img.data}" class="w-full h-full object-cover">
-                `;
-                previewGrid.appendChild(div);
-            });
-        }
-
-        function removeItem(id) {
-            imageList = imageList.filter(img => img.id != id);
+        function syncImageOrder() {
+            const visualIds = Array.from(previewGrid.children).map(c => c.dataset.id);
+            imageList = visualIds.map(id => imageList.find(img => img.id == id));
             renderPreview();
         }
 
-        async function processImages() {
-            if (!imageList.length) return alert("Please upload at least one image.");
-            loader.classList.remove('hidden');
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const w = pdf.internal.pageSize.getWidth();
-            const h = pdf.internal.pageSize.getHeight();
-
-            for (let i = 0; i < imageList.length; i++) {
-                bar.style.width = Math.round(((i + 1) / imageList.length) * 100) + '%';
-                stats.innerText = `${i + 1} / ${imageList.length} Processed`;
-                
-                if (i > 0) pdf.addPage();
-                pdf.addImage(imageList[i].data, 'JPEG', 0, 0, w, h, undefined, 'FAST');
-                
-                if (document.getElementById('pageNum').checked) {
-                    pdf.setFont("helvetica", "bold"); pdf.setFontSize(12); pdf.setTextColor(100);
-                    pdf.text(`${i + 1}`, w - 15, h - 10);
-                }
-                
-                pdf.setFont("helvetica", "italic"); pdf.setFontSize(10); pdf.setTextColor(150);
-                pdf.text("Pdf created on Shriramstationers.in", 10, h - 10);
-            }
-            
-            finalPDF = pdf;
-            loader.classList.add('hidden');
-            toolInterface.classList.add('hidden');
-            resultHub.classList.remove('hidden');
-            window.scrollTo(0,0);
-        }
-
-        function downloadPDF() {
-            if (finalPDF) finalPDF.save(`Shriram_Stationers_Document_${Date.now()}.pdf`);
-        }
-
-        function previewPDF() {
-            if (finalPDF) {
-                const blob = finalPDF.output('blob');
-                const url = URL.createObjectURL(blob);
-                window.open(url, '_blank');
-            }
-        }
-    </script>
-</body>
-</html>
+        document.getElementById('dropZone').onclick = () => fileInput.click();
+        fileInput.onchange = (e) => handleFiles(e.target.files
