@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart N-Up Slide Merge | Shriram Stationers Dausa</title>
+    <title>Chapter-Isolated N-Up | Shriram Stationers Dausa</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,42 +18,40 @@
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
         
-        /* Premium Visual Sorting Area */
+        /* Grid-based Sorting Area with Larger Previews */
         #fileList {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 1.5rem;
         }
 
         .file-item { 
             background: #1e293b; 
             border: 1px solid #334155; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            transition: all 0.3s ease; 
             cursor: grab; 
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 1.25rem;
-            border-radius: 1.25rem;
             text-align: center;
+            padding: 1rem;
+            border-radius: 1rem;
         }
-        .file-item:active { cursor: grabbing; }
-        .file-item:hover { border-color: #60a5fa; background: #24344d; transform: translateY(-5px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+        .file-item:hover { border-color: #3b82f6; background: #24344d; transform: translateY(-5px); }
 
-        /* Larger Thumbnails for Professional Review */
         .thumb-box { 
             width: 140px; 
             height: 190px; 
             background: #0f172a; 
-            border-radius: 10px; 
+            border-radius: 8px; 
             overflow: hidden; 
             border: 2px solid #334155; 
             flex-shrink: 0; 
-            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
         }
         .thumb-box canvas { width: 100%; height: 100%; object-fit: cover; }
 
-        .social-icon { transition: all 0.4s ease; color: #475569; }
+        .social-icon { transition: 0.4s; color: #475569; }
         .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -74,75 +72,59 @@
         </div>
     </nav>
 
-    <main class="flex-grow max-w-[1400px] mx-auto w-full px-6 py-12">
-        
+    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
         <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in duration-500">
-            <h2 class="text-3xl font-extrabold text-white mb-4 tracking-tight">Print Optimized File Ready!</h2>
-            <p class="text-slate-400 mb-8 font-medium">Isolated by file and balanced for 50 paisa duplex printing.</p>
+            <h2 class="text-3xl font-extrabold text-white mb-4">Balanced File Ready!</h2>
             <div class="flex justify-center gap-4">
-                <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold hover:bg-slate-600 transition shadow-lg"><i class="fas fa-eye mr-2"></i> Preview</button>
-                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold hover:bg-slate-200 transition shadow-lg"><i class="fas fa-download mr-2"></i> Download</button>
+                <button onclick="previewPDF()" class="bg-slate-700 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-600 transition shadow-lg"><i class="fas fa-eye mr-2"></i> Preview</button>
+                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:bg-slate-200 transition shadow-lg"><i class="fas fa-download mr-2"></i> Download</button>
             </div>
-            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase tracking-widest font-bold">Start New Session</button>
+            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase font-bold">Start New Batch</button>
         </section>
 
         <div id="toolInterface">
-            <div class="text-center mb-10">
-                <h1 class="text-4xl font-extrabold text-white mb-2">Smart N-Up Slide Merge</h1>
-                <p class="text-slate-400 text-sm italic">Organized printing for Dausa's student community.</p>
-            </div>
-
-            <div class="grid lg:grid-cols-4 gap-8">
+            <div class="grid lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-1 space-y-6">
-                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl sticky top-24">
+                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
                         <div id="dropZone" class="drop-zone rounded-2xl py-10 flex flex-col items-center justify-center cursor-pointer mb-6 text-center px-4">
                             <i class="fas fa-file-shield text-4xl text-blue-500 mb-2"></i>
-                            <p class="text-[10px] font-bold text-white uppercase tracking-widest">Select Massive PDFs</p>
+                            <p class="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Select PDF Files</p>
                             <input type="file" id="fileInput" multiple accept="application/pdf" class="hidden">
                         </div>
 
                         <div class="space-y-4 mb-6">
                             <div>
                                 <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Slides Per Side</label>
-                                <select id="nupValue" class="w-full bg-slate-900 border border-slate-700 text-white p-3 rounded-xl font-bold text-sm outline-none ring-blue-500/30 focus:ring-2">
-                                    <option value="2">2 Slides (Portrait)</option>
-                                    <option value="3">3 Slides (Portrait)</option>
-                                    <option value="4" selected>4 Slides (Landscape)</option>
-                                    <option value="6">6 Slides (Portrait)</option>
+                                <select id="nupValue" class="w-full bg-slate-900 border border-slate-700 text-white p-3 rounded-xl font-bold text-sm outline-none">
+                                    <option value="2">2 Slides</option>
+                                    <option value="3">3 Slides</option>
+                                    <option value="4" selected>4 Slides</option>
+                                    <option value="6">6 Slides</option>
                                 </select>
                             </div>
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
                                 <span class="text-xs font-bold text-slate-300">Binding Margin (1cm)</span>
                                 <input type="checkbox" id="marginFix" checked class="w-4 h-4 accent-blue-500">
                             </label>
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
                                 <span class="text-xs font-bold text-slate-300">Balance Double-Sided</span>
                                 <input type="checkbox" id="balanceFix" checked class="w-4 h-4 accent-blue-500">
                             </label>
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
-                                <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
-                                <input type="checkbox" id="pageNum" checked class="w-4 h-4 accent-blue-500">
-                            </label>
                         </div>
-
-                        <button id="mainBtn" onclick="processNUp()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95">
-                            GENERATE PDF
-                        </button>
+                        <button onclick="processNUp()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95">GENERATE PDF</button>
                     </div>
                 </div>
 
-                <div class="lg:col-span-3">
-                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[600px] shadow-2xl">
-                        <div class="flex flex-wrap justify-between items-center mb-8 border-b border-slate-800 pb-4 gap-4">
-                            <h3 class="text-white font-bold flex items-center gap-2"><i class="fas fa-sort text-blue-500"></i> Chapter Sequence Management</h3>
-                            <button onclick="sortFilesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-5 py-2 rounded-lg transition shadow-inner">
-                                <i class="fas fa-arrow-down-a-z mr-1"></i> Natural Sort
-                            </button>
+                <div class="lg:col-span-2">
+                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px] shadow-2xl">
+                        <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
+                            <h3 class="text-white font-bold flex items-center gap-2">File Management</h3>
+                            <button onclick="sortFilesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Sort by Name</button>
                         </div>
                         <div id="fileList"></div>
-                        <div id="emptyMsg" class="h-96 flex flex-col items-center justify-center text-slate-700">
-                            <i class="fas fa-layer-group text-6xl mb-4"></i>
-                            <p class="font-bold uppercase text-sm tracking-[0.2em]">Upload PDF files to sort chapters</p>
+                        <div id="emptyMsg" class="h-64 flex flex-col items-center justify-center text-slate-700">
+                            <i class="fas fa-layer-group text-4xl mb-3"></i>
+                            <p class="font-bold uppercase text-xs tracking-widest">No Files Uploaded</p>
                         </div>
                     </div>
                 </div>
@@ -153,49 +135,76 @@
     <div id="passwordModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[200] flex items-center justify-center p-6">
         <div class="bg-slate-900 border border-slate-700 p-8 rounded-3xl max-w-sm w-full shadow-2xl text-center">
             <i class="fas fa-lock text-4xl text-red-500 mb-4"></i>
-            <h3 class="text-xl font-bold text-white mb-2 text-sm uppercase">File is Encrypted</h3>
-            <p id="passwordFilename" class="text-[10px] text-slate-400 mb-6 truncate italic"></p>
-            <input type="password" id="pdfPasswordInput" placeholder="Enter PDF Password" class="w-full bg-slate-800 border border-slate-700 text-white p-4 rounded-xl mb-4 outline-none focus:border-blue-500 transition text-sm text-center">
+            <h3 class="text-xl font-bold text-white mb-2 text-sm">File is Protected</h3>
+            <p id="passwordFilename" class="text-[10px] text-slate-400 mb-6 truncate"></p>
+            <input type="password" id="pdfPasswordInput" placeholder="Password" class="w-full bg-slate-800 border border-slate-700 text-white p-4 rounded-xl mb-4 outline-none text-sm">
             <div class="flex gap-3">
-                <button onclick="submitPassword()" class="flex-grow bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-500 transition">Unlock File</button>
-                <button onclick="cancelPassword()" class="px-5 bg-slate-800 text-slate-400 py-3 rounded-xl text-sm font-bold hover:bg-slate-700">Skip</button>
+                <button onclick="submitPassword()" class="flex-grow bg-blue-600 text-white py-3 rounded-xl font-bold text-sm">Unlock</button>
+                <button onclick="cancelPassword()" class="px-4 bg-slate-800 text-slate-400 py-3 rounded-xl text-sm">Skip</button>
             </div>
         </div>
     </div>
 
     <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
-        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-[0.2em]">Rendering Grid...</h2>
-        <div class="w-96 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700 shadow-2xl">
+        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase">Rendering Grid...</h2>
+        <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
             <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
         </div>
-        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-6 uppercase tracking-[0.3em]">Sequential Memory Mode Active</p>
+        <p id="stats" class="text-blue-400 text-xs font-bold mt-4 uppercase tracking-[0.2em]">Safe Mode Active</p>
     </div>
 
-    <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12 text-left">
+<footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
+            
             <div>
-                <h3 class="text-xl font-bold mb-4 flex items-center gap-3 text-white">
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
                     <img src="../logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
                 </h3>
-                <p class="text-slate-500 mb-6 text-xs leading-relaxed">
-                    Dausa's trusted hub for high-speed printing and coaching modules since 2024.
+                <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                    Dausa's trusted hub for affordable student printing and quality stationery.
                 </p>
                 <div class="flex gap-4">
-                    <a href="https://wa.me/919414711702" target="_blank" class="social-icon text-2xl" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://telegram.me/ShriramStationers" target="_blank" class="social-icon text-2xl" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="https://www.facebook.com/Shriramstationers5/" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/shriramstationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-pink-600 hover:text-white transition" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://telegram.me/ShriramStationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-400 hover:text-white transition" aria-label="Telegram"><i class="fab fa-telegram-plane text-lg"></i></a>
+                    <a href="https://wa.me/919414711702" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-green-500 text-white transition" aria-label="WhatsApp"><i class="fab fa-whatsapp text-lg"></i></a>
                 </div>
             </div>
+            
             <div>
-                <h4 class="text-xs font-bold mb-6 text-slate-500 uppercase tracking-[0.2em]">Shop Location</h4>
-                <p class="text-sm">Opposite S.B.I. Bank, Agra Road, Dausa</p>
-                <p class="text-xs text-blue-500 font-bold mt-2">Open Daily for Quick Prints</p>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Our Shop</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
+                        <a href="https://share.google/fATJWy2Udk4xxdVbc" target="_blank" class="hover:text-blue-400 transition cursor-pointer">
+                            <span>Opposite S.B.I. Bank<br>Agra Road, Dausa<br>Rajasthan</span><br>
+                            <span class="text-xs text-blue-500 font-semibold mt-1 inline-block">Open in Google Maps →</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <div class="md:text-right">
-                <p class="text-2xl font-black text-white">9414711702</p>
-                <p class="text-[10px] text-blue-400 font-bold uppercase tracking-widest mt-2">50 Paisa Per Side Printing</p>
+
+            <div>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Contact Us</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-phone-alt text-slate-500"></i>
+                        <span class="font-bold text-lg text-white">9414711702</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-envelope text-slate-500"></i>
+                        <a href="mailto:shriramstationers05@gmail.com" class="hover:text-blue-400 transition break-all">shriramstationers05@gmail.com</a>
+                    </li>
+                    <li class="pt-2">
+                        <a href="https://wa.me/919414711702" target="_blank" class="inline-flex items-center gap-2 text-green-500 hover:text-green-400 font-medium transition">
+                            <i class="fab fa-whatsapp text-lg"></i> Message us on WhatsApp
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="text-center pt-8 border-t border-slate-900 text-[10px] text-slate-700 uppercase font-bold tracking-[0.3em]">
+        
+        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
             © 2026 Shriram Stationers. All Rights Reserved.
         </div>
     </footer>
@@ -208,13 +217,8 @@
         let resolvePassword = null;
         const fileInput = document.getElementById('fileInput');
         const fileListContainer = document.getElementById('fileList');
-        const emptyMsg = document.getElementById('emptyMsg');
 
-        // REORDER LOGIC: Strict Visual Sync
-        new Sortable(fileListContainer, { 
-            animation: 150, 
-            onEnd: () => { syncQueueToVisualOrder(); } 
-        });
+        new Sortable(fileListContainer, { animation: 150, onEnd: () => { syncQueueToVisualOrder(); } });
 
         function syncQueueToVisualOrder() {
             const visualOrderIds = Array.from(fileListContainer.children).map(child => child.dataset.id);
@@ -225,7 +229,7 @@
         fileInput.onchange = (e) => handleFiles(e.target.files);
 
         async function handleFiles(files) {
-            emptyMsg.style.display = 'none';
+            document.getElementById('emptyMsg').style.display = 'none';
             for (let file of files) {
                 if (file.type !== 'application/pdf') continue;
                 const id = Date.now() + Math.random();
@@ -241,7 +245,7 @@
             const pdf = await pdfjsLib.getDocument({ data }).promise;
             const page = await pdf.getPage(1);
             const canvas = document.querySelector(`[data-canvas-id="${item.id}"]`);
-            const viewport = page.getViewport({ scale: 0.5 }); // HIGH-QUALITY SCALE
+            const viewport = page.getViewport({ scale: 0.5 });
             canvas.height = viewport.height; canvas.width = viewport.width;
             await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
         }
@@ -252,14 +256,10 @@
             div.dataset.id = item.id;
             div.innerHTML = `
                 <div class="thumb-box mb-4"><canvas data-canvas-id="${item.id}"></canvas></div>
-                <p class="text-[10px] font-bold text-white w-full truncate px-2 mb-4">${item.file.name}</p>
-                <div class="flex gap-2 justify-center w-full">
-                    <button onclick="rotateItem('${item.id}')" class="p-2 bg-slate-900 rounded-xl hover:text-blue-400 transition shadow-inner">
-                        <i class="fas fa-rotate-right text-xs"></i>
-                    </button>
-                    <button onclick="removeFile('${item.id}')" class="p-2 bg-slate-900 rounded-xl hover:text-red-500 transition shadow-inner">
-                        <i class="fas fa-trash-alt text-xs"></i>
-                    </button>
+                <p class="text-[10px] font-bold text-white w-full truncate px-2 mb-3">${item.file.name}</p>
+                <div class="flex gap-2 justify-center">
+                    <button onclick="rotateItem('${item.id}')" class="p-2 bg-slate-900 rounded-lg hover:text-blue-400 transition"><i class="fas fa-rotate-right"></i></button>
+                    <button onclick="removeFile('${item.id}')" class="p-2 text-slate-500 hover:text-red-500 transition"><i class="fas fa-trash-alt"></i></button>
                 </div>`;
             fileListContainer.appendChild(div);
         }
@@ -279,33 +279,17 @@
         function removeFile(id) {
             pdfQueue = pdfQueue.filter(p => p.id != id);
             document.querySelector(`[data-id="${id}"]`).remove();
-            if(!pdfQueue.length) emptyMsg.style.display = 'flex';
+            if(!pdfQueue.length) document.getElementById('emptyMsg').style.display = 'flex';
         }
-
-        // Logic: Password Decryption
-        function askForPassword(filename) { 
-            return new Promise(res => { 
-                document.getElementById('passwordModal').classList.remove('hidden'); 
-                document.getElementById('passwordFilename').innerText = filename; 
-                document.getElementById('pdfPasswordInput').value = ''; 
-                document.getElementById('pdfPasswordInput').focus(); 
-                resolvePassword = res; 
-            }); 
-        }
-        function submitPassword() { const p = document.getElementById('pdfPasswordInput').value; document.getElementById('passwordModal').classList.add('hidden'); if(resolvePassword) resolvePassword(p); }
-        function cancelPassword() { document.getElementById('passwordModal').classList.add('hidden'); if(resolvePassword) resolvePassword(null); }
 
         async function processNUp() {
-            if (!pdfQueue.length) return alert("Please upload your PDF notes first!");
+            if (!pdfQueue.length) return alert("Select files!");
             syncQueueToVisualOrder();
             document.getElementById('loader').classList.remove('hidden');
 
             const n = parseInt(document.getElementById('nupValue').value);
-            // Smart Orientation: 4 -> Landscape, others -> Portrait
             let orient = (n === 4) ? 'landscape' : 'portrait';
-            
             const useMargin = document.getElementById('marginFix').checked;
-            const usePageNum = document.getElementById('pageNum').checked;
             const balance = document.getElementById('balanceFix').checked;
 
             const sheetW = (orient === 'landscape') ? 842 : 595;
@@ -315,7 +299,6 @@
             const fontBold = await mergedPdf.embedFont(StandardFonts.HelveticaBold);
             const fontItalic = await mergedPdf.embedFont(StandardFonts.HelveticaOblique);
 
-            // Sequential Extraction with FILE-LEVEL Isolation
             let allSourcePages = [];
             for (let item of pdfQueue) {
                 let doc;
@@ -334,8 +317,6 @@
                     if (item.rotation !== 0) p.setRotation(degrees(item.rotation));
                     allSourcePages.push(p);
                 });
-
-                // Chapter Balancing: Ensure next file starts on a new SHEET
                 const multiplier = balance ? (n * 2) : n;
                 const remainder = allSourcePages.length % multiplier;
                 if (remainder !== 0) {
@@ -348,39 +329,23 @@
             if (orient === 'landscape') [rows, cols] = [cols, rows];
             const cellW = sheetW / cols;
             const cellH = sheetH / rows;
-            const margin = useMargin ? 28.35 : 0; // 1cm
+            const margin = useMargin ? 28.35 : 0;
 
             let sheetCounter = 0;
             for (let i = 0; i < allSourcePages.length; i += n) {
-                // MASSIVE LOAD FIX: Release CPU every loop
                 await new Promise(r => setTimeout(r, 10));
-                
                 sheetCounter++;
                 document.getElementById('progressBar').style.width = Math.round((i / allSourcePages.length) * 100) + '%';
-                document.getElementById('stats').innerText = `Sheet ${sheetCounter} of ${Math.ceil(allSourcePages.length/n)}`;
-
                 const newPage = mergedPdf.addPage([sheetW, sheetH]);
-
                 for (let j = 0; j < n; j++) {
                     const srcPage = allSourcePages[i + j];
                     if (!srcPage) continue;
-
                     const embedded = await mergedPdf.embedPage(srcPage);
                     const colIdx = j % cols;
                     const rowIdx = rows - 1 - Math.floor(j / cols);
-
-                    newPage.drawPage(embedded, {
-                        x: colIdx * cellW + margin,
-                        y: rowIdx * cellH + margin,
-                        width: cellW - (margin * 2),
-                        height: cellH - (margin * 2)
-                    });
+                    newPage.drawPage(embedded, { x: colIdx * cellW + margin, y: rowIdx * cellH + margin, width: cellW - (margin * 2), height: cellH - (margin * 2) });
                 }
-
-                if (usePageNum) {
-                    newPage.drawText(`${sheetCounter}`, { x: sheetW - 35, y: 15, size: 10, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
-                }
-                // Branding Stamp
+                newPage.drawText(`${sheetCounter}`, { x: sheetW - 35, y: 15, size: 10, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
                 newPage.drawText("Pdf created on Shriramstationers.in", { x: 20, y: 15, size: 8, font: fontItalic, color: rgb(0.5, 0.5, 0.5) });
             }
 
@@ -391,7 +356,10 @@
             window.scrollTo(0,0);
         }
 
-        function downloadPDF() { const b = new Blob([finalPdfBytes], { type: 'application/pdf' }); const l = document.createElement('a'); l.href = URL.createObjectURL(b); l.download = `Shriram_MultiSlide_${Date.now()}.pdf`; l.click(); }
+        function askForPassword(filename) { return new Promise(res => { document.getElementById('passwordModal').classList.remove('hidden'); document.getElementById('passwordFilename').innerText = filename; document.getElementById('pdfPasswordInput').value = ''; document.getElementById('pdfPasswordInput').focus(); resolvePassword = res; }); }
+        function submitPassword() { const p = document.getElementById('pdfPasswordInput').value; document.getElementById('passwordModal').classList.add('hidden'); if(resolvePassword) resolvePassword(p); }
+        function cancelPassword() { document.getElementById('passwordModal').classList.add('hidden'); if(resolvePassword) resolvePassword(null); }
+        function downloadPDF() { const b = new Blob([finalPdfBytes], { type: 'application/pdf' }); const l = document.createElement('a'); l.href = URL.createObjectURL(b); l.download = `Shriram_NUp_${Date.now()}.pdf`; l.click(); }
         function previewPDF() { window.open(URL.createObjectURL(new Blob([finalPdfBytes], { type: 'application/pdf' })), '_blank'); }
     </script>
 </body>
