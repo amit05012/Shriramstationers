@@ -60,7 +60,7 @@
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
                         <div id="dropZone" onclick="document.getElementById('fileInput').click()" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6 text-center">
                             <i class="fas fa-file-pdf text-4xl text-blue-500 mb-2"></i>
-                            <p class="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Add Chapters</p>
+                            <p class="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Add Pdf</p>
                             <input type="file" id="fileInput" multiple accept="application/pdf" class="hidden">
                         </div>
 
@@ -79,14 +79,14 @@
                             </label>
                         </div>
 
-                        <button onclick="mergePDFs()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black uppercase shadow-lg text-sm transition active:scale-95">Generate Module</button>
+                        <button onclick="mergePDFs()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black uppercase shadow-lg text-sm transition active:scale-95">Merge Pdf</button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2 bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px] shadow-2xl">
                     <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-                        <h3 class="text-white font-bold text-[10px] uppercase tracking-widest"><i class="fas fa-sort mr-2"></i> Module Sequence</h3>
-                        <button onclick="sortFilesByName()" class="text-[10px] font-bold uppercase bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Natural Sort</button>
+                        <h3 class="text-white font-bold text-[10px] uppercase tracking-widest"><i class="fas fa-sort mr-2"></i> Pdf Sequence</h3>
+                        <button onclick="sortFilesByName()" class="text-[10px] font-bold uppercase bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Sort By Name</button>
                     </div>
                     <div id="fileList"></div>
                     <div id="emptyMsg" class="h-48 flex items-center justify-center text-slate-600 uppercase font-bold text-[10px] tracking-widest">No Chapters Selected</div>
