@@ -11,11 +11,43 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         body { font-family: 'Poppins', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        
+        /* Tool Layout Fixes */
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
-        .img-container { position: relative; cursor: grab; }
-        .page-badge { position: absolute; top: 4px; left: 4px; background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; z-index: 10; }
-        .remove-btn { position: absolute; top: 4px; right: 4px; background: #ef4444; color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; z-index: 10; }
+        
+        /* NEW: Bigger Visual Grid */
+        #previewGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .img-container { 
+            position: relative; 
+            cursor: grab; 
+            background: #1e293b; 
+            padding: 8px; 
+            border-radius: 12px; 
+            border: 1px solid #334155;
+            transition: all 0.3s ease;
+        }
+        .img-container:active { cursor: grabbing; }
+        .img-container:hover { border-color: #60a5fa; transform: translateY(-5px); }
+
+        /* BIGGER THUMBNAILS */
+        .img-wrapper {
+            width: 140px;
+            height: 190px;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #0f172a;
+        }
+        .img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+        .page-badge { position: absolute; top: 12px; left: 12px; background: #3b82f6; color: white; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .remove-btn { position: absolute; top: 12px; right: 12px; background: #ef4444; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; z-index: 10; font-weight: bold; border: 2px solid #1e293b; }
+
         .social-icon { transition: 0.4s; color: #475569; }
         .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
     </style>
@@ -29,18 +61,18 @@
         </div>
         <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
             <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
-            <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
+            <a href="index.html" class="text-blue-400">PDF Tools</a>
         </div>
     </nav>
 
-    <main class="flex-grow max-w-6xl mx-auto w-full px-6 py-12">
+    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
         <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in duration-500">
-            <h2 class="text-3xl font-extrabold text-white mb-4">Conversion Success!</h2>
+            <h2 class="text-3xl font-extrabold text-white mb-4">PDF Ready!</h2>
             <div class="flex justify-center gap-4">
-                <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold hover:bg-slate-600 transition">Preview</button>
-                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold hover:bg-slate-200 transition">Download</button>
+                <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold hover:bg-slate-600 transition shadow-lg">Preview</button>
+                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold hover:bg-slate-200 transition shadow-lg">Download</button>
             </div>
-            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline font-bold uppercase tracking-widest">Create New</button>
+            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline font-bold uppercase tracking-widest">Create New Batch</button>
         </section>
 
         <div id="toolInterface">
@@ -48,30 +80,32 @@
                 <div class="lg:col-span-1 space-y-6">
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
                         <div id="dropZone" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6 text-center">
-                            <i class="fas fa-image text-4xl text-blue-500 mb-2"></i>
+                            <i class="fas fa-camera-retro text-4xl text-blue-500 mb-2"></i>
                             <p class="text-[10px] font-bold text-white uppercase tracking-widest">Add Images</p>
                             <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
                         </div>
                         <div class="space-y-4 mb-6">
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
-                                <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
-                                <input type="checkbox" id="pageNum" checked class="w-4 h-4 accent-blue-500">
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer group">
+                                <span class="text-xs font-bold text-slate-300 group-hover:text-white transition">Add Page Numbers</span>
+                                <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
                             </label>
                         </div>
-                        <button id="mainBtn" onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-black text-xl shadow-lg transition">GENERATE PDF</button>
+                        <button id="mainBtn" onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95">GENERATE PDF</button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2">
-                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 min-h-[500px]">
-                        <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
-                            <h3 class="text-white font-bold flex items-center gap-2">Image Sequence</h3>
-                            <button onclick="sortImagesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition">Sort by Name</button>
+                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px] shadow-2xl">
+                        <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
+                            <h3 class="text-white font-bold flex items-center gap-2">Visual Sequence</h3>
+                            <button onclick="sortImagesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
+                                <i class="fas fa-sort-alpha-down"></i> Sort by Name
+                            </button>
                         </div>
-                        <div id="previewGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                        <div id="previewGrid"></div>
                         <div id="emptyMsg" class="h-64 flex flex-col items-center justify-center text-slate-700">
-                            <i class="fas fa-images text-4xl mb-3"></i>
-                            <p class="font-bold uppercase text-xs tracking-widest">No images selected</p>
+                            <i class="fas fa-images text-5xl mb-4"></i>
+                            <p class="font-bold uppercase text-xs tracking-widest">Drag and Drop images to begin</p>
                         </div>
                     </div>
                 </div>
@@ -80,25 +114,60 @@
     </main>
 
     <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12 text-left">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
+            
             <div>
-                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white"><img src="../logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers</h3>
-                <p class="text-slate-500 mb-6 text-sm leading-relaxed">Trusted since Sept 5, 2024 for Dausa students.</p>
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
+                    <img src="logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
+                </h3>
+                <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                    Dausa's trusted hub for affordable student printing and quality stationery.
+                </p>
                 <div class="flex gap-4">
-                    <a href="https://wa.me/919414711702" target="_blank" class="social-icon text-xl"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.facebook.com/Shriramstationers5/" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/shriramstationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-pink-600 hover:text-white transition" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://telegram.me/ShriramStationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-400 hover:text-white transition" aria-label="Telegram"><i class="fab fa-telegram-plane text-lg"></i></a>
+                    <a href="https://wa.me/919414711702" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-green-500 text-white transition" aria-label="WhatsApp"><i class="fab fa-whatsapp text-lg"></i></a>
                 </div>
             </div>
+            
             <div>
-                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Shop Address</h4>
-                <p class="text-sm text-slate-400">Opposite S.B.I. Bank, Agra Road, Dausa</p>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Our Shop</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
+                        <a href="https://share.google/fATJWy2Udk4xxdVbc" target="_blank" class="hover:text-blue-400 transition cursor-pointer">
+                            <span>Opposite S.B.I. Bank<br>Agra Road, Dausa<br>Rajasthan</span><br>
+                            <span class="text-xs text-blue-500 font-semibold mt-1 inline-block">Open in Google Maps →</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <div class="md:text-right">
-                <p class="text-xl font-bold text-white">9414711702</p>
-                <p class="text-xs text-blue-500 font-bold uppercase">50 Paisa Per Side Printing</p>
+
+            <div>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Contact Us</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-phone-alt text-slate-500"></i>
+                        <span class="font-bold text-lg text-white">9414711702</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-envelope text-slate-500"></i>
+                        <a href="mailto:shriramstationers05@gmail.com" class="hover:text-blue-400 transition break-all">shriramstationers05@gmail.com</a>
+                    </li>
+                    <li class="pt-2">
+                        <a href="https://wa.me/919414711702" target="_blank" class="inline-flex items-center gap-2 text-green-500 hover:text-green-400 font-medium transition">
+                            <i class="fab fa-whatsapp text-lg"></i> Message us on WhatsApp
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
+        
+        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
+            © 2026 Shriram Stationers. All Rights Reserved.
+        </div>
     </footer>
-
     <script>
         const previewGrid = document.getElementById('previewGrid');
         const emptyMsg = document.getElementById('emptyMsg');
@@ -131,9 +200,16 @@
             previewGrid.innerHTML = '';
             imageList.forEach((img, index) => {
                 const div = document.createElement('div');
-                div.className = 'img-container bg-slate-900 rounded-lg overflow-hidden border border-slate-700 aspect-[3/4]';
+                div.className = 'img-container';
                 div.dataset.id = img.id;
-                div.innerHTML = `<div class="page-badge">${index + 1}</div><div class="remove-btn" onclick="removeItem('${img.id}')">×</div><img src="${img.data}" class="w-full h-full object-cover">`;
+                div.innerHTML = `
+                    <div class="page-badge">${index + 1}</div>
+                    <div class="remove-btn" onclick="removeItem('${img.id}')">×</div>
+                    <div class="img-wrapper">
+                        <img src="${img.data}">
+                    </div>
+                    <p class="text-[9px] font-bold text-slate-500 mt-2 truncate w-full px-1">${img.name}</p>
+                `;
                 previewGrid.appendChild(div);
             });
         }
@@ -143,23 +219,30 @@
             renderPreview();
         }
 
-        function removeItem(id) { imageList = imageList.filter(img => img.id != id); renderPreview(); }
+        function removeItem(id) { 
+            imageList = imageList.filter(img => img.id != id); 
+            renderPreview(); 
+            if(!imageList.length) emptyMsg.style.display = 'flex';
+        }
 
         async function processImages() {
-            if (!imageList.length) return alert("Select images!");
+            if (!imageList.length) return alert("Please select images first.");
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF('p', 'mm', 'a4');
             for (let i = 0; i < imageList.length; i++) {
                 if (i > 0) pdf.addPage();
                 pdf.addImage(imageList[i].data, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
                 if (document.getElementById('pageNum').checked) {
-                    pdf.setFontSize(12); pdf.text(`${i + 1}`, 195, 287);
+                    pdf.setFontSize(12); pdf.setTextColor(100);
+                    pdf.text(`${i + 1}`, 195, 287);
                 }
-                pdf.setFontSize(10); pdf.text("Pdf created on Shriramstationers.in", 10, 287);
+                pdf.setFontSize(10); pdf.setTextColor(150);
+                pdf.text("Pdf created on Shriramstationers.in", 10, 287);
             }
             finalPDF = pdf;
             document.getElementById('toolInterface').classList.add('hidden');
             document.getElementById('resultHub').classList.remove('hidden');
+            window.scrollTo(0,0);
         }
 
         function getBase64(file) { return new Promise(res => { const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file); }); }
