@@ -18,12 +18,38 @@
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
         
-        .file-item { background: #1e293b; border: 1px solid #334155; transition: 0.3s; cursor: grab; }
-        .file-item:active { cursor: grabbing; }
-        .file-item:hover { border-color: #3b82f6; background: #24344d; }
+        /* Grid-based Sorting Area with Larger Previews */
+        #fileList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
+        }
 
-        .thumb-box { width: 50px; height: 70px; background: #0f172a; border-radius: 4px; overflow: hidden; border: 1px solid #444; flex-shrink: 0; }
-        .thumb-box canvas { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .file-item { 
+            background: #1e293b; 
+            border: 1px solid #334155; 
+            transition: all 0.3s ease; 
+            cursor: grab; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+            border-radius: 1rem;
+        }
+        .file-item:hover { border-color: #3b82f6; background: #24344d; transform: translateY(-5px); }
+
+        .thumb-box { 
+            width: 140px; 
+            height: 190px; 
+            background: #0f172a; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            border: 2px solid #334155; 
+            flex-shrink: 0; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        }
+        .thumb-box canvas { width: 100%; height: 100%; object-fit: cover; }
 
         .social-icon { transition: 0.4s; color: #475569; }
         .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
@@ -42,28 +68,21 @@
         </div>
         <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
             <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
-            <a href="index.html" class="text-blue-400">PDF Tools</a>
+            <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
         </div>
     </nav>
 
-    <main class="flex-grow max-w-6xl mx-auto w-full px-6 py-12">
-        
+    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
         <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in duration-500">
-            <h2 class="text-3xl font-extrabold text-white mb-4">Optimized File Ready!</h2>
-            <p class="text-slate-400 mb-6">Each file is isolated and balanced for professional duplex printing.</p>
+            <h2 class="text-3xl font-extrabold text-white mb-4">Balanced File Ready!</h2>
             <div class="flex justify-center gap-4">
                 <button onclick="previewPDF()" class="bg-slate-700 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-600 transition shadow-lg"><i class="fas fa-eye mr-2"></i> Preview</button>
                 <button onclick="downloadPDF()" class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:bg-slate-200 transition shadow-lg"><i class="fas fa-download mr-2"></i> Download</button>
             </div>
-            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase tracking-widest font-bold">Start New Batch</button>
+            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase font-bold">Start New Batch</button>
         </section>
 
         <div id="toolInterface">
-            <div class="text-center mb-10">
-                <h1 class="text-4xl font-extrabold text-white mb-2">Smart N-Up Slide Merge</h1>
-                <p class="text-slate-400 text-sm">Organized chapter isolation for coaching notes.</p>
-            </div>
-
             <div class="grid lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-1 space-y-6">
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
@@ -83,14 +102,6 @@
                                     <option value="6">6 Slides</option>
                                 </select>
                             </div>
-                            <div>
-                                <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Orientation</label>
-                                <select id="orientation" class="w-full bg-slate-900 border border-slate-700 text-white p-3 rounded-xl font-bold text-sm outline-none">
-                                    <option value="auto" selected>Auto Smart-Logic</option>
-                                    <option value="portrait">Always Vertical</option>
-                                    <option value="landscape">Always Horizontal</option>
-                                </select>
-                            </div>
                             <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
                                 <span class="text-xs font-bold text-slate-300">Binding Margin (1cm)</span>
                                 <input type="checkbox" id="marginFix" checked class="w-4 h-4 accent-blue-500">
@@ -99,25 +110,18 @@
                                 <span class="text-xs font-bold text-slate-300">Balance Double-Sided</span>
                                 <input type="checkbox" id="balanceFix" checked class="w-4 h-4 accent-blue-500">
                             </label>
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
-                                <span class="text-xs font-bold text-slate-300">Page Numbers</span>
-                                <input type="checkbox" id="pageNum" checked class="w-4 h-4 accent-blue-500">
-                            </label>
                         </div>
-
-                        <button id="mainBtn" onclick="processNUp()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95">
-                            GENERATE PDF
-                        </button>
+                        <button onclick="processNUp()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95">GENERATE PDF</button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2">
-                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 min-h-[500px] shadow-2xl">
-                        <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
-                            <h3 class="text-white font-bold flex items-center gap-2"><i class="fas fa-sort text-blue-500"></i> File Sequence</h3>
-                            <button onclick="sortFilesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition">Sort by Name</button>
+                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px] shadow-2xl">
+                        <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
+                            <h3 class="text-white font-bold flex items-center gap-2">File Management</h3>
+                            <button onclick="sortFilesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Sort by Name</button>
                         </div>
-                        <div id="fileList" class="space-y-3"></div>
+                        <div id="fileList"></div>
                         <div id="emptyMsg" class="h-64 flex flex-col items-center justify-center text-slate-700">
                             <i class="fas fa-layer-group text-4xl mb-3"></i>
                             <p class="font-bold uppercase text-xs tracking-widest">No Files Uploaded</p>
@@ -128,87 +132,60 @@
         </div>
     </main>
 
+    <div id="passwordModal" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[200] flex items-center justify-center p-6">
+        <div class="bg-slate-900 border border-slate-700 p-8 rounded-3xl max-w-sm w-full shadow-2xl text-center">
+            <i class="fas fa-lock text-4xl text-red-500 mb-4"></i>
+            <h3 class="text-xl font-bold text-white mb-2 text-sm">File is Protected</h3>
+            <p id="passwordFilename" class="text-[10px] text-slate-400 mb-6 truncate"></p>
+            <input type="password" id="pdfPasswordInput" placeholder="Password" class="w-full bg-slate-800 border border-slate-700 text-white p-4 rounded-xl mb-4 outline-none text-sm">
+            <div class="flex gap-3">
+                <button onclick="submitPassword()" class="flex-grow bg-blue-600 text-white py-3 rounded-xl font-bold text-sm">Unlock</button>
+                <button onclick="cancelPassword()" class="px-4 bg-slate-800 text-slate-400 py-3 rounded-xl text-sm">Skip</button>
+            </div>
+        </div>
+    </div>
+
     <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
-        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-wider">Rendering Grid...</h2>
-        <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden">
+        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase">Rendering Grid...</h2>
+        <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
             <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
         </div>
-        <p id="stats" class="text-blue-400 text-xs font-bold mt-4 uppercase tracking-[0.2em]">Sequential Memory Mode</p>
+        <p id="stats" class="text-blue-400 text-xs font-bold mt-4 uppercase tracking-[0.2em]">Safe Mode Active</p>
     </div>
 
     <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 text-left">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
             <div>
                 <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
                     <img src="../logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
                 </h3>
-                <p class="text-slate-500 mb-6 text-sm leading-relaxed">
-                    Dausa's trusted hub for affordable student printing and quality stationery.
-                </p>
-                <div class="flex gap-4">
-                    <a href="https://www.facebook.com/Shriramstationers5/" target="_blank" class="social-icon text-xl" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/shriramstationers" target="_blank" class="social-icon text-xl" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://telegram.me/ShriramStationers" target="_blank" class="social-icon text-xl" aria-label="Telegram"><i class="fab fa-telegram-plane text-lg"></i></a>
-                    <a href="https://wa.me/919414711702" target="_blank" class="social-icon text-xl" aria-label="WhatsApp"><i class="fab fa-whatsapp text-lg"></i></a>
-                </div>
+                <p class="text-slate-500 mb-6 text-sm">Trusted hub for affordable student printing in Dausa.</p>
             </div>
-            
             <div>
-                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Our Shop</h4>
-                <ul class="space-y-4 text-slate-400">
-                    <li class="flex items-start gap-3">
-                        <i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
-                        <a href="https://share.google/fATJWy2Udk4xxdVbc" target="_blank" class="hover:text-blue-400 transition cursor-pointer">
-                            <span>Opposite S.B.I. Bank<br>Agra Road, Dausa<br>Rajasthan</span><br>
-                            <span class="text-xs text-blue-500 font-semibold mt-1 inline-block font-bold">Open in Google Maps →</span>
-                        </a>
-                    </li>
-                </ul>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Us</h4>
+                <p class="text-sm">Opposite S.B.I. Bank, Agra Road, Dausa</p>
             </div>
-
-            <div>
-                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Contact Us</h4>
-                <ul class="space-y-4 text-slate-400">
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-phone-alt text-slate-500"></i>
-                        <span class="font-bold text-lg text-white">9414711702</span>
-                    </li>
-                    <li class="flex items-center gap-3 text-sm">
-                        <i class="fas fa-envelope text-slate-500"></i>
-                        shriramstationers05@gmail.com
-                    </li>
-                    <li class="pt-2 text-xs uppercase tracking-widest text-blue-400 font-bold">
-                        Established Sept 5, 2024
-                    </li>
-                </ul>
+            <div class="md:text-right">
+                <p class="text-xl font-bold text-white">9414711702</p>
+                <p class="text-xs text-blue-500 font-bold uppercase">50 Paisa Per Side Printing</p>
             </div>
         </div>
-        
-        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
-            © 2026 Shriram Stationers. All Rights Reserved.
+    </footer>
 
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
         const { PDFDocument, rgb, StandardFonts, degrees } = PDFLib;
-
         let pdfQueue = [];
         let finalPdfBytes = null;
+        let resolvePassword = null;
         const fileInput = document.getElementById('fileInput');
         const fileListContainer = document.getElementById('fileList');
 
-        new Sortable(fileListContainer, {
-            animation: 150,
-            onEnd: () => { syncQueueToVisualOrder(); }
-        });
+        new Sortable(fileListContainer, { animation: 150, onEnd: () => { syncQueueToVisualOrder(); } });
 
         function syncQueueToVisualOrder() {
             const visualOrderIds = Array.from(fileListContainer.children).map(child => child.dataset.id);
-            const newQueue = [];
-            visualOrderIds.forEach(id => {
-                const item = pdfQueue.find(p => p.id == id);
-                if (item) newQueue.push(item);
-            });
-            pdfQueue = newQueue;
+            pdfQueue = visualOrderIds.map(id => pdfQueue.find(p => p.id == id));
         }
 
         document.getElementById('dropZone').onclick = () => fileInput.click();
@@ -231,20 +208,22 @@
             const pdf = await pdfjsLib.getDocument({ data }).promise;
             const page = await pdf.getPage(1);
             const canvas = document.querySelector(`[data-canvas-id="${item.id}"]`);
-            const viewport = page.getViewport({ scale: 0.2 });
+            const viewport = page.getViewport({ scale: 0.5 });
             canvas.height = viewport.height; canvas.width = viewport.width;
             await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
         }
 
         function renderItem(item) {
             const div = document.createElement('div');
-            div.className = 'file-item p-4 rounded-xl flex items-center gap-4';
+            div.className = 'file-item';
             div.dataset.id = item.id;
             div.innerHTML = `
-                <div class="thumb-box"><canvas data-canvas-id="${item.id}"></canvas></div>
-                <div class="flex-grow min-w-0"><p class="text-xs font-bold text-white truncate">${item.file.name}</p></div>
-                <button onclick="rotateItem('${item.id}')" class="p-2 bg-slate-900 rounded-lg hover:text-blue-400 transition"><i class="fas fa-rotate-right"></i></button>
-                <button onclick="removeFile('${item.id}')" class="p-2 text-slate-500 hover:text-red-500 transition"><i class="fas fa-trash"></i></button>`;
+                <div class="thumb-box mb-4"><canvas data-canvas-id="${item.id}"></canvas></div>
+                <p class="text-[10px] font-bold text-white w-full truncate px-2 mb-3">${item.file.name}</p>
+                <div class="flex gap-2 justify-center">
+                    <button onclick="rotateItem('${item.id}')" class="p-2 bg-slate-900 rounded-lg hover:text-blue-400 transition"><i class="fas fa-rotate-right"></i></button>
+                    <button onclick="removeFile('${item.id}')" class="p-2 text-slate-500 hover:text-red-500 transition"><i class="fas fa-trash-alt"></i></button>
+                </div>`;
             fileListContainer.appendChild(div);
         }
 
@@ -267,16 +246,13 @@
         }
 
         async function processNUp() {
-            if (!pdfQueue.length) return alert("Upload files first!");
+            if (!pdfQueue.length) return alert("Select files!");
             syncQueueToVisualOrder();
             document.getElementById('loader').classList.remove('hidden');
 
             const n = parseInt(document.getElementById('nupValue').value);
-            let orient = document.getElementById('orientation').value;
-            if(orient === 'auto') orient = (n === 4) ? 'landscape' : 'portrait';
-            
+            let orient = (n === 4) ? 'landscape' : 'portrait';
             const useMargin = document.getElementById('marginFix').checked;
-            const usePageNum = document.getElementById('pageNum').checked;
             const balance = document.getElementById('balanceFix').checked;
 
             const sheetW = (orient === 'landscape') ? 842 : 595;
@@ -286,28 +262,31 @@
             const fontBold = await mergedPdf.embedFont(StandardFonts.HelveticaBold);
             const fontItalic = await mergedPdf.embedFont(StandardFonts.HelveticaOblique);
 
-            // Step 1: Sequential Extraction with Isolated Balancing
             let allSourcePages = [];
             for (let item of pdfQueue) {
-                const doc = await PDFDocument.load(await item.file.arrayBuffer());
+                let doc;
+                const buffer = await item.file.arrayBuffer();
+                try {
+                    doc = await PDFDocument.load(buffer);
+                } catch (err) {
+                    if (err.message.includes('encrypted') || err.message.includes('password')) {
+                        const pass = await askForPassword(item.file.name);
+                        if (pass) doc = await PDFDocument.load(buffer, { password: pass });
+                        else continue;
+                    } else throw err;
+                }
                 const pages = await mergedPdf.copyPages(doc, doc.getPageIndices());
-                
-                // Add this file's pages
                 pages.forEach(p => {
                     if (item.rotation !== 0) p.setRotation(degrees(item.rotation));
                     allSourcePages.push(p);
                 });
-
-                // FILE-LEVEL BALANCE: Multiplier of (n * 2) for duplex or (n) for single
                 const multiplier = balance ? (n * 2) : n;
                 const remainder = allSourcePages.length % multiplier;
                 if (remainder !== 0) {
-                    const padding = multiplier - remainder;
-                    for (let k = 0; k < padding; k++) allSourcePages.push(null);
+                    for (let k = 0; k < (multiplier - remainder); k++) allSourcePages.push(null);
                 }
             }
 
-            // Step 2: Grid Math & Drawing
             let rows = (n === 2 || n === 4) ? 2 : 3;
             let cols = (n === 2 || n === 3) ? 1 : 2;
             if (orient === 'landscape') [rows, cols] = [cols, rows];
@@ -317,33 +296,19 @@
 
             let sheetCounter = 0;
             for (let i = 0; i < allSourcePages.length; i += n) {
-                await new Promise(r => setTimeout(r, 10)); // Memory Safe Pause
-                
+                await new Promise(r => setTimeout(r, 10));
                 sheetCounter++;
                 document.getElementById('progressBar').style.width = Math.round((i / allSourcePages.length) * 100) + '%';
-                document.getElementById('stats').innerText = `Sheet ${sheetCounter}...`;
-
                 const newPage = mergedPdf.addPage([sheetW, sheetH]);
-
                 for (let j = 0; j < n; j++) {
                     const srcPage = allSourcePages[i + j];
                     if (!srcPage) continue;
-
                     const embedded = await mergedPdf.embedPage(srcPage);
                     const colIdx = j % cols;
                     const rowIdx = rows - 1 - Math.floor(j / cols);
-
-                    newPage.drawPage(embedded, {
-                        x: colIdx * cellW + margin,
-                        y: rowIdx * cellH + margin,
-                        width: cellW - (margin * 2),
-                        height: cellH - (margin * 2)
-                    });
+                    newPage.drawPage(embedded, { x: colIdx * cellW + margin, y: rowIdx * cellH + margin, width: cellW - (margin * 2), height: cellH - (margin * 2) });
                 }
-
-                if (usePageNum) {
-                    newPage.drawText(`${sheetCounter}`, { x: sheetW - 35, y: 15, size: 10, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
-                }
+                newPage.drawText(`${sheetCounter}`, { x: sheetW - 35, y: 15, size: 10, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
                 newPage.drawText("Pdf created on Shriramstationers.in", { x: 20, y: 15, size: 8, font: fontItalic, color: rgb(0.5, 0.5, 0.5) });
             }
 
@@ -354,18 +319,11 @@
             window.scrollTo(0,0);
         }
 
-        function downloadPDF() {
-            const blob = new Blob([finalPdfBytes], { type: 'application/pdf' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `Shriram_NUp_Balanced.pdf`;
-            link.click();
-        }
-
-        function previewPDF() {
-            const blob = new Blob([finalPdfBytes], { type: 'application/pdf' });
-            window.open(URL.createObjectURL(blob), '_blank');
-        }
+        function askForPassword(filename) { return new Promise(res => { document.getElementById('passwordModal').classList.remove('hidden'); document.getElementById('passwordFilename').innerText = filename; document.getElementById('pdfPasswordInput').value = ''; document.getElementById('pdfPasswordInput').focus(); resolvePassword = res; }); }
+        function submitPassword() { const p = document.getElementById('pdfPasswordInput').value; document.getElementById('passwordModal').classList.add('hidden'); if(resolvePassword) resolvePassword(p); }
+        function cancelPassword() { document.getElementById('passwordModal').classList.add('hidden'); if(resolvePassword) resolvePassword(null); }
+        function downloadPDF() { const b = new Blob([finalPdfBytes], { type: 'application/pdf' }); const l = document.createElement('a'); l.href = URL.createObjectURL(b); l.download = `Shriram_NUp_${Date.now()}.pdf`; l.click(); }
+        function previewPDF() { window.open(URL.createObjectURL(new Blob([finalPdfBytes], { type: 'application/pdf' })), '_blank'); }
     </script>
 </body>
 </html>
