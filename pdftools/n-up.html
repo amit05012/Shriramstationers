@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapter-Isolated N-Up | Shriram Stationers Dausa</title>
+    <title>Professional N-Up Merge | Shriram Stationers Dausa</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -35,37 +35,51 @@
         </div>
         <div class="hidden md:flex space-x-8 font-semibold text-slate-300">
             <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
-            <a href="index.html" class="text-blue-400">PDF Tools</a>
+            <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
         </div>
     </nav>
 
     <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
         <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in">
-            <h2 class="text-3xl font-extrabold text-white mb-4 uppercase tracking-tighter">Print Ready!</h2>
+            <h2 class="text-3xl font-extrabold text-white mb-4">Files Optimized!</h2>
             <div class="flex justify-center gap-4">
                 <button onclick="previewPDF()" class="bg-slate-700 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-600 transition">Preview</button>
                 <button onclick="downloadPDF()" class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:bg-slate-200 transition">Download</button>
             </div>
-            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase">New Batch</button>
+            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase">Start New Batch</button>
         </section>
 
         <div id="toolInterface">
             <div class="grid lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-1 space-y-6">
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
-                        <div id="dropZone" class="drop-zone rounded-2xl py-10 flex flex-col items-center justify-center cursor-pointer mb-6 text-center">
-                            <i class="fas fa-file-shield text-4xl text-blue-500 mb-2"></i>
-                            <p class="text-[10px] font-bold text-white uppercase tracking-widest">Add PDFs</p>
+                        <div id="dropZone" class="drop-zone rounded-2xl py-10 flex flex-col items-center justify-center cursor-pointer mb-6 text-center px-4">
+                            <i class="fas fa-file-pdf text-4xl text-blue-500 mb-2"></i>
+                            <p class="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Select PDF Files</p>
                             <input type="file" id="fileInput" multiple accept="application/pdf" class="hidden">
                         </div>
+
                         <div class="space-y-4 mb-6">
-                            <select id="nupValue" class="w-full bg-slate-900 border border-slate-700 text-white p-3 rounded-xl font-bold text-sm outline-none">
-                                <option value="2">2 Slides</option>
-                                <option value="4" selected>4 Slides</option>
-                            </select>
+                            <div>
+                                <label class="text-[10px] font-bold text-slate-500 uppercase mb-2 block">Slides Per Side</label>
+                                <select id="nupValue" class="w-full bg-slate-900 border border-slate-700 text-white p-3 rounded-xl font-bold text-sm outline-none">
+                                    <option value="2">2 Slides</option>
+                                    <option value="3">3 Slides</option>
+                                    <option value="4" selected>4 Slides</option>
+                                    <option value="6">6 Slides</option>
+                                </select>
+                            </div>
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-300">Binding Margin (1cm)</span>
+                                <input type="checkbox" id="marginFix" checked class="w-4 h-4 accent-blue-500">
+                            </label>
                             <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
                                 <span class="text-xs font-bold text-slate-300">Balance Double-Sided</span>
                                 <input type="checkbox" id="balanceFix" checked class="w-4 h-4 accent-blue-500">
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
+                                <input type="checkbox" id="pageNum" checked class="w-4 h-4 accent-blue-500">
                             </label>
                         </div>
                         <button onclick="processNUp()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95">GENERATE PDF</button>
@@ -75,7 +89,7 @@
                 <div class="lg:col-span-2">
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px] shadow-2xl">
                         <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-                            <h3 class="text-white font-bold uppercase tracking-widest text-xs">Visual Sorting Grid</h3>
+                            <h3 class="text-white font-bold flex items-center gap-2">Sorting Grid</h3>
                             <button onclick="sortFilesByName()" class="text-[10px] bg-slate-700 text-white px-4 py-2 rounded-lg transition hover:bg-slate-600">Sort by Name</button>
                         </div>
                         <div id="fileList"></div>
@@ -88,79 +102,36 @@
 
     <div id="passwordModal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[200] flex items-center justify-center p-6">
         <div class="bg-slate-900 border border-slate-700 p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl">
-            <i class="fas fa-unlock-alt text-4xl text-red-500 mb-4"></i>
-            <h3 class="text-xl font-bold text-white mb-2">Protected PDF</h3>
+            <i class="fas fa-lock text-4xl text-red-500 mb-4"></i>
+            <h3 class="text-xl font-bold text-white mb-2 uppercase">File Locked</h3>
             <p id="passwordFilename" class="text-[10px] text-slate-400 mb-2 truncate italic"></p>
-            <p id="passwordError" class="text-[10px] text-red-500 font-bold mb-4 hidden uppercase tracking-widest">Wrong Password - Try Again</p>
-            <input type="password" id="pdfPasswordInput" placeholder="Enter Password" class="w-full bg-slate-800 border border-slate-700 text-white p-4 rounded-xl mb-4 text-center outline-none focus:border-blue-500">
+            <p id="passwordError" class="text-[10px] text-red-500 font-bold mb-4 hidden uppercase tracking-widest">Incorrect Password</p>
+            <input type="password" id="pdfPasswordInput" placeholder="Password" class="w-full bg-slate-800 border border-slate-700 text-white p-4 rounded-xl mb-4 text-center outline-none focus:border-blue-500">
             <div class="flex gap-3">
                 <button onclick="handleUnlockSubmit()" class="flex-grow bg-blue-600 text-white py-3 rounded-xl font-bold">Unlock</button>
-                <button onclick="cancelPassword()" class="px-4 bg-slate-800 text-slate-400 py-3 rounded-xl">Skip</button>
+                <button onclick="cancelPassword()" class="px-4 bg-slate-800 text-slate-400 py-3 rounded-xl font-bold">Skip</button>
             </div>
         </div>
     </div>
 
     <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10 text-center">
-        <h2 id="loaderTitle" class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Initializing...</h2>
+        <h2 id="loaderTitle" class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Processing...</h2>
         <div class="w-80 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700 shadow-2xl">
             <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
         </div>
-        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-6 uppercase tracking-[0.3em]">Preparing Memory Hub</p>
+        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-6 uppercase tracking-[0.3em]">Preparing Memory</p>
     </div>
 
-    <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
-            
+    <footer class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div>
-                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
-                    <img src="logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
-                </h3>
-                <p class="text-slate-500 mb-6 text-sm leading-relaxed">
-                    Dausa's trusted hub for affordable student printing and quality stationery.
-                </p>
-                <div class="flex gap-4">
-                    <a href="https://www.facebook.com/Shriramstationers5/" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/shriramstationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-pink-600 hover:text-white transition" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://telegram.me/ShriramStationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-400 hover:text-white transition" aria-label="Telegram"><i class="fab fa-telegram-plane text-lg"></i></a>
-                    <a href="https://wa.me/919414711702" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-green-500 text-white transition" aria-label="WhatsApp"><i class="fab fa-whatsapp text-lg"></i></a>
-                </div>
+                <h3 class="text-xl font-bold text-white uppercase">Shriram Stationers</h3>
+                <p class="text-xs">Dausa, Rajasthan</p>
             </div>
-            
-            <div>
-                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Our Shop</h4>
-                <ul class="space-y-4 text-slate-400">
-                    <li class="flex items-start gap-3">
-                        <i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
-                        <a href="https://share.google/fATJWy2Udk4xxdVbc" target="_blank" class="hover:text-blue-400 transition cursor-pointer">
-                            <span>Opposite S.B.I. Bank<br>Agra Road, Dausa<br>Rajasthan</span><br>
-                            <span class="text-xs text-blue-500 font-semibold mt-1 inline-block">Open in Google Maps →</span>
-                        </a>
-                    </li>
-                </ul>
+            <div class="text-right">
+                <p class="text-xl font-black text-white">9414711702</p>
+                <p class="text-[10px] text-blue-500 font-bold uppercase tracking-widest">Safe-Margin Printing Hub</p>
             </div>
-
-            <div>
-                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Contact Us</h4>
-                <ul class="space-y-4 text-slate-400">
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-phone-alt text-slate-500"></i>
-                        <span class="font-bold text-lg text-white">9414711702</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-envelope text-slate-500"></i>
-                        <a href="mailto:shriramstationers05@gmail.com" class="hover:text-blue-400 transition break-all">shriramstationers05@gmail.com</a>
-                    </li>
-                    <li class="pt-2">
-                        <a href="https://wa.me/919414711702" target="_blank" class="inline-flex items-center gap-2 text-green-500 hover:text-green-400 font-medium transition">
-                            <i class="fab fa-whatsapp text-lg"></i> Message us on WhatsApp
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
-            © 2026 Shriram Stationers. All Rights Reserved.
         </div>
     </footer>
 
@@ -197,7 +168,7 @@
             div.dataset.id = item.id;
             div.innerHTML = `<div class="thumb-box bg-slate-950"><canvas data-canvas-id="${item.id}"></canvas></div>
                              <p class="text-[10px] font-bold text-white truncate w-full px-2 mt-3">${item.file.name}</p>
-                             <button onclick="removeFile('${item.id}')" class="p-2 text-red-500 hover:text-red-400"><i class="fas fa-trash-alt"></i></button>`;
+                             <button onclick="removeFile('${item.id}')" class="p-2 text-red-500 hover:text-red-400 transition"><i class="fas fa-trash-alt"></i></button>`;
             document.getElementById('fileList').appendChild(div);
         }
 
@@ -209,12 +180,13 @@
                 const viewport = page.getViewport({ scale: 0.5 });
                 canvas.height = viewport.height; canvas.width = viewport.width;
                 await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-            } catch (e) { console.log("Locked PDF"); }
+            } catch (e) { console.log("Protected PDF Thumbnail skipped."); }
         }
 
         function removeFile(id) {
             pdfQueue = pdfQueue.filter(p => p.id != id);
-            document.querySelector(`[data-id="${id}"]`).remove();
+            const el = document.querySelector(`[data-id="${id}"]`);
+            if(el) el.remove();
             if(!pdfQueue.length) document.getElementById('emptyMsg').style.display = 'block';
         }
 
@@ -237,18 +209,18 @@
         async function processNUp() {
             if (!pdfQueue.length) return alert("Select files first!");
             
-            const loader = document.getElementById('loader');
             const bar = document.getElementById('progressBar');
             const statText = document.getElementById('stats');
             const title = document.getElementById('loaderTitle');
-            
-            loader.classList.remove('hidden');
-            title.innerText = "Extracting Pages...";
+            document.getElementById('loader').classList.remove('hidden');
 
             const n = parseInt(document.getElementById('nupValue').value);
             const balance = document.getElementById('balanceFix').checked;
-            const sheetW = (n === 4) ? 842 : 595;
-            const sheetH = (n === 4) ? 595 : 842;
+            const usePageNum = document.getElementById('pageNum').checked;
+            const useMargin = document.getElementById('marginFix').checked;
+
+            const sheetW = (n === 4 || n === 6) ? 842 : 595;
+            const sheetH = (n === 4 || n === 6) ? 595 : 842;
 
             const mergedPdf = await PDFDocument.create();
             const fontBold = await mergedPdf.embedFont(StandardFonts.HelveticaBold);
@@ -256,12 +228,13 @@
 
             let allSourcePages = [];
 
-            // Phase 1: Unlocking and Loading
+            // Stage 1: Load and Unlock
+            title.innerText = "Extracting Pages...";
             for (let i = 0; i < pdfQueue.length; i++) {
                 let item = pdfQueue[i];
-                let percent = Math.round((i / pdfQueue.length) * 40); // 0% to 40%
+                let percent = Math.round((i / pdfQueue.length) * 40);
                 bar.style.width = percent + '%';
-                statText.innerText = `Loading File ${i + 1} of ${pdfQueue.length}`;
+                statText.innerText = `Reading File ${i + 1} of ${pdfQueue.length}`;
                 
                 await new Promise(r => setTimeout(r, 10));
 
@@ -272,7 +245,7 @@
                     try {
                         doc = await PDFDocument.load(buffer);
                     } catch (err) {
-                        if (err.message.includes('password') || err.message.includes('encrypted') || err.message.includes('EB')) {
+                        if (err.message.includes('password') || err.message.includes('encrypted')) {
                             document.getElementById('passwordModal').classList.remove('hidden');
                             document.getElementById('passwordFilename').innerText = item.file.name;
                             const pass = await new Promise(res => { currentResolver = res; });
@@ -299,32 +272,52 @@
                 if (remainder !== 0) for (let k = 0; k < (multiplier - remainder); k++) allSourcePages.push(null);
             }
 
-            // Phase 2: Sheet Rendering
-            title.innerText = "Rendering Grid...";
-            let sheetCounter = 0;
-            const rows = 2; const cols = (n === 4) ? 2 : 1;
-            const cellW = sheetW / cols; const cellH = sheetH / rows;
+            // Stage 2: Render
+            title.innerText = "Building Grid...";
+            let rows, cols;
+            if (n === 2) { rows = 2; cols = 1; }
+            else if (n === 3) { rows = 3; cols = 1; }
+            else if (n === 4) { rows = 2; cols = 2; }
+            else if (n === 6) { rows = 2; cols = 3; }
+
+            const footerSpace = 45; // NEW: Reserved black-text zone
+            const sideMargin = useMargin ? 30 : 0;
+            const cellW = (sheetW - (sideMargin * 2)) / cols;
+            const cellH = (sheetH - footerSpace) / rows;
             const totalSheets = Math.ceil(allSourcePages.length / n);
 
+            let sheetCounter = 0;
             for (let i = 0; i < allSourcePages.length; i += n) {
                 await new Promise(r => setTimeout(r, 10));
                 sheetCounter++;
-                
-                // 40% to 100% progress
                 let percent = 40 + Math.round((sheetCounter / totalSheets) * 60);
                 bar.style.width = percent + '%';
                 statText.innerText = `Drawing Sheet ${sheetCounter} of ${totalSheets}`;
 
                 const newPage = mergedPdf.addPage([sheetW, sheetH]);
+
                 for (let j = 0; j < n; j++) {
                     const srcPage = allSourcePages[i + j];
                     if (!srcPage) continue;
                     const embedded = await mergedPdf.embedPage(srcPage);
-                    const colIdx = j % cols; const rowIdx = rows - 1 - Math.floor(j / cols);
-                    newPage.drawPage(embedded, { x: colIdx * cellW, y: rowIdx * cellH, width: cellW, height: cellH });
+                    const colIdx = j % cols;
+                    const rowIdx = rows - 1 - Math.floor(j / cols);
+                    
+                    newPage.drawPage(embedded, { 
+                        x: colIdx * cellW + sideMargin, 
+                        y: (rowIdx * cellH) + footerSpace, // Shifted UP for footer safety
+                        width: cellW, 
+                        height: cellH 
+                    });
                 }
-                newPage.drawText(`${sheetCounter}`, { x: sheetW - 35, y: 15, size: 10, font: fontBold, color: rgb(0.3, 0.3, 0.3) });
-                newPage.drawText("Pdf created on Shriramstationers.in", { x: 20, y: 15, size: 8, font: fontItalic, color: rgb(0.5, 0.5, 0.5) });
+                
+                // Color: Black (0,0,0)
+                const textColor = rgb(0, 0, 0); 
+
+                if (usePageNum) {
+                    newPage.drawText(`${sheetCounter}`, { x: sheetW - 35, y: 15, size: 10, font: fontBold, color: textColor });
+                }
+                newPage.drawText("Pdf created on Shriramstationers.in", { x: 20, y: 15, size: 8, font: fontItalic, color: textColor });
             }
 
             finalPdfBytes = await mergedPdf.save();
