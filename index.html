@@ -3,194 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shriram Stationers | Premium Printing Dausa</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <meta name="description" content="Shriram Stationers in Dausa offering bulk printing at 50 paisa per side and high-quality stationery.">
+    <title>Shriram Stationers | Premium Stationery & Printing</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
-
-        /* THEME VARIABLES - Use these for all future pages */
-        :root {
-            --bg-main: #0f172a;      /* Deep Slate */
-            --bg-card: #1e293b;      /* Navy Slate */
-            --brand-blue: #3b82f6;   /* Royal Blue */
-            --brand-yellow: #fbbf24; /* Golden Yellow */
-            --border-glow: rgba(59, 130, 246, 0.2);
-        }
-
+        /* General Reset & Typography */
         body { 
-            font-family: 'Poppins', sans-serif; 
-            background-color: var(--bg-main); 
-            color: #f8fafc;
-            scroll-behavior: smooth;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            color: #333; 
+            line-height: 1.6; 
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 { margin-bottom: 0.5rem; }
+        
+        /* Header styling */
+        header { 
+            background: #2c3e50; 
+            color: #fff; 
+            padding: 1.5rem 0; 
+            text-align: center; 
+            border-bottom: 4px solid #e74c3c;
+        }
+        header p { margin: 0; font-size: 1.1rem; color: #bdc3c7; }
+
+        /* Hero / Advertisement Section */
+        .hero { 
+            background: #e74c3c; 
+            color: white; 
+            text-align: center; 
+            padding: 4rem 1rem; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .hero h2 { font-size: 2.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .hero p { font-size: 1.3rem; margin: 10px 0; }
+        .highlight-box {
+            display: inline-block;
+            background: #fff;
+            color: #e74c3c;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-top: 15px;
         }
 
-        .glass-nav {
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        /* Main Content Container */
+        .container { 
+            max-width: 1000px; 
+            margin: auto; 
+            padding: 2rem; 
         }
 
-        .hero-glow {
-            background: radial-gradient(circle at center, var(--border-glow) 0%, transparent 70%);
+        /* Services Grid */
+        .services { 
+            display: flex; 
+            justify-content: space-between; 
+            flex-wrap: wrap; 
+            text-align: center; 
+            margin-top: 2rem; 
+        }
+        .service-card { 
+            flex-basis: 30%; 
+            background: #fff; 
+            padding: 2rem 1.5rem; 
+            margin-bottom: 1.5rem; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .service-card:hover { transform: translateY(-5px); }
+
+        /* Contact Section */
+        .contact-section { 
+            background: #fff; 
+            padding: 3rem 2rem; 
+            border-radius: 8px; 
+            margin-top: 2rem; 
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .contact-section a { color: #2c3e50; text-decoration: none; font-weight: bold; }
+        .contact-section a:hover { color: #e74c3c; }
+        
+        /* Social Media Links */
+        .social-links { margin-top: 1.5rem; }
+        .social-links a { 
+            display: inline-block;
+            margin: 0 10px; 
+            padding: 10px 20px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .social-links a:hover { background: #e74c3c; color: #fff; }
+
+        /* Footer */
+        footer { 
+            background: #2c3e50; 
+            color: #bdc3c7; 
+            text-align: center; 
+            padding: 1.5rem 0; 
+            margin-top: 3rem; 
         }
 
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .card-hover:hover {
-            transform: translateY(-5px);
-            border-color: var(--brand-blue);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-        }
-
-        .hindi-promo {
-            font-weight: 800;
-            line-height: 1.2;
-            letter-spacing: -0.5px;
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .service-card { flex-basis: 100%; }
+            .hero h2 { font-size: 2rem; }
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <nav class="glass-nav sticky top-0 z-50 py-4 px-6 lg:px-12 flex justify-between items-center">
-        <div class="flex items-center gap-4 cursor-pointer" onclick="window.scrollTo(0,0)">
-            <img src="logo.jpg" alt="Shriram Stationers" class="h-10 md:h-12 rounded-lg shadow-2xl">
-            <div class="flex flex-col">
-                <span class="text-lg md:text-xl font-bold tracking-tight leading-none text-white">Shriram Stationers</span>
-                <span class="text-[10px] uppercase tracking-[0.2em] text-blue-400 font-bold">Dausa, Rajasthan</span>
-            </div>
-        </div>
-        
-        <div class="hidden md:flex space-x-10 items-center">
-            <a href="#home" class="text-xs font-bold uppercase tracking-widest hover:text-blue-400 transition">Home</a>
-            <a href="/pdftools" class="text-xs font-bold uppercase tracking-widest text-yellow-500 hover:text-yellow-400 transition">PDF Tools</a>
-            <a href="#about" class="text-xs font-bold uppercase tracking-widest hover:text-blue-400 transition">Services</a>
-            <a href="#contact" class="px-5 py-2 border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-white hover:text-slate-900 transition">Contact</a>
-        </div>
-    </nav>
-
-    <header id="home" class="relative overflow-hidden pt-20 pb-20 lg:pt-32 lg:pb-32 px-6">
-        <div class="hero-glow absolute inset-0 pointer-events-none"></div>
-        
-        <div class="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-            <div class="text-center lg:text-left">
-                <div class="inline-block bg-blue-500/10 text-blue-400 border border-blue-500/20 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-8">
-                    Since Sept 2024
-                </div>
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-8 tracking-tighter text-white">
-                    Premium Print.<br>
-                    <span class="text-blue-500 italic">Student Rates.</span>
-                </h1>
-                <p class="text-lg text-slate-400 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                    The leading hub for academic excellence in Dausa. Specialized in high-speed notes printing and professional stationery.
-                </p>
-                <div class="flex flex-wrap justify-center lg:justify-start gap-4">
-                    <a href="/pdftools" class="bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-xl font-bold transition shadow-xl shadow-blue-600/20">
-                        Access PDF Tools
-                    </a>
-                    <a href="#contact" class="bg-slate-800 hover:bg-slate-700 text-white px-10 py-4 rounded-xl font-bold transition border border-white/5">
-                        Locate Shop
-                    </a>
-                </div>
-            </div>
-
-            <div class="relative max-w-md mx-auto lg:ml-auto">
-                <div class="absolute -inset-1 bg-blue-500 rounded-[2rem] blur opacity-20"></div>
-                <div class="relative bg-slate-900 border border-white/10 p-10 rounded-[2rem] shadow-2xl">
-                    <h2 class="text-3xl lg:text-4xl hindi-promo text-white mb-6">
-                        स्टूडेंट्स स्पेशल:<br>
-                        मात्र <span class="text-yellow-500">50 पैसे / साइड</span>
-                    </h2>
-                    <div class="w-16 h-1 bg-blue-500 rounded-full mb-8"></div>
-                    <ul class="space-y-4 mb-10 text-slate-300 font-medium">
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-blue-500"></i> Double-side: ₹1 per sheet</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-blue-500"></i> High-Speed Laser Quality</li>
-                        <li class="flex items-center gap-3"><i class="fas fa-check text-blue-500"></i> Bulk Coaching Notes</li>
-                    </ul>
-                    <div class="bg-slate-800/50 p-5 rounded-2xl border border-white/5 text-center">
-                        <span class="text-[10px] uppercase font-bold text-slate-500 tracking-widest">Shop Landmark</span>
-                        <p class="text-white font-bold mt-1">Opposite S.B.I. Bank, Agra Road</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <header>
+        <h1>Shriram Stationers</h1>
+        <p>Serving Dausa with Excellence Since September 2024</p>
     </header>
 
-    <section id="about" class="max-w-7xl mx-auto py-24 px-6">
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="card-hover bg-slate-800/30 p-10 rounded-[2rem]">
-                <div class="text-blue-500 text-3xl mb-6"><i class="fas fa-print"></i></div>
-                <h3 class="text-xl font-bold mb-4 text-white">Bulk Printing</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Fastest turnaround for competitive exam materials and board notes in Dausa.</p>
-            </div>
-            <div class="card-hover bg-slate-800/30 p-10 rounded-[2rem]">
-                <div class="text-yellow-500 text-3xl mb-6"><i class="fas fa-magic"></i></div>
-                <h3 class="text-xl font-bold mb-4 text-white">Online Toolkit</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Merge, split, and optimize your study materials directly through our website.</p>
-            </div>
-            <div class="card-hover bg-slate-800/30 p-10 rounded-[2rem]">
-                <div class="text-green-500 text-3xl mb-6"><i class="fas fa-book-open"></i></div>
-                <h3 class="text-xl font-bold mb-4 text-white">Stationery</h3>
-                <p class="text-slate-400 text-sm leading-relaxed">Premium academic supplies from top brands curated for students.</p>
-            </div>
+    <section class="hero">
+        <h2>Student Special Offer!</h2>
+        <p>High-quality notes printed at unbeatable prices.</p>
+        <div class="highlight-box">
+            Only 50 Paisa Per Side
         </div>
+        <p><em>(Just ₹1 per double-sided sheet — perfect for heavy PDFs!)</em></p>
     </section>
 
-    <footer id="contact" class="bg-slate-950 border-t border-white/5 pt-20 pb-10 px-6">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-16 mb-20">
-            <div>
-                <img src="logo.jpg" alt="Logo" class="h-10 rounded mb-6 grayscale hover:grayscale-0 transition duration-500">
-                <p class="text-slate-500 text-sm leading-relaxed mb-8">
-                    Your trusted academic partner in Rajasthan. Committed to affordability and excellence since 2024.
-                </p>
-                <div class="flex gap-4">
-                    <a href="https://www.facebook.com/Shriramstationers5/" class="text-slate-400 hover:text-white transition text-lg"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/shriramstationers" class="text-slate-400 hover:text-white transition text-lg"><i class="fab fa-instagram"></i></a>
-                    <a href="https://telegram.me/ShriramStationers" class="text-slate-400 hover:text-white transition text-lg"><i class="fab fa-telegram-plane"></i></a>
-                </div>
+    <div class="container">
+        <h2 style="text-align: center; color: #2c3e50;">What We Offer</h2>
+        <div class="services">
+            <div class="service-card">
+                <h3 style="color: #e74c3c;">Bulk Printing</h3>
+                <p>Crisp, high-speed printing for study materials, notes, and professional documents.</p>
             </div>
-
-            <div>
-                <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-8">Location</h4>
-                <a href="https://share.google/fATJWy2Udk4xxdVbc" target="_blank" class="group">
-                    <p class="text-slate-300 mb-2 leading-relaxed group-hover:text-blue-400 transition">
-                        Opposite S.B.I. Bank,<br>
-                        Agra Road, Dausa, Rajasthan
-                    </p>
-                    <span class="text-xs font-bold text-blue-500 uppercase tracking-widest">Open in Maps &rarr;</span>
-                </a>
+            <div class="service-card">
+                <h3 style="color: #e74c3c;">Office & School Supplies</h3>
+                <p>A complete range of premium stationery items for students and professionals.</p>
             </div>
-
-            <div>
-                <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-8">Connect</h4>
-                <div class="space-y-6">
-                    <a href="https://wa.me/919414711702" target="_blank" class="flex items-center gap-4 group">
-                        <div class="w-10 h-10 rounded-full bg-green-500/10 text-green-500 flex items-center justify-center group-hover:bg-green-500 group-hover:text-white transition"><i class="fab fa-whatsapp"></i></div>
-                        <div>
-                            <p class="text-[10px] uppercase font-bold text-slate-500">WhatsApp Order</p>
-                            <p class="text-slate-200 font-bold">9414711702</p>
-                        </div>
-                    </a>
-                    <a href="mailto:shriramstationers05@gmail.com" class="flex items-center gap-4 group">
-                        <div class="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition"><i class="far fa-envelope"></i></div>
-                        <div>
-                            <p class="text-[10px] uppercase font-bold text-slate-500">Email Inquiry</p>
-                            <p class="text-slate-200 font-bold text-sm">shriramstationers05@gmail.com</p>
-                        </div>
-                    </a>
-                </div>
+            <div class="service-card">
+                <h3 style="color: #e74c3c;">Document Services</h3>
+                <p>Reliable scanning, lamination, and binding services to keep your documents secure.</p>
             </div>
         </div>
 
-        <div class="max-w-7xl mx-auto pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold text-slate-600 uppercase tracking-widest">
-            <p>&copy; 2026 Shriram Stationers</p>
-            <p>Dausa, Rajasthan</p>
+        <div class="contact-section">
+            <h2 style="color: #2c3e50;">Visit Us Today</h2>
+            <p><strong>Address:</strong> Opposite S.B.I. Bank Agra Road Dausa, Rajasthan</p>
+            <p><strong>Phone / WhatsApp:</strong> <a href="tel:+919414711702">+91 9414711702</a></p>
+            <p><strong>Email:</strong> <a href="mailto:shriramstationers05@gmail.com">shriramstationers05@gmail.com</a></p>
+            
+            <div class="social-links">
+                <a href="https://facebook.com/shriramstationers5" target="_blank">Facebook</a>
+                <a href="https://instagram.com/shriramstationers" target="_blank">Instagram</a>
+                <a href="https://wa.me/919414711702" target="_blank">WhatsApp Us</a>
+            </div>
         </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Shriram Stationers. All rights reserved.</p>
     </footer>
 
 </body>
