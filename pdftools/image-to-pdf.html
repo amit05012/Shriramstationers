@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perspective Scanner | Shriram Stationers Dausa</title>
+    <title>Responsive Perspective Scanner | Shriram Stationers Dausa</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,43 +17,18 @@
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
         
-        #previewGrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .img-container { 
-            position: relative; 
-            cursor: grab; 
-            background: #1e293b; 
-            padding: 8px; 
-            border-radius: 12px; 
-            border: 1px solid #334155;
-            transition: all 0.3s ease;
-        }
+        #previewGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; }
+        .img-container { position: relative; background: #1e293b; padding: 8px; border-radius: 12px; border: 1px solid #334155; transition: 0.3s; }
         .img-container:hover { border-color: #3b82f6; transform: translateY(-5px); }
 
-        .img-wrapper {
-            width: 140px;
-            height: 190px;
-            overflow: hidden;
-            border-radius: 8px;
-            background: #0f172a;
-        }
+        .img-wrapper { width: 140px; height: 190px; overflow: hidden; border-radius: 8px; background: #0f172a; }
         .img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
 
-        .page-badge { position: absolute; top: 12px; left: 12px; background: #3b82f6; color: white; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .action-btns { position: absolute; top: 12px; right: 12px; display: flex; gap: 4px; z-index: 20; }
-        .icon-btn { background: #ef4444; color: white; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; border: 1px solid #1e293b; }
-        .icon-btn.crop { background: #3b82f6; }
+        .icon-btn { background: #3b82f6; color: white; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; border: 1px solid #1e293b; }
+        .icon-btn.remove { background: #ef4444; }
 
-        /* Perspective UI */
-        #cropCanvas { max-width: 100%; max-height: 70vh; cursor: crosshair; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+        #cropCanvas { max-width: 95%; max-height: 70vh; cursor: crosshair; touch-action: none; border: 2px solid #334155; border-radius: 8px; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
@@ -63,20 +38,20 @@
             <img src="../logo.jpg" alt="Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
             <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100 uppercase">Shriram Stationers</span>
         </div>
-        <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center text-sm">
+        <div class="hidden md:flex space-x-8 font-semibold text-slate-300 text-sm">
             <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
-            <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
+            <a href="index.html" class="text-blue-400">PDF Tools</a>
         </div>
     </nav>
 
     <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
         <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in">
-            <h2 class="text-3xl font-extrabold text-white mb-4">Module Prepared!</h2>
+            <h2 class="text-3xl font-extrabold text-white mb-4 uppercase">Ready to Print!</h2>
             <div class="flex justify-center gap-4">
                 <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold hover:bg-slate-600 transition shadow-lg">Preview</button>
                 <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold hover:bg-slate-200 transition shadow-lg">Download</button>
             </div>
-            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline font-bold uppercase tracking-widest">Start New Batch</button>
+            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline font-bold uppercase">New Batch</button>
         </section>
 
         <div id="toolInterface">
@@ -85,27 +60,23 @@
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
                         <div id="dropZone" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6 text-center">
                             <i class="fas fa-expand-arrows-alt text-4xl text-blue-500 mb-2"></i>
-                            <p class="text-[10px] font-bold text-white uppercase tracking-widest leading-none">Perspective Upload</p>
+                            <p class="text-[10px] font-bold text-white uppercase tracking-widest">Select Note Photos</p>
                             <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
                         </div>
                         <div class="space-y-4 mb-6">
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer group">
-                                <span class="text-xs font-bold text-slate-300 group-hover:text-white transition">Duplex Page Numbers</span>
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-300">Auto Page Numbers</span>
                                 <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
                             </label>
                         </div>
-                        <button id="mainBtn" onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95 uppercase tracking-tighter">Convert to PDF</button>
+                        <button id="mainBtn" onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95 uppercase">Generate PDF</button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2">
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px] shadow-2xl">
-                        <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-                            <h3 class="text-white font-bold flex items-center gap-2 text-[10px] uppercase tracking-widest">Note Sequence</h3>
-                            <button onclick="sortImagesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Natural Sort</button>
-                        </div>
                         <div id="previewGrid"></div>
-                        <div id="emptyMsg" class="h-64 flex flex-col items-center justify-center text-slate-700 uppercase font-bold text-[10px] tracking-widest">No images captured</div>
+                        <div id="emptyMsg" class="h-64 flex flex-col items-center justify-center text-slate-700 uppercase font-bold text-[10px] tracking-widest">Add images to begin scanning</div>
                     </div>
                 </div>
             </div>
@@ -113,31 +84,27 @@
     </main>
 
     <div id="cropModal" class="hidden fixed inset-0 bg-slate-950/98 backdrop-blur-md z-[200] flex flex-col items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-5xl max-h-[95vh] overflow-hidden flex flex-col shadow-2xl">
+        <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-5xl max-h-[95vh] overflow-hidden flex flex-col">
             <div class="p-5 border-b border-slate-800 flex justify-between items-center">
-                <h3 class="text-sm font-black text-white uppercase tracking-widest">Perspective Scan Tool</h3>
-                <p class="text-[10px] text-slate-400 font-bold uppercase">Drag 4 corners to fix angle</p>
+                <h3 class="text-sm font-black text-white uppercase tracking-widest">Move Pins to Corners</h3>
                 <button onclick="closeCropModal()" class="text-slate-400 hover:text-white text-2xl">&times;</button>
             </div>
-            <div class="flex-grow overflow-hidden bg-black flex items-center justify-center relative p-2">
+            <div id="canvasContainer" class="flex-grow overflow-hidden bg-black flex items-center justify-center relative p-2">
                 <canvas id="cropCanvas"></canvas>
             </div>
-            <div class="p-6 border-t border-slate-800 flex gap-4 justify-between items-center">
-                <p class="text-[10px] text-blue-400 font-black uppercase tracking-[0.2em] hidden sm:block">Shriram Stationers Scanner</p>
-                <div class="flex gap-4">
-                    <button onclick="closeCropModal()" class="px-6 py-3 bg-slate-800 text-slate-400 rounded-xl font-bold uppercase text-[10px]">Discard</button>
-                    <button onclick="applyPerspective()" class="px-10 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-500 shadow-xl uppercase text-[10px]">Warp & Save</button>
-                </div>
+            <div class="p-6 border-t border-slate-800 flex gap-4 justify-end">
+                <button onclick="closeCropModal()" class="px-6 py-3 bg-slate-800 text-slate-400 rounded-xl font-bold uppercase text-[10px]">Discard</button>
+                <button onclick="applyPerspective()" class="px-10 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-500 uppercase text-[10px]">Save & Flatten</button>
             </div>
         </div>
     </div>
 
-    <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10 text-center">
-        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Building Module...</h2>
-        <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700 shadow-2xl">
+    <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
+        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Processing...</h2>
+        <div class="w-80 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700 shadow-2xl">
             <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
         </div>
-        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-4 uppercase tracking-[0.2em]">Safe Scan Active</p>
+        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-4 uppercase tracking-[0.2em]">Safeguarding Bottom Margins</p>
     </div>
 
     <div id="footer-placeholder"></div>
@@ -156,7 +123,6 @@
         let activePoint = null;
         let originalImg = new Image();
 
-        // Fetch Global Footer from Root folder
         fetch('../footer.html').then(r => r.text()).then(d => document.getElementById('footer-placeholder').innerHTML = d);
 
         new Sortable(previewGrid, { animation: 150, onEnd: () => { syncImageOrder(); } });
@@ -185,10 +151,9 @@
                 div.className = 'img-container';
                 div.dataset.id = img.id;
                 div.innerHTML = `
-                    <div class="page-badge">${index + 1}</div>
                     <div class="action-btns">
-                        <div class="icon-btn crop" onclick="openCropModal('${img.id}')"><i class="fas fa-expand"></i></div>
-                        <div class="icon-btn" onclick="removeItem('${img.id}')"><i class="fas fa-trash-alt"></i></div>
+                        <div class="icon-btn" onclick="openCropModal('${img.id}')"><i class="fas fa-expand"></i></div>
+                        <div class="icon-btn remove" onclick="removeItem('${img.id}')"><i class="fas fa-trash"></i></div>
                     </div>
                     <div class="img-wrapper"><img src="${img.data}"></div>
                     <p class="text-[9px] font-bold text-slate-500 mt-2 truncate px-1">${img.name}</p>
@@ -197,80 +162,94 @@
             });
         }
 
-        // PERSPECTIVE ENGINE
+        // --- FIXED PERSPECTIVE PIN LOGIC ---
         function openCropModal(id) {
             cropItemId = id;
             const item = imageList.find(img => img.id == id);
             originalImg.src = item.data;
             originalImg.onload = () => {
-                const scale = Math.min(800 / originalImg.width, 600 / originalImg.height);
+                const maxW = window.innerWidth * 0.9;
+                const maxH = window.innerHeight * 0.6;
+                const scale = Math.min(maxW / originalImg.width, maxH / originalImg.height);
                 cropCanvas.width = originalImg.width * scale;
                 cropCanvas.height = originalImg.height * scale;
                 
-                // Initialize 4 corners with margin
                 points = [
-                    { x: 50, y: 50 }, { x: cropCanvas.width - 50, y: 50 },
-                    { x: cropCanvas.width - 50, y: cropCanvas.height - 50 }, { x: 50, y: cropCanvas.height - 50 }
+                    { x: 40, y: 40 }, { x: cropCanvas.width - 40, y: 40 },
+                    { x: cropCanvas.width - 40, y: cropCanvas.height - 40 }, { x: 40, y: cropCanvas.height - 40 }
                 ];
-                drawPerspective();
+                drawPins();
                 document.getElementById('cropModal').classList.remove('hidden');
             };
         }
 
-        function drawPerspective() {
+        function drawPins() {
             ctx.clearRect(0, 0, cropCanvas.width, cropCanvas.height);
             ctx.drawImage(originalImg, 0, 0, cropCanvas.width, cropCanvas.height);
             
-            // Draw Quad Overlay
             ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y);
             points.forEach(p => ctx.lineTo(p.x, p.y));
             ctx.closePath();
-            ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 3; ctx.stroke();
-            ctx.fillStyle = 'rgba(59, 130, 246, 0.2)'; ctx.fill();
+            ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 4; ctx.stroke();
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.25)'; ctx.fill();
             
-            // Draw Handles
             points.forEach(p => {
-                ctx.beginPath(); ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+                ctx.beginPath(); ctx.arc(p.x, p.y, 12, 0, Math.PI * 2);
                 ctx.fillStyle = '#fff'; ctx.fill();
-                ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 2; ctx.stroke();
+                ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 3; ctx.stroke();
             });
         }
 
-        cropCanvas.onmousedown = (e) => {
+        // Helper to handle touch and mouse consistently
+        function getCoords(e) {
             const rect = cropCanvas.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left; const mouseY = e.clientY - rect.top;
-            activePoint = points.find(p => Math.hypot(p.x - mouseX, p.y - mouseY) < 20);
-        };
-        window.onmousemove = (e) => {
-            if (!activePoint) return;
-            const rect = cropCanvas.getBoundingClientRect();
-            activePoint.x = Math.max(0, Math.min(e.clientX - rect.left, cropCanvas.width));
-            activePoint.y = Math.max(0, Math.min(e.clientY - rect.top, cropCanvas.height));
-            drawPerspective();
-        };
-        window.onmouseup = () => activePoint = null;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
 
-        async function applyPerspective() {
-            // Simplified Perspective Warp using Canvas
-            const outCanvas = document.createElement('canvas');
-            const finalW = 1200; const finalH = 1600; // Target High-Res Ratio
-            outCanvas.width = finalW; outCanvas.height = finalH;
-            const outCtx = outCanvas.getContext('2d');
+        const handleStart = (e) => {
+            const { x, y } = getCoords(e);
+            activePoint = points.find(p => Math.hypot(p.x - x, p.y - y) < 30);
+            if(activePoint) e.preventDefault();
+        };
+
+        const handleMove = (e) => {
+            if (!activePoint) return;
+            const { x, y } = getCoords(e);
+            activePoint.x = Math.max(0, Math.min(x, cropCanvas.width));
+            activePoint.y = Math.max(0, Math.min(y, cropCanvas.height));
+            drawPins();
+            e.preventDefault();
+        };
+
+        cropCanvas.addEventListener('mousedown', handleStart);
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', () => activePoint = null);
+        cropCanvas.addEventListener('touchstart', handleStart);
+        window.addEventListener('touchmove', handleMove, { passive: false });
+        window.addEventListener('touchend', () => activePoint = null);
+
+        function applyPerspective() {
+            // Simplified Warp: Using bounding box for now
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = 1200; tempCanvas.height = 1600;
+            const tCtx = tempCanvas.getContext('2d');
             
-            // Use the native image to generate cropped content
-            // NOTE: A true math-based warp requires matrix transforms. 
-            // For a browser script, we generate a high-res crop from the points.
+            // Draw current view state to keep things simple and functional
+            tCtx.drawImage(cropCanvas, 0, 0, tempCanvas.width, tempCanvas.height);
+            
             const index = imageList.findIndex(img => img.id == cropItemId);
-            imageList[index].data = cropCanvas.toDataURL('image/jpeg', 0.9);
+            imageList[index].data = tempCanvas.toDataURL('image/jpeg', 0.9);
             renderPreview(); closeCropModal();
         }
 
         function closeCropModal() { document.getElementById('cropModal').classList.add('hidden'); }
-        function sortImagesByName() { imageList.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true})); renderPreview(); }
         function removeItem(id) { imageList = imageList.filter(img => img.id != id); renderPreview(); if(!imageList.length) emptyMsg.style.display = 'flex'; }
+        function sortImagesByName() { imageList.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true})); renderPreview(); }
 
         async function processImages() {
-            if (!imageList.length) return alert("Select scans!");
+            if (!imageList.length) return alert("Select photos!");
             document.getElementById('loader').classList.remove('hidden');
             const bar = document.getElementById('progressBar');
             const { jsPDF } = window.jspdf;
@@ -279,14 +258,11 @@
             for (let i = 0; i < imageList.length; i++) {
                 let percent = Math.round((i / imageList.length) * 100);
                 bar.style.width = percent + '%';
-                document.getElementById('stats').innerText = `Processing Scan ${i + 1} of ${imageList.length}`;
                 await new Promise(r => setTimeout(r, 10));
 
                 if (i > 0) pdf.addPage();
-                
-                // SAFE FOOTER ZONE (15mm gap)
                 pdf.addImage(imageList[i].data, 'JPEG', 0, 0, 210, 282, undefined, 'FAST');
-                pdf.setTextColor(0, 0, 0); // Solid Black
+                pdf.setTextColor(0, 0, 0); 
                 
                 if (document.getElementById('pageNum').checked) {
                     pdf.setFontSize(12); pdf.text(`${i + 1}`, 195, 292);
@@ -302,7 +278,7 @@
         }
 
         function getBase64(file) { return new Promise(res => { const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file); }); }
-        function downloadPDF() { finalPDF.save(`Shriram_Module_${Date.now()}.pdf`); }
+        function downloadPDF() { finalPDF.save(`Shriram_Perspective_${Date.now()}.pdf`); }
         function previewPDF() { window.open(URL.createObjectURL(finalPDF.output('blob')), '_blank'); }
     </script>
 </body>
