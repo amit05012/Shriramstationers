@@ -4,19 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Merge PDF | Shriram Stationers Dausa</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
-        body { font-family: 'Poppins', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; background-color: #0f172a; color: #f8fafc; }
+        
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
-        .file-item { background: #1e293b; border: 1px solid #334155; transition: 0.3s; cursor: grab; }
-        .thumb-box { width: 50px; height: 70px; background: #0f172a; border-radius: 4px; overflow: hidden; border: 1px solid #444; flex-shrink: 0; }
-        .thumb-box canvas { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* NEW: Grid-based Sorting Area */
+        #fileList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .file-item { 
+            background: #1e293b; 
+            border: 1px solid #334155; 
+            transition: all 0.3s ease; 
+            cursor: grab; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .file-item:active { cursor: grabbing; }
+        .file-item:hover { border-color: #60a5fa; background: #24344d; transform: translateY(-5px); }
+
+        /* BIGGER THUMBNAILS */
+        .thumb-box { 
+            width: 140px; 
+            height: 190px; 
+            background: #0f172a; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            border: 2px solid #334155; 
+            flex-shrink: 0; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        }
+        .thumb-box canvas { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+
+        .social-icon { transition: 0.4s; color: #475569; }
+        .fa-facebook-f:hover { color: #1877F2; filter: drop-shadow(0 0 10px #1877F2); }
+        .fa-instagram:hover { color: #E1306C; filter: drop-shadow(0 0 10px #E1306C); }
+        .fa-telegram-plane:hover { color: #0088cc; filter: drop-shadow(0 0 10px #0088cc); }
+        .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
@@ -24,25 +67,31 @@
     <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
         <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='https://www.shriramstationers.in'">
             <img src="../logo.jpg" alt="Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
-            <span class="text-2xl font-bold tracking-tight text-slate-100 uppercase">Shriram Stationers</span>
+            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100 uppercase">Shriram Stationers</span>
         </div>
         <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
             <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
-            <a href="index.html" class="text-blue-400">PDF Tools</a>
+            <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
         </div>
     </nav>
 
-    <main class="flex-grow max-w-5xl mx-auto w-full px-6 py-12">
+    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
+        
         <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in duration-500">
-            <h2 class="text-3xl font-extrabold text-white mb-4">Merge Complete!</h2>
+            <h2 class="text-3xl font-extrabold text-white mb-4">Merge Successful!</h2>
             <div class="flex justify-center gap-4">
-                <button onclick="previewPDF()" class="bg-slate-700 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-600 transition shadow-lg">Preview</button>
-                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:bg-slate-200 transition shadow-lg">Download</button>
+                <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold hover:bg-slate-600 transition shadow-lg"><i class="fas fa-eye mr-2"></i> Preview</button>
+                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold hover:bg-slate-200 transition shadow-lg"><i class="fas fa-download mr-2"></i> Download</button>
             </div>
-            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase font-bold">Start New</button>
+            <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase font-bold">Start New Merge</button>
         </section>
 
         <div id="toolInterface">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-extrabold text-white mb-2 tracking-tight">Merge PDF Files</h1>
+                <p class="text-slate-400 text-sm">Organize your modules with large visual previews.</p>
+            </div>
+
             <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 shadow-2xl">
                 <div id="dropZone" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-8">
                     <i class="fas fa-file-pdf text-5xl text-red-500 mb-3"></i>
@@ -50,40 +99,91 @@
                     <input type="file" id="fileInput" multiple accept="application/pdf" class="hidden">
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-4 mb-8">
-                    <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer">
+                <div class="grid md:grid-cols-2 gap-4 mb-10">
+                    <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
                         <span class="text-xs font-bold text-slate-300">Binding Margin (1cm)</span>
                         <input type="checkbox" id="marginFix" checked class="w-5 h-5 accent-blue-500">
                     </label>
-                    <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer">
-                        <span class="text-xs font-bold text-slate-300">Add Blank for Odd Counts</span>
+                    <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
+                        <span class="text-xs font-bold text-slate-300">Balance Double-Sided</span>
                         <input type="checkbox" id="balanceFix" checked class="w-5 h-5 accent-blue-500">
                     </label>
                 </div>
 
-                <div class="bg-slate-800/60 rounded-2xl p-6 mb-8">
-                    <div class="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-                        <h3 class="text-white font-bold flex items-center gap-2">File Sorting</h3>
-                        <button onclick="sortPDFsByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-3 py-2 rounded-lg transition">Sort by Name</button>
+                <div class="bg-slate-800/60 rounded-2xl p-8 mb-8 border border-slate-700 shadow-inner">
+                    <div class="flex justify-between items-center mb-8 border-b border-slate-700 pb-4">
+                        <h3 class="text-white font-bold flex items-center gap-2"><i class="fas fa-sort text-blue-500"></i> Visual Sorting Grid</h3>
+                        <button onclick="sortPDFsByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
+                            <i class="fas fa-sort-alpha-down"></i> Sort by Name
+                        </button>
                     </div>
-                    <div id="fileList" class="space-y-3"></div>
+                    <div id="fileList"></div>
+                    <div id="emptyMsg" class="h-48 flex flex-col items-center justify-center text-slate-600">
+                        <i class="fas fa-layer-group text-4xl mb-3"></i>
+                        <p class="font-bold uppercase text-xs tracking-widest">Upload files to begin sorting</p>
+                    </div>
                 </div>
 
-                <button onclick="mergePDFs()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition">MERGE DOCUMENTS</button>
+                <button onclick="mergePDFs()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95">
+                    MERGE DOCUMENTS
+                </button>
             </div>
         </div>
     </main>
 
-    <footer id="contact" class="bg-slate-950 text-slate-400 pt-16 pb-8 px-6 border-t border-slate-800">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 text-left">
+    <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
+            
             <div>
-                <h3 class="text-xl font-bold mb-4 text-white">Shriram Stationers</h3>
-                <p class="text-sm">Opposite S.B.I. Bank, Agra Road, Dausa</p>
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
+                    <img src="logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
+                </h3>
+                <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                    Dausa's trusted hub for affordable student printing and quality stationery.
+                </p>
+                <div class="flex gap-4">
+                    <a href="https://www.facebook.com/Shriramstationers5/" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/shriramstationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-pink-600 hover:text-white transition" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://telegram.me/ShriramStationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-400 hover:text-white transition" aria-label="Telegram"><i class="fab fa-telegram-plane text-lg"></i></a>
+                    <a href="https://wa.me/919414711702" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-green-500 text-white transition" aria-label="WhatsApp"><i class="fab fa-whatsapp text-lg"></i></a>
+                </div>
             </div>
-            <div class="md:text-right col-span-2">
-                <p class="text-xl font-black text-white">9414711702</p>
-                <p class="text-xs text-blue-500 font-bold uppercase">50 Paisa Per Side Printing</p>
+            
+            <div>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Our Shop</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
+                        <a href="https://share.google/fATJWy2Udk4xxdVbc" target="_blank" class="hover:text-blue-400 transition cursor-pointer">
+                            <span>Opposite S.B.I. Bank<br>Agra Road, Dausa<br>Rajasthan</span><br>
+                            <span class="text-xs text-blue-500 font-semibold mt-1 inline-block">Open in Google Maps →</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
+
+            <div>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Contact Us</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-phone-alt text-slate-500"></i>
+                        <span class="font-bold text-lg text-white">9414711702</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-envelope text-slate-500"></i>
+                        <a href="mailto:shriramstationers05@gmail.com" class="hover:text-blue-400 transition break-all">shriramstationers05@gmail.com</a>
+                    </li>
+                    <li class="pt-2">
+                        <a href="https://wa.me/919414711702" target="_blank" class="inline-flex items-center gap-2 text-green-500 hover:text-green-400 font-medium transition">
+                            <i class="fab fa-whatsapp text-lg"></i> Message us on WhatsApp
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
+            © 2026 Shriram Stationers. All Rights Reserved.
         </div>
     </footer>
 
@@ -94,8 +194,12 @@
         let finalPdfBytes = null;
         const fileInput = document.getElementById('fileInput');
         const fileListContainer = document.getElementById('fileList');
+        const emptyMsg = document.getElementById('emptyMsg');
 
-        new Sortable(fileListContainer, { animation: 150, onEnd: () => { syncQueue(); } });
+        new Sortable(fileListContainer, { 
+            animation: 150, 
+            onEnd: () => { syncQueue(); } 
+        });
 
         function syncQueue() {
             const visualIds = Array.from(fileListContainer.children).map(c => c.dataset.id);
@@ -106,6 +210,7 @@
         fileInput.onchange = (e) => handleFiles(e.target.files);
 
         async function handleFiles(files) {
+            emptyMsg.style.display = 'none';
             for (let file of files) {
                 if (file.type !== 'application/pdf') continue;
                 const id = Date.now() + Math.random();
@@ -121,17 +226,27 @@
             const pdf = await pdfjsLib.getDocument({ data }).promise;
             const page = await pdf.getPage(1);
             const canvas = document.querySelector(`[data-canvas-id="${item.id}"]`);
-            const viewport = page.getViewport({ scale: 0.2 });
-            canvas.height = viewport.height; canvas.width = viewport.width;
+            const viewport = page.getViewport({ scale: 0.6 }); // HIGH RES SCALE
+            canvas.height = viewport.height; 
+            canvas.width = viewport.width;
             await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
         }
 
         function renderItem(item) {
             const div = document.createElement('div');
-            div.className = 'file-item p-4 rounded-xl flex items-center gap-4';
+            div.className = 'file-item p-4 rounded-2xl';
             div.dataset.id = item.id;
-            div.innerHTML = `<div class="thumb-box"><canvas data-canvas-id="${item.id}"></canvas></div><p class="text-xs font-bold text-white flex-grow truncate">${item.file.name}</p>
-                             <button onclick="rotateItem('${item.id}')" class="p-2 bg-slate-900 rounded-lg"><i class="fas fa-rotate-right"></i></button>`;
+            div.innerHTML = `
+                <div class="thumb-box mb-4"><canvas data-canvas-id="${item.id}"></canvas></div>
+                <p class="text-[10px] font-bold text-white w-full truncate px-2 mb-3">${item.file.name}</p>
+                <div class="flex gap-2 w-full justify-center">
+                    <button onclick="rotateItem('${item.id}')" class="p-2 bg-slate-900/80 rounded-lg hover:text-blue-400 transition shadow-inner">
+                        <i class="fas fa-rotate-right text-xs"></i>
+                    </button>
+                    <button onclick="removeFile('${item.id}')" class="p-2 bg-slate-900/80 rounded-lg hover:text-red-500 transition shadow-inner">
+                        <i class="fas fa-trash-alt text-xs"></i>
+                    </button>
+                </div>`;
             fileListContainer.appendChild(div);
         }
 
@@ -147,25 +262,38 @@
             document.querySelector(`[data-canvas-id="${id}"]`).style.transform = `rotate(${item.rotation}deg)`;
         }
 
+        function removeFile(id) {
+            pdfQueue = pdfQueue.filter(p => p.id != id);
+            document.querySelector(`[data-id="${id}"]`).remove();
+            if(!pdfQueue.length) emptyMsg.style.display = 'flex';
+        }
+
         async function mergePDFs() {
+            if(!pdfQueue.length) return alert("Select files!");
             const mergedPdf = await PDFDocument.create();
             const fontI = await mergedPdf.embedFont(StandardFonts.HelveticaOblique);
+            
             for (let item of pdfQueue) {
                 const doc = await PDFDocument.load(await item.file.arrayBuffer());
                 const pages = await mergedPdf.copyPages(doc, doc.getPageIndices());
                 pages.forEach(p => {
                     if(item.rotation !== 0) p.setRotation(degrees(item.rotation));
                     mergedPdf.addPage(p);
+                    // WATERMARK
                     p.drawText("Pdf created on Shriramstationers.in", { x: 20, y: 15, size: 8, font: fontI, color: rgb(0.5, 0.5, 0.5) });
                 });
-                if(document.getElementById('balanceFix').checked && pages.length % 2 !== 0) mergedPdf.addPage([595, 842]);
+                if(document.getElementById('balanceFix').checked && pages.length % 2 !== 0) {
+                    const blank = mergedPdf.addPage([595, 842]);
+                    blank.drawText("Pdf created on Shriramstationers.in", { x: 20, y: 15, size: 8, font: fontI, color: rgb(0.5, 0.5, 0.5) });
+                }
             }
             finalPdfBytes = await mergedPdf.save();
             document.getElementById('toolInterface').classList.add('hidden');
             document.getElementById('resultHub').classList.remove('hidden');
+            window.scrollTo(0,0);
         }
 
-        function downloadPDF() { const blob = new Blob([finalPdfBytes], { type: 'application/pdf' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `Shriram_Merged.pdf`; link.click(); }
+        function downloadPDF() { const blob = new Blob([finalPdfBytes], { type: 'application/pdf' }); const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = `Shriram_Merged_${Date.now()}.pdf`; link.click(); }
         function previewPDF() { window.open(URL.createObjectURL(new Blob([finalPdfBytes], { type: 'application/pdf' })), '_blank'); }
     </script>
 </body>
