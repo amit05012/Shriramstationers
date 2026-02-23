@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High-Load Image to PDF | Shriram Stationers</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        
+        /* Drag & Drop Styling */
+        .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
+        .drop-zone.drag-over { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+
+        /* Animation for massive processing */
+        .processing-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <nav class="bg-slate-900/95 backdrop-blur-md py-4 px-8 flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='https://www.shriramstationers.in'">
+            <img src="../logo.jpg" alt="Logo" class="h-12 rounded-md border border-slate-700">
+            <span class="text-xl font-extrabold tracking-tight text-white uppercase">Shriram Stationers</span>
+        </div>
+        <div class="hidden md:block text-right">
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-none">Established</p>
+            <p class="text-blue-400 font-bold text-xs uppercase">Sept 5, 2024</p>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-4xl mx-auto w-full px-6 py-12">
+        <div class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-white mb-3">Non-Stop Image to PDF</h1>
+            <p class="text-slate-400 text-sm">Engineered for 10,000+ pages. No crashes. No limits.</p>
+        </div>
+
+        <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 shadow-2xl">
+            <div id="dropZone" class="drop-zone rounded-2xl py-16 flex flex-col items-center justify-center cursor-pointer mb-8">
+                <i class="fas fa-file-import text-5xl text-blue-500 mb-4"></i>
+                <p class="text-lg font-bold text-white text-center px-4">Drag massive image batches here</p>
+                <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
+                <button onclick="document.getElementById('fileInput').click()" class="mt-6 bg-slate-700 hover:bg-slate-600 text-white px-6 py-2 rounded-lg font-bold transition">Browse Storage</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="flex items-center gap-3 p-4 bg-slate-900/50 rounded-xl border border-slate-700">
+                    <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
+                    <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
+                </div>
+                <div class="flex items-center gap-3 p-4 bg-slate-900/50 rounded-xl border border-slate-700">
+                    <i class="fas fa-stamp text-blue-500 text-sm"></i>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Auto-Watermark Active</span>
+                </div>
+            </div>
+
+            <button id="mainBtn" onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95 disabled:opacity-50">
+                START PDF GENERATION
+            </button>
+        </div>
+    </main>
+
+    <div id="loader" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
+        <div class="w-full max-w-md">
+            <h2 class="text-white text-3xl font-black mb-2 text-center processing-pulse">Processing Load...</h2>
+            <div class="w-full bg-slate-800 rounded-full h-4 mb-4 border border-slate-700 overflow-hidden">
+                <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <p id="progressStats" class="text-blue-400 text-center font-bold font-mono">0 / 0 Images Processed</p>
+            <p class="text-slate-500 text-center text-[10px] mt-8 uppercase font-bold tracking-[0.2em]">Optimization: Memory-Safe Sequential Mode</p>
+        </div>
+    </div>
+
+    <footer id="contact" class="bg-slate-950 text-slate-400 pt-16 pb-8 px-8 border-t border-slate-900">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 items-start">
+            <div>
+                <img src="../logo.jpg" alt="Logo" class="h-10 rounded-sm mb-4">
+                <h3 class="text-white font-black text-xl mb-1">Shriram Stationers</h3>
+                <p class="text-xs uppercase tracking-widest font-bold text-blue-500">Dausa</p>
+                <div class="flex gap-4 mt-6">
+                    <a href="https://wa.me/919414711702" target="_blank" class="text-2xl hover:text-green-500 transition"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/ShriramStationers" target="_blank" class="text-2xl hover:text-sky-500 transition"><i class="fab fa-telegram-plane"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase text-xs tracking-widest">Shop Location</h4>
+                <p class="text-sm leading-relaxed">Opposite S.B.I. Bank,<br>Agra Road, Dausa<br>Rajasthan - 303303</p>
+            </div>
+            <div class="md:text-right">
+                <h4 class="text-white font-bold mb-4 uppercase text-xs tracking-widest">Business Contact</h4>
+                <p class="text-2xl font-black text-white mb-2">9414711702</p>
+                <p class="text-xs text-blue-400 font-bold uppercase">Best Rate: 50 Paisa Per Side</p>
+            </div>
+        </div>
+        <div class="text-center mt-12 pt-8 border-t border-slate-900 text-[10px] font-bold text-slate-700 uppercase tracking-widest">
+            &copy; 2026 Shriram Stationers | Powered by Professional Printing Tech
+        </div>
+    </footer>
+
+    <script>
+        const input = document.getElementById('fileInput');
+        const loader = document.getElementById('loader');
+        const bar = document.getElementById('progressBar');
+        const stats = document.getElementById('progressStats');
+        const mainBtn = document.getElementById('mainBtn');
+
+        let queue = [];
+
+        // Drag & Drop Handlers
+        const dz = document.getElementById('dropZone');
+        dz.onclick = () => input.click();
+        dz.ondragover = (e) => { e.preventDefault(); dz.classList.add('drag-over'); };
+        dz.ondragleave = () => dz.classList.remove('drag-over');
+        dz.ondrop = (e) => {
+            e.preventDefault();
+            dz.classList.remove('drag-over');
+            addFiles(e.dataTransfer.files);
+        };
+
+        input.onchange = (e) => addFiles(e.target.files);
+
+        function addFiles(files) {
+            queue = [...queue, ...Array.from(files).filter(f => f.type.startsWith('image/'))];
+            mainBtn.innerText = `PROCESS ${queue.length} IMAGES`;
+        }
+
+        async function processImages() {
+            if (queue.length === 0) return alert("Upload images first!");
+            
+            loader.classList.remove('hidden');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const w = pdf.internal.pageSize.getWidth();
+            const h = pdf.internal.pageSize.getHeight();
+
+            for (let i = 0; i < queue.length; i++) {
+                // Update UI Progress
+                const p = Math.round(((i + 1) / queue.length) * 100);
+                bar.style.width = p + '%';
+                stats.innerText = `${i + 1} / ${queue.length} Images Processed`;
+
+                const data = await getBase64(queue[i]);
+                if (i > 0) pdf.addPage();
+                
+                // Optimized image insertion (FAST compression avoids crashes)
+                pdf.addImage(data, 'JPEG', 0, 0, w, h, undefined, 'FAST');
+
+                // Page Numbers logic
+                if (document.getElementById('pageNum').checked) {
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(150);
+                    pdf.text(`${i + 1}`, w - 15, h - 10);
+                }
+
+                // Mandatory Watermark logic
+                pdf.setFontSize(8);
+                pdf.setTextColor(180);
+                pdf.text("Pdf created on Shriramstationers.in", 10, h - 10);
+            }
+
+            pdf.save(`Shriram_Stationers_${Date.now()}.pdf`);
+            loader.classList.add('hidden');
+            queue = [];
+            mainBtn.innerText = "START PDF GENERATION";
+            alert("Massive Load Processed Successfully!");
+        }
+
+        function getBase64(file) {
+            return new Promise((res) => {
+                const r = new FileReader();
+                r.onload = (e) => res(e.target.result);
+                r.readAsDataURL(file);
+            });
+        }
+    </script>
+</body>
+</html>
