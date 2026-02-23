@@ -13,7 +13,7 @@
         body { font-family: 'Poppins', sans-serif; background-color: #0f172a; color: #f8fafc; }
         
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
-        .drop-zone.drag-over { border-color: #10b981; background: rgba(16, 185, 129, 0.1); }
+        .drop-zone.drag-over { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
         
         #previewGrid {
             display: grid;
@@ -31,7 +31,7 @@
             transition: all 0.3s ease;
         }
         .img-container:active { cursor: grabbing; }
-        .img-container:hover { border-color: #10b981; transform: translateY(-5px); }
+        .img-container:hover { border-color: #3b82f6; transform: translateY(-5px); }
 
         .img-wrapper {
             width: 140px;
@@ -42,11 +42,8 @@
         }
         .img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
-        .page-badge { position: absolute; top: 12px; left: 12px; background: #10b981; color: white; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .page-badge { position: absolute; top: 12px; left: 12px; background: #3b82f6; color: white; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .remove-btn { position: absolute; top: 12px; right: 12px; background: #ef4444; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; z-index: 10; font-weight: bold; border: 2px solid #1e293b; }
-
-        .social-icon { transition: 0.4s; color: #475569; }
-        .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
@@ -62,12 +59,12 @@
         </div>
         <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
             <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
-            <a href="index.html" class="text-emerald-400 border-b-2 border-emerald-500 pb-1">PDF Tools</a>
+            <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
         </div>
     </nav>
 
     <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
-        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-emerald-500/30 text-center animate-in fade-in duration-500">
+        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in duration-500">
             <h2 class="text-3xl font-extrabold text-white mb-4">PDF Created!</h2>
             <div class="flex justify-center gap-4">
                 <button onclick="previewPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold hover:bg-slate-600 transition shadow-lg">Preview</button>
@@ -81,26 +78,26 @@
                 <div class="lg:col-span-1 space-y-6">
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
                         <div id="dropZone" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6 text-center">
-                            <i class="fas fa-camera-retro text-4xl text-emerald-500 mb-2"></i>
+                            <i class="fas fa-camera-retro text-4xl text-blue-500 mb-2"></i>
                             <p class="text-[10px] font-bold text-white uppercase tracking-widest">Add Images</p>
                             <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
                         </div>
                         <div class="space-y-4 mb-6">
                             <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer group">
                                 <span class="text-xs font-bold text-slate-300 group-hover:text-white transition">Add Page Numbers</span>
-                                <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-emerald-500">
+                                <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
                             </label>
                         </div>
-                        <button id="mainBtn" onclick="processImages()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95">CONVERT TO PDF</button>
+                        <button id="mainBtn" onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95 uppercase tracking-tighter">CONVERT TO PDF</button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2">
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px] shadow-2xl">
                         <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-                            <h3 class="text-white font-bold flex items-center gap-2">Image Sequence</h3>
-                            <button onclick="sortImagesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
-                                <i class="fas fa-sort-alpha-down"></i> Natural Sort
+                            <h3 class="text-white font-bold flex items-center gap-2 text-xs uppercase tracking-widest">Image Sequence</h3>
+                            <button onclick="sortImagesByName()" class="text-[10px] font-bold uppercase tracking-wider bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
+                                <i class="fas fa-sort-alpha-down"></i> Sort by Name
                             </button>
                         </div>
                         <div id="previewGrid"></div>
@@ -115,74 +112,24 @@
     </main>
 
     <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
-        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Generating PDF...</h2>
+        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Converting Scans...</h2>
         <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700 shadow-2xl">
-            <div id="progressBar" class="bg-emerald-500 h-full w-0 transition-all duration-300"></div>
+            <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
         </div>
-        <p id="stats" class="text-emerald-400 text-[10px] font-bold mt-6 uppercase tracking-[0.2em]">Preparing conversion</p>
+        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-4 uppercase tracking-[0.2em]">Preparing Page 1</p>
     </div>
 
-    <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
-            
-            <div>
-                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
-                    <img src="logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
-                </h3>
-                <p class="text-slate-500 mb-6 text-sm leading-relaxed">
-                    Dausa's trusted hub for affordable student printing and quality stationery.
-                </p>
-                <div class="flex gap-4">
-                    <a href="https://www.facebook.com/Shriramstationers5/" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/shriramstationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-pink-600 hover:text-white transition" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://telegram.me/ShriramStationers" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-400 hover:text-white transition" aria-label="Telegram"><i class="fab fa-telegram-plane text-lg"></i></a>
-                    <a href="https://wa.me/919414711702" target="_blank" class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-green-500 text-white transition" aria-label="WhatsApp"><i class="fab fa-whatsapp text-lg"></i></a>
-                </div>
-            </div>
-            
-            <div>
-                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Our Shop</h4>
-                <ul class="space-y-4 text-slate-400">
-                    <li class="flex items-start gap-3">
-                        <i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
-                        <a href="https://share.google/fATJWy2Udk4xxdVbc" target="_blank" class="hover:text-blue-400 transition cursor-pointer">
-                            <span>Opposite S.B.I. Bank<br>Agra Road, Dausa<br>Rajasthan</span><br>
-                            <span class="text-xs text-blue-500 font-semibold mt-1 inline-block">Open in Google Maps →</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+    <div id="footer-placeholder"></div>
 
-            <div>
-                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Contact Us</h4>
-                <ul class="space-y-4 text-slate-400">
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-phone-alt text-slate-500"></i>
-                        <span class="font-bold text-lg text-white">9414711702</span>
-                    </li>
-                    <li class="flex items-center gap-3">
-                        <i class="fas fa-envelope text-slate-500"></i>
-                        <a href="mailto:shriramstationers05@gmail.com" class="hover:text-blue-400 transition break-all">shriramstationers05@gmail.com</a>
-                    </li>
-                    <li class="pt-2">
-                        <a href="https://wa.me/919414711702" target="_blank" class="inline-flex items-center gap-2 text-green-500 hover:text-green-400 font-medium transition">
-                            <i class="fab fa-whatsapp text-lg"></i> Message us on WhatsApp
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
-            © 2026 Shriram Stationers. All Rights Reserved.
-        </div>
-    </footer>
     <script>
         const previewGrid = document.getElementById('previewGrid');
         const emptyMsg = document.getElementById('emptyMsg');
         const fileInput = document.getElementById('fileInput');
         let imageList = [];
         let finalPDF = null;
+
+        // Fetch Global Footer
+        fetch('../footer.html').then(r => r.text()).then(d => document.getElementById('footer-placeholder').innerHTML = d);
 
         new Sortable(previewGrid, { animation: 150, onEnd: () => { syncImageOrder(); } });
 
@@ -200,7 +147,6 @@
             for (let file of files) {
                 if (!file.type.startsWith('image/')) continue;
                 const data = await getBase64(file);
-                // Capture file name for natural sorting
                 imageList.push({ id: Date.now() + Math.random(), name: file.name, data });
             }
             renderPreview();
@@ -244,25 +190,29 @@
             const pdf = new jsPDF('p', 'mm', 'a4');
 
             for (let i = 0; i < imageList.length; i++) {
-                // Update Progress Calculation
                 let percent = Math.round((i / imageList.length) * 100);
                 bar.style.width = percent + '%';
                 statText.innerText = `Processing Page ${i + 1} of ${imageList.length}`;
                 
-                // Allow browser to repaint the UI to show progress
                 await new Promise(r => setTimeout(r, 10));
 
                 if (i > 0) pdf.addPage();
-                pdf.addImage(imageList[i].data, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+                
+                // SAFE FOOTER ZONE: Drawing image with a 15mm bottom margin
+                // A4 is 210x297. Image will use 210x282.
+                pdf.addImage(imageList[i].data, 'JPEG', 0, 0, 210, 282, undefined, 'FAST');
+                
+                // Color: Solid Black
+                pdf.setTextColor(0, 0, 0); 
                 
                 if (document.getElementById('pageNum').checked) {
-                    pdf.setFontSize(12); pdf.setTextColor(100);
-                    pdf.text(`${i + 1}`, 195, 287);
+                    pdf.setFontSize(12);
+                    pdf.text(`${i + 1}`, 195, 292);
                 }
                 
-                // Branding
-                pdf.setFontSize(10); pdf.setTextColor(150);
-                pdf.text("Pdf created on Shriramstationers.in", 10, 287);
+                // Branding Stamp at Shriram Stationers
+                pdf.setFontSize(10);
+                pdf.text("Pdf created on Shriramstationers.in", 10, 292);
             }
 
             bar.style.width = '100%';
