@@ -41,10 +41,10 @@
 
     <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12">
         <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in">
-            <h2 class="text-3xl font-extrabold text-white mb-4">Print Ready!</h2>
+            <h2 class="text-3xl font-extrabold text-white mb-4 uppercase tracking-tighter">Print Ready!</h2>
             <div class="flex justify-center gap-4">
-                <button onclick="previewPDF()" class="bg-slate-700 text-white px-8 py-4 rounded-xl font-bold">Preview</button>
-                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold">Download</button>
+                <button onclick="previewPDF()" class="bg-slate-700 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-600 transition">Preview</button>
+                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:bg-slate-200 transition">Download</button>
             </div>
             <button onclick="location.reload()" class="mt-8 text-xs text-slate-500 underline uppercase">New Batch</button>
         </section>
@@ -55,31 +55,31 @@
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
                         <div id="dropZone" class="drop-zone rounded-2xl py-10 flex flex-col items-center justify-center cursor-pointer mb-6 text-center">
                             <i class="fas fa-file-shield text-4xl text-blue-500 mb-2"></i>
-                            <p class="text-[10px] font-bold text-white uppercase">Select PDF Files</p>
+                            <p class="text-[10px] font-bold text-white uppercase tracking-widest">Add PDFs</p>
                             <input type="file" id="fileInput" multiple accept="application/pdf" class="hidden">
                         </div>
                         <div class="space-y-4 mb-6">
-                            <select id="nupValue" class="w-full bg-slate-900 border border-slate-700 text-white p-3 rounded-xl font-bold text-sm">
+                            <select id="nupValue" class="w-full bg-slate-900 border border-slate-700 text-white p-3 rounded-xl font-bold text-sm outline-none">
                                 <option value="2">2 Slides</option>
                                 <option value="4" selected>4 Slides</option>
                             </select>
-                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700">
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
                                 <span class="text-xs font-bold text-slate-300">Balance Double-Sided</span>
                                 <input type="checkbox" id="balanceFix" checked class="w-4 h-4 accent-blue-500">
                             </label>
                         </div>
-                        <button onclick="processNUp()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg">GENERATE PDF</button>
+                        <button onclick="processNUp()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95">GENERATE PDF</button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2">
-                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px]">
+                    <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 min-h-[500px] shadow-2xl">
                         <div class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-                            <h3 class="text-white font-bold">Sorting Area</h3>
-                            <button onclick="sortFilesByName()" class="text-[10px] bg-slate-700 text-white px-4 py-2 rounded-lg">Sort by Name</button>
+                            <h3 class="text-white font-bold uppercase tracking-widest text-xs">Visual Sorting Grid</h3>
+                            <button onclick="sortFilesByName()" class="text-[10px] bg-slate-700 text-white px-4 py-2 rounded-lg transition hover:bg-slate-600">Sort by Name</button>
                         </div>
                         <div id="fileList"></div>
-                        <div id="emptyMsg" class="h-64 flex flex-col items-center justify-center text-slate-700 uppercase font-bold text-xs">No Files Uploaded</div>
+                        <div id="emptyMsg" class="h-64 flex flex-col items-center justify-center text-slate-700 uppercase font-bold text-xs tracking-widest">No Files Uploaded</div>
                     </div>
                 </div>
             </div>
@@ -89,10 +89,10 @@
     <div id="passwordModal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[200] flex items-center justify-center p-6">
         <div class="bg-slate-900 border border-slate-700 p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl">
             <i class="fas fa-unlock-alt text-4xl text-red-500 mb-4"></i>
-            <h3 class="text-xl font-bold text-white mb-2">Password Protected</h3>
-            <p id="passwordFilename" class="text-[10px] text-slate-400 mb-2 truncate"></p>
-            <p id="passwordError" class="text-[10px] text-red-500 font-bold mb-4 hidden uppercase tracking-widest">WRONG PASSWORD - TRY AGAIN</p>
-            <input type="password" id="pdfPasswordInput" placeholder="Enter Password" class="w-full bg-slate-800 border border-slate-700 text-white p-4 rounded-xl mb-4 text-center">
+            <h3 class="text-xl font-bold text-white mb-2">Protected PDF</h3>
+            <p id="passwordFilename" class="text-[10px] text-slate-400 mb-2 truncate italic"></p>
+            <p id="passwordError" class="text-[10px] text-red-500 font-bold mb-4 hidden uppercase tracking-widest">Wrong Password - Try Again</p>
+            <input type="password" id="pdfPasswordInput" placeholder="Enter Password" class="w-full bg-slate-800 border border-slate-700 text-white p-4 rounded-xl mb-4 text-center outline-none focus:border-blue-500">
             <div class="flex gap-3">
                 <button onclick="handleUnlockSubmit()" class="flex-grow bg-blue-600 text-white py-3 rounded-xl font-bold">Unlock</button>
                 <button onclick="cancelPassword()" class="px-4 bg-slate-800 text-slate-400 py-3 rounded-xl">Skip</button>
@@ -100,17 +100,20 @@
         </div>
     </div>
 
-    <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
-        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase">Processing...</h2>
-        <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700"><div id="progressBar" class="bg-blue-600 h-full w-0 transition-all"></div></div>
+    <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10 text-center">
+        <h2 id="loaderTitle" class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Initializing...</h2>
+        <div class="w-80 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700 shadow-2xl">
+            <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-6 uppercase tracking-[0.3em]">Preparing Memory Hub</p>
     </div>
 
-<footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
+    <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
         <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12">
             
             <div>
                 <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
-                    <img src="../logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
+                    <img src="logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
                 </h3>
                 <p class="text-slate-500 mb-6 text-sm leading-relaxed">
                     Dausa's trusted hub for affordable student printing and quality stationery.
@@ -168,7 +171,6 @@
         let finalPdfBytes = null;
         let currentResolver = null;
 
-        // Enter Key Listener
         document.getElementById('pdfPasswordInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUnlockSubmit(); });
 
         new Sortable(document.getElementById('fileList'), { animation: 150, onEnd: () => { syncQueue(); } });
@@ -194,8 +196,8 @@
             div.className = 'file-item';
             div.dataset.id = item.id;
             div.innerHTML = `<div class="thumb-box bg-slate-950"><canvas data-canvas-id="${item.id}"></canvas></div>
-                             <p class="text-[10px] font-bold text-white truncate w-full px-2 mt-2">${item.file.name}</p>
-                             <button onclick="removeFile('${item.id}')" class="p-2 text-red-500"><i class="fas fa-trash"></i></button>`;
+                             <p class="text-[10px] font-bold text-white truncate w-full px-2 mt-3">${item.file.name}</p>
+                             <button onclick="removeFile('${item.id}')" class="p-2 text-red-500 hover:text-red-400"><i class="fas fa-trash-alt"></i></button>`;
             document.getElementById('fileList').appendChild(div);
         }
 
@@ -207,7 +209,7 @@
                 const viewport = page.getViewport({ scale: 0.5 });
                 canvas.height = viewport.height; canvas.width = viewport.width;
                 await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
-            } catch (e) { console.log("Protected"); }
+            } catch (e) { console.log("Locked PDF"); }
         }
 
         function removeFile(id) {
@@ -222,7 +224,6 @@
             pdfQueue.forEach(item => renderItem(item));
         }
 
-        // NEW: Clean State Retry Loop [cite: 2026-02-23]
         function handleUnlockSubmit() {
             const val = document.getElementById('pdfPasswordInput').value;
             if(currentResolver) currentResolver(val);
@@ -234,8 +235,15 @@
         }
 
         async function processNUp() {
-            if (!pdfQueue.length) return alert("Select files!");
-            document.getElementById('loader').classList.remove('hidden');
+            if (!pdfQueue.length) return alert("Select files first!");
+            
+            const loader = document.getElementById('loader');
+            const bar = document.getElementById('progressBar');
+            const statText = document.getElementById('stats');
+            const title = document.getElementById('loaderTitle');
+            
+            loader.classList.remove('hidden');
+            title.innerText = "Extracting Pages...";
 
             const n = parseInt(document.getElementById('nupValue').value);
             const balance = document.getElementById('balanceFix').checked;
@@ -247,7 +255,16 @@
             const fontItalic = await mergedPdf.embedFont(StandardFonts.HelveticaOblique);
 
             let allSourcePages = [];
-            for (let item of pdfQueue) {
+
+            // Phase 1: Unlocking and Loading
+            for (let i = 0; i < pdfQueue.length; i++) {
+                let item = pdfQueue[i];
+                let percent = Math.round((i / pdfQueue.length) * 40); // 0% to 40%
+                bar.style.width = percent + '%';
+                statText.innerText = `Loading File ${i + 1} of ${pdfQueue.length}`;
+                
+                await new Promise(r => setTimeout(r, 10));
+
                 let doc = null;
                 const buffer = await item.file.arrayBuffer();
                 
@@ -258,12 +275,9 @@
                         if (err.message.includes('password') || err.message.includes('encrypted') || err.message.includes('EB')) {
                             document.getElementById('passwordModal').classList.remove('hidden');
                             document.getElementById('passwordFilename').innerText = item.file.name;
-                            
-                            const pass = await new Promise(resolve => { currentResolver = resolve; });
-                            if (pass === null) break; // Skip file
-
+                            const pass = await new Promise(res => { currentResolver = res; });
+                            if (pass === null) break;
                             try {
-                                // Explicitly test the password with a fresh load instance [cite: 2026-02-23]
                                 doc = await PDFDocument.load(buffer, { password: pass });
                                 document.getElementById('passwordModal').classList.add('hidden');
                                 document.getElementById('passwordError').classList.add('hidden');
@@ -271,9 +285,9 @@
                                 document.getElementById('passwordError').classList.remove('hidden');
                                 document.getElementById('pdfPasswordInput').value = '';
                                 document.getElementById('pdfPasswordInput').focus();
-                                doc = null; // Stay in loop
+                                doc = null;
                             }
-                        } else { console.error(err); break; }
+                        } else { break; }
                     }
                 }
 
@@ -285,14 +299,22 @@
                 if (remainder !== 0) for (let k = 0; k < (multiplier - remainder); k++) allSourcePages.push(null);
             }
 
+            // Phase 2: Sheet Rendering
+            title.innerText = "Rendering Grid...";
             let sheetCounter = 0;
-            const rows = (n === 4) ? 2 : 2; const cols = (n === 4) ? 2 : 1;
+            const rows = 2; const cols = (n === 4) ? 2 : 1;
             const cellW = sheetW / cols; const cellH = sheetH / rows;
+            const totalSheets = Math.ceil(allSourcePages.length / n);
 
             for (let i = 0; i < allSourcePages.length; i += n) {
                 await new Promise(r => setTimeout(r, 10));
                 sheetCounter++;
-                document.getElementById('progressBar').style.width = Math.round((i / allSourcePages.length) * 100) + '%';
+                
+                // 40% to 100% progress
+                let percent = 40 + Math.round((sheetCounter / totalSheets) * 60);
+                bar.style.width = percent + '%';
+                statText.innerText = `Drawing Sheet ${sheetCounter} of ${totalSheets}`;
+
                 const newPage = mergedPdf.addPage([sheetW, sheetH]);
                 for (let j = 0; j < n; j++) {
                     const srcPage = allSourcePages[i + j];
