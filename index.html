@@ -3,166 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Shriram Stationers in Dausa offering bulk printing at 50 paisa per side and high-quality stationery.">
-    <title>Shriram Stationers | Premium Stationery & Printing</title>
+    <title>Shriram Stationers | Premium Printing & Stationery Dausa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* General Reset & Typography */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            color: #333; 
-            line-height: 1.6; 
-            background-color: #f9f9f9;
-        }
-        h1, h2, h3 { margin-bottom: 0.5rem; }
-        
-        /* Header styling */
-        header { 
-            background: #2c3e50; 
-            color: #fff; 
-            padding: 1.5rem 0; 
-            text-align: center; 
-            border-bottom: 4px solid #e74c3c;
-        }
-        header p { margin: 0; font-size: 1.1rem; color: #bdc3c7; }
-
-        /* Hero / Advertisement Section */
-        .hero { 
-            background: #e74c3c; 
-            color: white; 
-            text-align: center; 
-            padding: 4rem 1rem; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .hero h2 { font-size: 2.8rem; text-transform: uppercase; letter-spacing: 1px; }
-        .hero p { font-size: 1.3rem; margin: 10px 0; }
-        .highlight-box {
-            display: inline-block;
-            background: #fff;
-            color: #e74c3c;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 1.5rem;
-            margin-top: 15px;
+        :root {
+            --bg-color: #0d0d0d;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --accent-silver: #f0f0f0;
+            --text-main: #ffffff;
+            --text-dim: #999999;
+            /* Brand Glow Colors */
+            --whatsapp-glow: #25D366;
+            --instagram-glow: #E1306C;
+            --facebook-glow: #1877F2;
+            --telegram-glow: #0088cc;
         }
 
-        /* Main Content Container */
-        .container { 
-            max-width: 1000px; 
-            margin: auto; 
-            padding: 2rem; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
 
-        /* Services Grid */
-        .services { 
-            display: flex; 
-            justify-content: space-between; 
-            flex-wrap: wrap; 
-            text-align: center; 
-            margin-top: 2rem; 
+        /* Navigation */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 8%; background: rgba(13, 13, 13, 0.9);
+            backdrop-filter: blur(15px); position: fixed; width: 100%; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .service-card { 
-            flex-basis: 30%; 
-            background: #fff; 
-            padding: 2rem 1.5rem; 
-            margin-bottom: 1.5rem; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
-        }
-        .service-card:hover { transform: translateY(-5px); }
+        .nav-logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.5px; }
+        .est-badge { font-size: 0.7rem; color: var(--text-dim); letter-spacing: 1px; }
 
-        /* Contact Section */
-        .contact-section { 
-            background: #fff; 
-            padding: 3rem 2rem; 
-            border-radius: 8px; 
-            margin-top: 2rem; 
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        /* Hero & 50 Paisa Ad */
+        .hero {
+            padding: 160px 8% 80px; text-align: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #0d0d0d 100%);
         }
-        .contact-section a { color: #2c3e50; text-decoration: none; font-weight: bold; }
-        .contact-section a:hover { color: #e74c3c; }
-        
-        /* Social Media Links */
-        .social-links { margin-top: 1.5rem; }
-        .social-links a { 
-            display: inline-block;
-            margin: 0 10px; 
-            padding: 10px 20px;
-            background: #ecf0f1;
-            border-radius: 5px;
-            transition: background 0.3s ease;
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; margin-bottom: 2rem; }
+        .ad-container {
+            display: inline-block; padding: 2.5rem 5rem; border-radius: 20px;
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); transform: perspective(1000px);
         }
-        .social-links a:hover { background: #e74c3c; color: #fff; }
+        .ad-price { font-size: 4rem; font-weight: 800; display: block; }
+        .ad-subtext { color: var(--text-dim); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 3px; }
 
-        /* Footer */
-        footer { 
-            background: #2c3e50; 
-            color: #bdc3c7; 
-            text-align: center; 
-            padding: 1.5rem 0; 
-            margin-top: 3rem; 
+        /* Map & Direction Section */
+        .map-section { padding: 60px 8%; text-align: center; }
+        .direction-btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: #fff; color: #000; padding: 18px 35px;
+            border-radius: 50px; font-weight: 700; text-decoration: none;
+            margin-top: 2rem; transition: 0.3s;
         }
+        .direction-btn:hover { background: var(--accent-silver); transform: translateY(-3px); }
 
-        /* Mobile Responsiveness */
+        /* Services */
+        .grid { padding: 40px 8% 100px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .card { 
+            background: var(--card-bg); padding: 3rem; border-radius: 25px; 
+            border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        }
+        .card:hover { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.06); }
+        .card i { font-size: 1.5rem; color: var(--text-dim); margin-bottom: 1rem; display: block; }
+
+        /* Footer & Socials */
+        .footer-section { 
+            padding: 80px 8%; text-align: center; background: #080808; 
+            border-top: 1px solid rgba(255,255,255,0.05); 
+        }
+        .info-group { margin-bottom: 3rem; }
+        .info-group p { font-size: 1.1rem; color: var(--text-dim); margin-bottom: 5px; }
+
+        .social-links { display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; }
+        .social-link { font-size: 2.5rem; color: #333; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+        /* Custom Glowing Effects */
+        .fa-whatsapp:hover { color: var(--whatsapp-glow); filter: drop-shadow(0 0 15px var(--whatsapp-glow)); transform: scale(1.2); }
+        .fa-instagram:hover { color: var(--instagram-glow); filter: drop-shadow(0 0 15px var(--instagram-glow)); transform: scale(1.2); }
+        .fa-facebook:hover { color: var(--facebook-glow); filter: drop-shadow(0 0 15px var(--facebook-glow)); transform: scale(1.2); }
+        .fa-telegram:hover { color: var(--telegram-glow); filter: drop-shadow(0 0 15px var(--telegram-glow)); transform: scale(1.2); }
+
         @media (max-width: 768px) {
-            .service-card { flex-basis: 100%; }
-            .hero h2 { font-size: 2rem; }
+            .hero h1 { font-size: 2.8rem; }
+            .ad-container { padding: 2rem; }
+            .ad-price { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Shriram Stationers</h1>
-        <p>Serving Dausa with Excellence Since September 2024</p>
+    <nav>
+        <div class="nav-logo">SHRIRAM STATIONERS</div>
+        <div class="est-badge">EST. SEP 2024</div>
+    </nav>
+
+    <header class="hero">
+        <h1>Excellence in Every Page.</h1>
+        <div class="ad-container">
+            <span class="ad-subtext">Signature Bulk Offer</span>
+            <span class="ad-price">50 Paisa</span>
+            <span class="ad-subtext">Per Side | ₹1 Per Double-Sided Sheet</span>
+        </div>
+        <p style="margin-top: 2.5rem; color: var(--text-dim); font-size: 1.1rem;">Premium printing solutions for the modern student and professional.</p>
     </header>
 
-    <section class="hero">
-        <h2>Student Special Offer!</h2>
-        <p>High-quality notes printed at unbeatable prices.</p>
-        <div class="highlight-box">
-            Only 50 Paisa Per Side
+    <section class="grid">
+        <div class="card">
+            <i class="fa-solid fa-bolt"></i>
+            <h3>High-Speed Print</h3>
+            <p>Rapid production of study notes and office files with professional clarity.</p>
         </div>
-        <p><em>(Just ₹1 per double-sided sheet — perfect for heavy PDFs!)</em></p>
+        <div class="card">
+            <i class="fa-solid fa-medal"></i>
+            <h3>Quality Stationery</h3>
+            <p>Curated office supplies and school essentials from trusted brands.</p>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h3>Safe Archiving</h3>
+            <p>Professional scanning and lamination to keep your documents secure forever.</p>
+        </div>
     </section>
 
-    <div class="container">
-        <h2 style="text-align: center; color: #2c3e50;">What We Offer</h2>
-        <div class="services">
-            <div class="service-card">
-                <h3 style="color: #e74c3c;">Bulk Printing</h3>
-                <p>Crisp, high-speed printing for study materials, notes, and professional documents.</p>
-            </div>
-            <div class="service-card">
-                <h3 style="color: #e74c3c;">Office & School Supplies</h3>
-                <p>A complete range of premium stationery items for students and professionals.</p>
-            </div>
-            <div class="service-card">
-                <h3 style="color: #e74c3c;">Document Services</h3>
-                <p>Reliable scanning, lamination, and binding services to keep your documents secure.</p>
-            </div>
+    <section class="map-section">
+        <h2 style="font-size: 2rem; margin-bottom: 1rem;">Find Us</h2>
+        <p style="color: var(--text-dim);">Dausa, Rajasthan</p>
+        <a href="https://maps.google.com/?cid=12324559094968712416&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ" target="_blank" class="direction-btn">
+            <i class="fa-solid fa-location-arrow"></i> Get Directions on Google Maps
+        </a>
+    </section>
+
+    <footer class="footer-section">
+        <div class="info-group">
+            <p><strong>Shriram Stationers</strong></p>
+            <p>Opposite S.B.I. Bank, Agra Road, Dausa, Rajasthan</p>
+            <p>Phone: +91 9414711702</p>
+            <p>Email: shriramstationers05@gmail.com</p>
         </div>
 
-        <div class="contact-section">
-            <h2 style="color: #2c3e50;">Visit Us Today</h2>
-            <p><strong>Address:</strong> Opposite S.B.I. Bank Agra Road Dausa, Rajasthan</p>
-            <p><strong>Phone / WhatsApp:</strong> <a href="tel:+919414711702">+91 9414711702</a></p>
-            <p><strong>Email:</strong> <a href="mailto:shriramstationers05@gmail.com">shriramstationers05@gmail.com</a></p>
-            
-            <div class="social-links">
-                <a href="https://facebook.com/shriramstationers5" target="_blank">Facebook</a>
-                <a href="https://instagram.com/shriramstationers" target="_blank">Instagram</a>
-                <a href="https://wa.me/919414711702" target="_blank">WhatsApp Us</a>
-            </div>
+        <div class="social-links">
+            <a href="https://wa.me/919414711702" target="_blank" class="social-link" title="WhatsApp">
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+            <a href="https://t.me/Shriramstationers" target="_blank" class="social-link" title="Telegram">
+                <i class="fa-brands fa-telegram"></i>
+            </a>
+            <a href="https://instagram.com/Shriramstationers" target="_blank" class="social-link" title="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://facebook.com/Shriramstationers5" target="_blank" class="social-link" title="Facebook">
+                <i class="fa-brands fa-facebook"></i>
+            </a>
         </div>
-    </div>
 
-    <footer>
-        <p>&copy; 2026 Shriram Stationers. All rights reserved.</p>
+        <p style="margin-top: 4rem; font-size: 0.75rem; color: #444;">&copy; 2026 Shriram Stationers. All Rights Reserved.</p>
     </footer>
 
 </body>
