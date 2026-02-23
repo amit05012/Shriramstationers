@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merge PDF | Shriram Stationers Dausa</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        
+        .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
+        .drop-zone.drag-over { border-color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
+        .file-item { background: #1e293b; border: 1px solid #334155; transition: 0.2s; }
+        .file-item:hover { border-color: #3b82f6; }
+        .sortable-ghost { opacity: 0.3; background: #3b82f6; }
+
+        /* Social Glows */
+        .social-icon { transition: 0.4s; color: #475569; }
+        .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
+        .fa-telegram-plane:hover { color: #0088cc; filter: drop-shadow(0 0 10px #0088cc); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
+        <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='https://www.shriramstationers.in'">
+            <img src="../logo.jpg" alt="Shriram Stationers Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
+            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100">Shriram Stationers</span>
+        </div>
+        <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
+            <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
+            <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
+            <a href="#contact" class="hover:text-white transition">Contact</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-5xl mx-auto w-full px-6 py-12">
+        
+        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in zoom-in duration-500">
+            <div class="mb-8">
+                <i class="fas fa-layer-group text-6xl text-blue-400 mb-4"></i>
+                <h2 class="text-3xl font-extrabold text-white">Merge Successful!</h2>
+                <p class="text-slate-400 mt-2">Your files are now one. Ready for 50 paisa bulk printing.</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-6">
+                <button onclick="previewMergedPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:bg-slate-600 transition">
+                    <i class="fas fa-eye text-xl"></i> Preview
+                </button>
+                <button onclick="downloadMergedPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:bg-slate-200 transition">
+                    <i class="fas fa-download text-xl"></i> Download
+                </button>
+            </div>
+        </section>
+
+        <div id="toolInterface">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Merge PDF Files</h1>
+                <p class="text-slate-400">Combine multiple PDFs into a single professional document.</p>
+            </div>
+
+            <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 shadow-2xl">
+                <div id="dropZone" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-8">
+                    <i class="fas fa-file-pdf text-5xl text-red-500 mb-3"></i>
+                    <p class="text-lg font-bold text-white uppercase tracking-wider">Select PDF Files</p>
+                    <input type="file" id="fileInput" multiple accept="application/pdf" class="hidden">
+                </div>
+
+                <div id="fileList" class="space-y-3 mb-8"></div>
+
+                <div class="grid md:grid-cols-2 gap-4 mb-8">
+                    <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
+                        <span class="text-xs font-bold text-slate-300">Add Blank Page for Odd Counts</span>
+                        <input type="checkbox" id="oddPageFix" checked class="w-5 h-5 accent-blue-500">
+                    </label>
+                    <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
+                        <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
+                        <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
+                    </label>
+                </div>
+
+                <button id="mainBtn" onclick="mergeFiles()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95 disabled:opacity-50">
+                    MERGE & OPTIMIZE
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 text-left">
+            <div>
+                <h3 class="text-2xl font-bold mb-4 text-white">Shriram Stationers</h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Trusted since Sept 5, 2024 for Dausa's student community.</p>
+                <div class="flex gap-4 mt-6">
+                    <a href="https://wa.me/919414711702" class="social-icon text-2xl"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/ShriramStationers" class="social-icon text-2xl"><i class="fab fa-telegram-plane"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-sm font-bold mb-6 text-white uppercase tracking-widest">Shop Location</h4>
+                <p class="text-slate-400 text-sm">Opposite S.B.I. Bank, Agra Road, Dausa</p>
+            </div>
+            <div class="md:text-right">
+                <p class="font-bold text-white text-lg">9414711702</p>
+                <p class="text-blue-400 font-bold text-xs uppercase">50 Paisa Per Side Printing</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="loader" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
+        <h2 class="text-white text-3xl font-black mb-4">Merging Documents...</h2>
+        <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
+            <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all"></div>
+        </div>
+        <p id="stats" class="text-blue-400 text-xs font-bold mt-4 uppercase tracking-widest">0 / 0 Ready</p>
+    </div>
+
+    <script>
+        const { PDFDocument, rgb, StandardFonts } = PDFLib;
+        const fileListContainer = document.getElementById('fileList');
+        const fileInput = document.getElementById('fileInput');
+        const loader = document.getElementById('loader');
+        const bar = document.getElementById('progressBar');
+        const resultHub = document.getElementById('resultHub');
+        const toolInterface = document.getElementById('toolInterface');
+
+        let pdfQueue = [];
+        let mergedPdfBytes = null;
+
+        new Sortable(fileListContainer, {
+            animation: 150,
+            onEnd: () => {
+                const newOrder = Array.from(fileListContainer.children).map(c => c.dataset.id);
+                pdfQueue = newOrder.map(id => pdfQueue.find(p => p.id == id));
+            }
+        });
+
+        document.getElementById('dropZone').onclick = () => fileInput.click();
+        fileInput.onchange = (e) => handleFiles(e.target.files);
+
+        async function handleFiles(files) {
+            for (let file of files) {
+                if (file.type !== 'application/pdf') continue;
+                pdfQueue.push({ id: Date.now() + Math.random(), file });
+            }
+            renderFileList();
+        }
+
+        function renderFileList() {
+            fileListContainer.innerHTML = '';
+            pdfQueue.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'file-item p-4 rounded-xl flex justify-between items-center cursor-move';
+                div.dataset.id = item.id;
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-file-pdf text-red-500"></i>
+                        <span class="text-sm font-bold truncate max-w-[200px]">${item.file.name}</span>
+                    </div>
+                    <button onclick="removeFile('${item.id}')" class="text-slate-500 hover:text-red-500"><i class="fas fa-times"></i></button>
+                `;
+                fileListContainer.appendChild(div);
+            });
+        }
+
+        function removeFile(id) {
+            pdfQueue = pdfQueue.filter(p => p.id != id);
+            renderFileList();
+        }
+
+        async function mergeFiles() {
+            if (pdfQueue.length < 1) return alert("Select at least one PDF.");
+            loader.classList.remove('hidden');
+
+            const mergedPdf = await PDFDocument.create();
+            const helveticaFont = await mergedPdf.embedFont(StandardFonts.Helvetica);
+            const helveticaItalic = await mergedPdf.embedFont(StandardFonts.HelveticaOblique);
+            
+            let totalPageCounter = 1;
+
+            for (let i = 0; i < pdfQueue.length; i++) {
+                bar.style.width = Math.round(((i + 1) / pdfQueue.length) * 100) + '%';
+                
+                const arrayBuffer = await pdfQueue[i].file.arrayBuffer();
+                const pdfDoc = await PDFDocument.load(arrayBuffer);
+                const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
+                
+                copiedPages.forEach((page) => {
+                    const { width, height } = page.getSize();
+                    
+                    // Add Page Numbers
+                    if (document.getElementById('pageNum').checked) {
+                        page.drawText(`${totalPageCounter}`, {
+                            x: width - 20, y: 15, size: 12, font: helveticaFont, color: rgb(0.4, 0.4, 0.4)
+                        });
+                    }
+
+                    // Add Watermark
+                    page.drawText("Pdf created on Shriramstationers.in", {
+                        x: 20, y: 15, size: 10, font: helveticaItalic, color: rgb(0.6, 0.6, 0.6)
+                    });
+
+                    mergedPdf.addPage(page);
+                    totalPageCounter++;
+                });
+
+                // BLANK PAGE FOR ODD LOGIC
+                if (document.getElementById('oddPageFix').checked && copiedPages.length % 2 !== 0) {
+                    const blankPage = mergedPdf.addPage([mergedPdf.getPage(0).getWidth(), mergedPdf.getPage(0).getHeight()]);
+                    
+                    // Watermark still printed on blank page
+                    blankPage.drawText("Pdf created on Shriramstationers.in", {
+                        x: 20, y: 15, size: 10, font: helveticaItalic, color: rgb(0.6, 0.6, 0.6)
+                    });
+                    
+                    if (document.getElementById('pageNum').checked) {
+                        blankPage.drawText(`${totalPageCounter}`, {
+                            x: blankPage.getWidth() - 20, y: 15, size: 12, font: helveticaFont, color: rgb(0.4, 0.4, 0.4)
+                        });
+                    }
+                    totalPageCounter++;
+                }
+            }
+
+            mergedPdfBytes = await mergedPdf.save();
+            loader.classList.add('hidden');
+            toolInterface.classList.add('hidden');
+            resultHub.classList.remove('hidden');
+        }
+
+        function downloadMergedPDF() {
+            const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Shriram_Merged_${Date.now()}.pdf`;
+            link.click();
+        }
+
+        function previewMergedPDF() {
+            const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+            window.open(URL.createObjectURL(blob), '_blank');
+        }
+    </script>
+</body>
+</html>
