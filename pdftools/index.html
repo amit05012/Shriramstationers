@@ -17,13 +17,6 @@
         .tool-card i { transition: transform 0.3s ease; }
         .tool-card:hover i { transform: scale(1.2); color: #60a5fa; }
 
-        /* Social Glows for Footer */
-        .social-icon { transition: all 0.4s ease; color: #475569; }
-        .fa-facebook-f:hover { color: #1877F2; filter: drop-shadow(0 0 10px #1877F2); }
-        .fa-instagram:hover { color: #E1306C; filter: drop-shadow(0 0 10px #E1306C); }
-        .fa-telegram-plane:hover { color: #0088cc; filter: drop-shadow(0 0 10px #0088cc); }
-        .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
-
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
@@ -34,7 +27,7 @@
     <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
         <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='https://www.shriramstationers.in'">
             <img src="../logo.jpg" alt="Shriram Stationers Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
-            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100">Shriram Stationers</span>
+            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100 uppercase">Shriram Stationers</span>
         </div>
         
         <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
@@ -51,7 +44,7 @@
                 Optimized Document Processing
             </div>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight">PDF Utility Hub</h1>
-            <p class="text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            <p class="text-slate-400 max-w-2xl mx-auto leading-relaxed text-sm">
                 Organize and optimize your files for professional high-speed printing at **50 paisa per side**.
             </p>
         </div>
@@ -63,86 +56,52 @@
             <div class="tool-card p-6 rounded-2xl" onclick="window.location.href='image-to-pdf.html'">
                 <i class="fas fa-image text-2xl mb-4 text-emerald-400"></i>
                 <h3 class="text-lg font-bold text-white mb-2">Image to PDF</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Rearrange pages manually. Bulk processing for coaching notes.</p>
+                <p class="text-slate-400 text-xs leading-relaxed">Bulk process coaching photos into high-quality PDFs.</p>
             </div>
 
             <div class="tool-card p-6 rounded-2xl" onclick="window.location.href='merge-pdf.html'">
                 <i class="fas fa-file-export text-2xl mb-4 text-cyan-400"></i>
                 <h3 class="text-lg font-bold text-white mb-2">Merge PDF</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Combine multiple chapters into one file with binding margins.</p>
+                <p class="text-slate-400 text-xs leading-relaxed">Combine multiple chapters into one file for binding.</p>
             </div>
 
             <div class="tool-card p-6 rounded-2xl border-blue-500/30 bg-blue-500/5" onclick="window.location.href='n-up.html'">
                 <i class="fas fa-table-cells text-2xl mb-4 text-blue-400"></i>
                 <h3 class="text-lg font-bold text-white mb-2">N-Up Slides</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Print 2, 4, or 6 slides per side to save money and paper.</p>
+                <p class="text-slate-400 text-xs leading-relaxed">Print 2, 4, or 6 slides per side to save on costs.</p>
             </div>
 
-            <div class="tool-card p-6 rounded-2xl">
+            <div class="tool-card p-6 rounded-2xl opacity-60">
                 <i class="fas fa-arrows-rotate text-2xl mb-4 text-blue-400"></i>
                 <h3 class="text-lg font-bold text-white mb-2">Rotate PDF</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Fix sideways or upside-down orientation of scanned pages.</p>
+                <p class="text-slate-400 text-xs leading-relaxed text-[10px] uppercase font-bold">Coming Soon</p>
             </div>
 
-            <div class="tool-card p-6 rounded-2xl">
-                <i class="fas fa-sort-amount-down text-2xl mb-4 text-indigo-400"></i>
-                <h3 class="text-lg font-bold text-white mb-2">Rearrange PDF</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Move pages around to your desired order for better flow.</p>
-            </div>
-
-            <div class="tool-card p-6 rounded-2xl">
-                <i class="fas fa-list-numeric text-2xl mb-4 text-purple-400"></i>
-                <h3 class="text-lg font-bold text-white mb-2">Page Number</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Add sequential professional numbering to your materials.</p>
-            </div>
-
-            <div class="tool-card p-6 rounded-2xl">
-                <i class="fas fa-circle-half-stroke text-2xl mb-4 text-yellow-400"></i>
-                <h3 class="text-lg font-bold text-white mb-2">Invert PDF</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Switch colors for high-clarity bulk printing (saves ink).</p>
-            </div>
-
-            <div class="tool-card p-6 rounded-2xl">
+            <div class="tool-card p-6 rounded-2xl opacity-60">
                 <i class="fas fa-scissors text-2xl mb-4 text-red-400"></i>
                 <h3 class="text-lg font-bold text-white mb-2">Split PDF</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Extract only specific pages to save on printing costs.</p>
+                <p class="text-slate-400 text-xs leading-relaxed text-[10px] uppercase font-bold">Coming Soon</p>
             </div>
 
-            <div class="tool-card p-6 rounded-2xl">
-                <i class="fas fa-up-right-and-down-left-from-center text-2xl mb-4 text-orange-400"></i>
-                <h3 class="text-lg font-bold text-white mb-2">Resize PDF</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Scale dimensions for specific layouts or portal uploads.</p>
-            </div>
-
-            <div class="tool-card p-6 rounded-2xl">
-                <i class="fas fa-screwdriver-wrench text-2xl mb-4 text-orange-400"></i>
-                <h3 class="text-lg font-bold text-white mb-2">Repair PDF</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Recover data from corrupted files so they are ready to print.</p>
-            </div>
-
-            <div class="tool-card p-6 rounded-2xl">
-                <i class="fas fa-file-image text-2xl mb-4 text-pink-400"></i>
-                <h3 class="text-lg font-bold text-white mb-2">PDF to Image</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Extract high-quality images from PDF pages instantly.</p>
-            </div>
-
-            <div class="tool-card p-6 rounded-2xl">
+            <div class="tool-card p-6 rounded-2xl opacity-60" onclick="window.location.href='unlock-pdf.html'">
                 <i class="fas fa-lock-open text-2xl mb-4 text-red-500"></i>
                 <h3 class="text-lg font-bold text-white mb-2">Unlock PDF</h3>
-                <p class="text-slate-400 text-xs leading-relaxed">Remove passwords from protected PDFs for easier access.</p>
+                <p class="text-slate-400 text-xs leading-relaxed text-[10px] uppercase font-bold">Coming Soon</p>
             </div>
 
-        </div>
+            </div>
     </main>
 
     <div id="footer-placeholder"></div>
+
     <script>
-    fetch('footer.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('footer-placeholder').innerHTML = data;
-        })
-        .catch(error => console.error('Error loading footer:', error));
-</script>
+        fetch('../footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Footer load failed:', error));
+    </script>
+
 </body>
 </html>
