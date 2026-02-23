@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Mobile Scanner | Shriram Stationers Dausa</title>
+    <title>Scanner Hub | Shriram Stationers Dausa</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,21 +14,21 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         body { font-family: 'Poppins', sans-serif; background-color: #0f172a; color: #f8fafc; overflow-x: hidden; }
         
-        /* Mobile Performance Tweaks */
-        .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); }
+        .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
+        .drop-zone.drag-over { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        
         #previewGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
-        .img-container { position: relative; background: #1e293b; padding: 6px; border-radius: 12px; border: 1px solid #334155; }
+        .img-container { position: relative; background: #1e293b; padding: 6px; border-radius: 12px; border: 1px solid #334155; cursor: grab; }
+        .img-container:active { cursor: grabbing; }
+
         .img-wrapper { width: 100%; height: 160px; overflow: hidden; border-radius: 8px; background: #000; }
         .img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
 
-        /* Perspective Pin UI */
-        #cropCanvas { 
-            max-width: 100%; 
-            max-height: 65vh; 
-            touch-action: none; /* Prevents mobile scrolling while cropping */
-            cursor: crosshair; 
-            border: 1px solid #3b82f6;
-        }
+        .action-btns { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; z-index: 20; }
+        .icon-btn { background: #3b82f6; color: white; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; border: 1px solid #1e293b; }
+        .icon-btn.remove { background: #ef4444; }
+
+        #cropCanvas { max-width: 100%; max-height: 65vh; touch-action: none; cursor: crosshair; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
@@ -37,6 +37,10 @@
         <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='https://www.shriramstationers.in'">
             <img src="../logo.jpg" alt="Logo" class="h-10 md:h-14 object-contain rounded-md">
             <span class="text-xl font-bold tracking-tight text-slate-100 uppercase sm:block hidden">Shriram Stationers</span>
+        </div>
+        <div class="hidden md:flex space-x-8 font-semibold text-slate-300 text-sm">
+            <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
+            <a href="index.html" class="text-blue-400">PDF Tools</a>
         </div>
     </nav>
 
@@ -47,20 +51,33 @@
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
                         <div id="dropZone" onclick="document.getElementById('fileInput').click()" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6 text-center">
                             <i class="fas fa-camera text-4xl text-blue-500 mb-2"></i>
-                            <p class="text-[10px] font-bold text-white uppercase">Upload Coaching Notes</p>
+                            <p class="text-[10px] font-bold text-white uppercase">Upload Notes</p>
                             <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
                         </div>
+
+                        <div class="space-y-4 mb-6">
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
+                                <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
+                            </label>
+                        </div>
+
                         <button onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black uppercase shadow-lg text-sm">Generate Final PDF</button>
                     </div>
                 </div>
+
                 <div class="lg:col-span-2 bg-slate-800/40 rounded-3xl border border-slate-700 p-6 min-h-[400px]">
+                    <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
+                        <h3 class="text-white font-bold text-[10px] uppercase tracking-widest">Sequence Manager</h3>
+                        <button onclick="sortImagesByName()" class="text-[10px] font-bold uppercase bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Natural Sort</button>
+                    </div>
                     <div id="previewGrid"></div>
                 </div>
             </div>
         </div>
         
         <section id="resultHub" class="hidden text-center py-20 bg-slate-800/60 rounded-3xl border-2 border-blue-500/30">
-            <h2 class="text-3xl font-extrabold mb-6">PDF Ready for Printing!</h2>
+            <h2 class="text-3xl font-extrabold mb-6 uppercase tracking-tighter">Document Ready</h2>
             <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold uppercase text-sm shadow-xl">Download Now</button>
         </section>
     </main>
@@ -68,16 +85,22 @@
     <div id="cropModal" class="hidden fixed inset-0 bg-slate-950/98 z-[200] flex flex-col items-center justify-center p-2">
         <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-5xl overflow-hidden flex flex-col h-[90vh]">
             <div class="p-4 border-b border-slate-800 flex justify-between items-center">
-                <span class="text-[10px] font-black uppercase text-blue-400 tracking-widest">Touch & Drag Corners</span>
+                <span class="text-[10px] font-black uppercase text-blue-400 tracking-widest">Perspective Crop</span>
                 <button onclick="closeCropModal()" class="text-white text-2xl px-2">&times;</button>
             </div>
-            <div class="flex-grow bg-black flex items-center justify-center overflow-hidden">
-                <canvas id="cropCanvas"></canvas>
-            </div>
+            <div class="flex-grow bg-black flex items-center justify-center overflow-hidden"><canvas id="cropCanvas"></canvas></div>
             <div class="p-6 border-t border-slate-800 flex justify-center">
-                <button onclick="applyWarp()" class="w-full sm:w-auto px-12 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs tracking-tighter shadow-lg">Crop & Flatten</button>
+                <button onclick="applyWarp()" class="w-full sm:w-auto px-12 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg">Save Changes</button>
             </div>
         </div>
+    </div>
+
+    <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
+        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest text-center">Finalizing PDF...</h2>
+        <div class="w-80 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700">
+            <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-4 uppercase tracking-[0.2em]">Safe Bottom Margin Enabled</p>
     </div>
 
     <div id="footer-placeholder"></div>
@@ -94,6 +117,16 @@
 
         fetch('../footer.html').then(r => r.text()).then(d => document.getElementById('footer-placeholder').innerHTML = d);
 
+        // DRAG AND DROP SORTING INTEGRATION [cite: 2026-02-23]
+        new Sortable(document.getElementById('previewGrid'), { 
+            animation: 150, 
+            onEnd: () => { 
+                const visualIds = Array.from(document.getElementById('previewGrid').children).map(c => c.dataset.id);
+                imageList = visualIds.map(id => imageList.find(img => img.id == id));
+                renderPreview(); 
+            } 
+        });
+
         document.getElementById('fileInput').onchange = async (e) => {
             for (let file of e.target.files) {
                 const data = await new Promise(res => { const r = new FileReader(); r.onload = ev => res(ev.target.result); r.readAsDataURL(file); });
@@ -108,14 +141,24 @@
             imageList.forEach(img => {
                 const div = document.createElement('div');
                 div.className = 'img-container';
-                div.innerHTML = `<div class="absolute top-2 right-2 flex gap-2 z-10">
-                    <div class="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center text-white" onclick="openCropModal('${img.id}')"><i class="fas fa-expand"></i></div>
+                div.dataset.id = img.id;
+                div.innerHTML = `<div class="action-btns">
+                    <div class="icon-btn" onclick="openCropModal('${img.id}')"><i class="fas fa-expand"></i></div>
+                    <div class="icon-btn remove" onclick="removeItem('${img.id}')"><i class="fas fa-trash"></i></div>
                 </div>
-                <div class="img-wrapper"><img src="${img.data}"></div>`;
+                <div class="img-wrapper"><img src="${img.data}"></div>
+                <p class="text-[8px] font-bold text-slate-500 mt-2 truncate w-full px-1 uppercase">${img.name}</p>`;
                 grid.appendChild(div);
             });
         }
 
+        // SORT BY NAME LOGIC [cite: 2026-02-23]
+        function sortImagesByName() {
+            imageList.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+            renderPreview();
+        }
+
+        // PERSPECTIVE ENGINE (Mobile + Desktop)
         function openCropModal(id) {
             cropItemId = id;
             const item = imageList.find(i => i.id == id);
@@ -124,13 +167,8 @@
                 const winW = window.innerWidth * 0.95;
                 const winH = window.innerHeight * 0.6;
                 const scale = Math.min(winW / originalImg.width, winH / originalImg.height);
-                canvas.width = originalImg.width * scale; 
-                canvas.height = originalImg.height * scale;
-                
-                points = [
-                    {x:30, y:30}, {x:canvas.width-30, y:30}, 
-                    {x:canvas.width-30, y:canvas.height-30}, {x:30, y:canvas.height-30}
-                ];
+                canvas.width = originalImg.width * scale; canvas.height = originalImg.height * scale;
+                points = [{x:30,y:30}, {x:canvas.width-30,y:30}, {x:canvas.width-30,y:canvas.height-30}, {x:30,y:canvas.height-30}];
                 draw();
                 document.getElementById('cropModal').classList.remove('hidden');
             };
@@ -142,14 +180,13 @@
             ctx.beginPath(); ctx.moveTo(points[0].x, points[0].y);
             points.forEach(p => ctx.lineTo(p.x, p.y)); ctx.closePath();
             ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 4; ctx.stroke();
-            ctx.fillStyle = 'rgba(59, 130, 246, 0.2)'; ctx.fill();
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.25)'; ctx.fill();
             points.forEach(p => { 
-                ctx.beginPath(); ctx.arc(p.x, p.y, 14, 0, 7); // Bigger pins for mobile
+                ctx.beginPath(); ctx.arc(p.x, p.y, 14, 0, 7); 
                 ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = '#3b82f6'; ctx.lineWidth = 3; ctx.stroke(); 
             });
         }
 
-        // --- NEW: UNIFIED MOBILE & DESKTOP TOUCH ENGINE ---
         function getCoords(e) {
             const rect = canvas.getBoundingClientRect();
             const cx = e.touches ? e.touches[0].clientX : e.clientX;
@@ -159,7 +196,7 @@
 
         const handleDown = (e) => {
             const { x, y } = getCoords(e);
-            activePoint = points.find(p => Math.hypot(p.x - x, p.y - y) < 40); // 40px hit area
+            activePoint = points.find(p => Math.hypot(p.x - x, p.y - y) < 40);
             if (activePoint) e.preventDefault();
         };
 
@@ -184,39 +221,55 @@
             const minY = Math.min(...points.map(p => p.y));
             const maxX = Math.max(...points.map(p => p.x));
             const maxY = Math.max(...points.map(p => p.y));
-            
             const sx = originalImg.width / canvas.width;
             const sy = originalImg.height / canvas.height;
-            
             const out = document.createElement('canvas');
-            out.width = (maxX - minX) * sx;
-            out.height = (maxY - minY) * sy;
+            out.width = (maxX - minX) * sx; out.height = (maxY - minY) * sy;
             out.getContext('2d').drawImage(originalImg, minX*sx, minY*sy, out.width, out.height, 0, 0, out.width, out.height);
-            
             const idx = imageList.findIndex(i => i.id == cropItemId);
             imageList[idx].data = out.toDataURL('image/jpeg', 0.85);
             renderPreview(); closeCropModal();
         }
 
         function closeCropModal() { document.getElementById('cropModal').classList.add('hidden'); }
+        function removeItem(id) { imageList = imageList.filter(img => img.id != id); renderPreview(); }
 
+        // PDF GENERATION WITH PAGE NUMBERS [cite: 2026-02-23]
         async function processImages() {
+            if (!imageList.length) return alert("Select photos!");
+            document.getElementById('loader').classList.remove('hidden');
+            const bar = document.getElementById('progressBar');
+            const usePageNum = document.getElementById('pageNum').checked;
+
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF('p', 'mm', 'a4');
+
             for (let i = 0; i < imageList.length; i++) {
+                let percent = Math.round((i / imageList.length) * 100);
+                bar.style.width = percent + '%';
+                await new Promise(r => setTimeout(r, 10));
+
                 if (i > 0) pdf.addPage();
-                // 15mm Safe Footer
+                
+                // Safe 15mm Footer Margin [cite: 2026-02-23]
                 pdf.addImage(imageList[i].data, 'JPEG', 0, 0, 210, 282);
-                pdf.setTextColor(0,0,0); // Solid Black
+                
+                // Solid Black Text [cite: 2026-02-23]
+                pdf.setTextColor(0,0,0);
                 pdf.setFontSize(10);
+                
+                if (usePageNum) {
+                    pdf.text(`${i + 1}`, 195, 292);
+                }
                 pdf.text("Pdf created on Shriramstationers.in", 10, 292);
             }
             finalPDF = pdf;
+            document.getElementById('loader').classList.add('hidden');
             document.getElementById('toolInterface').classList.add('hidden');
             document.getElementById('resultHub').classList.remove('hidden');
         }
 
-        function downloadPDF() { finalPDF.save('Shriram_Mobile_Scan.pdf'); }
+        function downloadPDF() { finalPDF.save('Shriram_Module.pdf'); }
     </script>
 </body>
 </html>
