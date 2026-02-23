@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merge PDF | Shriram Stationers Dausa</title>
+    <title>Advanced Merge PDF | Shriram Stationers Dausa</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     
     <style>
@@ -16,76 +17,80 @@
         
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
-        .file-item { background: #1e293b; border: 1px solid #334155; transition: 0.2s; }
-        .file-item:hover { border-color: #3b82f6; }
+        
+        .file-item { background: #1e293b; border: 1px solid #334155; transition: 0.3s; }
+        .file-item:hover { border-color: #3b82f6; background: #24344d; }
         .sortable-ghost { opacity: 0.3; background: #3b82f6; }
 
-        /* Social Glows */
+        .thumb-box { width: 60px; height: 80px; background: #0f172a; border-radius: 4px; overflow: hidden; border: 1px solid #444; position: relative; flex-shrink: 0; }
+        .thumb-box canvas { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+
         .social-icon { transition: 0.4s; color: #475569; }
         .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
-        .fa-telegram-plane:hover { color: #0088cc; filter: drop-shadow(0 0 10px #0088cc); }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
 
     <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
         <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='https://www.shriramstationers.in'">
-            <img src="../logo.jpg" alt="Shriram Stationers Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
-            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100">Shriram Stationers</span>
+            <img src="../logo.jpg" alt="Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
+            <span class="text-2xl font-bold tracking-tight text-slate-100">Shriram Stationers</span>
         </div>
         <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
             <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
-            <a href="index.html" class="text-blue-400 border-b-2 border-blue-500 pb-1">PDF Tools</a>
-            <a href="#contact" class="hover:text-white transition">Contact</a>
+            <a href="index.html" class="text-blue-400">PDF Tools</a>
         </div>
     </nav>
 
     <main class="flex-grow max-w-5xl mx-auto w-full px-6 py-12">
         
-        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in zoom-in duration-500">
-            <div class="mb-8">
-                <i class="fas fa-layer-group text-6xl text-blue-400 mb-4"></i>
-                <h2 class="text-3xl font-extrabold text-white">Merge Successful!</h2>
-                <p class="text-slate-400 mt-2">Your files are now one. Ready for 50 paisa bulk printing.</p>
+        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center">
+            <h2 class="text-3xl font-extrabold text-white mb-4">Merge Successful!</h2>
+            <p class="text-slate-400 mb-6">Your document is ready for professional binding and printing at 50 paisa per side.</p>
+            <div class="flex justify-center gap-4">
+                <button onclick="previewMergedPDF()" class="bg-slate-700 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-600 transition"><i class="fas fa-eye mr-2"></i> Preview</button>
+                <button onclick="downloadMergedPDF()" class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:bg-slate-200 transition"><i class="fas fa-download mr-2"></i> Download</button>
             </div>
-            <div class="flex flex-wrap justify-center gap-6">
-                <button onclick="previewMergedPDF()" class="bg-slate-700 text-white px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:bg-slate-600 transition">
-                    <i class="fas fa-eye text-xl"></i> Preview
-                </button>
-                <button onclick="downloadMergedPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold flex items-center gap-3 hover:bg-slate-200 transition">
-                    <i class="fas fa-download text-xl"></i> Download
-                </button>
-            </div>
+            <button onclick="location.reload()" class="text-slate-500 hover:text-blue-400 text-xs font-bold uppercase tracking-widest transition mt-6">
+                <i class="fas fa-redo-alt mr-2"></i> Merge More Files
+            </button>
         </section>
 
         <div id="toolInterface">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Merge PDF Files</h1>
-                <p class="text-slate-400">Combine multiple PDFs into a single professional document.</p>
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-extrabold text-white mb-2">Visual PDF Merge</h1>
+                <p class="text-slate-400 text-sm">Combine files with professional binding margins.</p>
             </div>
 
             <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 shadow-2xl">
                 <div id="dropZone" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-8">
                     <i class="fas fa-file-pdf text-5xl text-red-500 mb-3"></i>
-                    <p class="text-lg font-bold text-white uppercase tracking-wider">Select PDF Files</p>
+                    <p class="text-lg font-bold text-white">Select PDF Files</p>
                     <input type="file" id="fileInput" multiple accept="application/pdf" class="hidden">
                 </div>
 
-                <div id="fileList" class="space-y-3 mb-8"></div>
+                <div id="fileList" class="space-y-4 mb-8"></div>
 
-                <div class="grid md:grid-cols-2 gap-4 mb-8">
+                <div class="grid md:grid-cols-3 gap-4 mb-8">
                     <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
-                        <span class="text-xs font-bold text-slate-300">Add Blank Page for Odd Counts</span>
+                        <span class="text-xs font-bold text-slate-300">Add Blank for Odd Pages</span>
                         <input type="checkbox" id="oddPageFix" checked class="w-5 h-5 accent-blue-500">
                     </label>
                     <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer group hover:border-blue-500 transition">
                         <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
                         <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
                     </label>
+                    <label class="flex items-center justify-between p-4 bg-blue-900/20 rounded-xl border border-blue-500/30 cursor-pointer group hover:border-blue-400 transition">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-blue-300">Add Binding Margin</span>
+                            <span class="text-[10px] text-blue-400/70">Shrink content (1cm border)</span>
+                        </div>
+                        <input type="checkbox" id="bindingMargin" class="w-5 h-5 accent-blue-500">
+                    </label>
                 </div>
 
-                <button id="mainBtn" onclick="mergeFiles()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95 disabled:opacity-50">
-                    MERGE & OPTIMIZE
+                <button id="mainBtn" onclick="mergeFiles()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition">
+                    MERGE DOCUMENTS
                 </button>
             </div>
         </div>
@@ -94,43 +99,48 @@
     <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
         <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 text-left">
             <div>
-                <h3 class="text-2xl font-bold mb-4 text-white">Shriram Stationers</h3>
-                <p class="text-slate-500 text-sm leading-relaxed">Trusted since Sept 5, 2024 for Dausa's student community.</p>
+                <h3 class="text-xl font-bold mb-4 text-white flex items-center gap-2">
+                    <img src="../logo.jpg" alt="Logo" class="h-6 rounded-sm"> Shriram Stationers
+                </h3>
+                <p class="text-slate-500 text-sm">Dausa's trusted student hub since Sept 5, 2024.</p>
                 <div class="flex gap-4 mt-6">
                     <a href="https://wa.me/919414711702" class="social-icon text-2xl"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://t.me/ShriramStationers" class="social-icon text-2xl"><i class="fab fa-telegram-plane"></i></a>
                 </div>
             </div>
             <div>
-                <h4 class="text-sm font-bold mb-6 text-white uppercase tracking-widest">Shop Location</h4>
-                <p class="text-slate-400 text-sm">Opposite S.B.I. Bank, Agra Road, Dausa</p>
+                <h4 class="text-xs font-bold mb-4 text-slate-500 uppercase tracking-widest">Shop Address</h4>
+                <p class="text-sm">Opposite S.B.I. Bank, Agra Road, Dausa</p>
             </div>
             <div class="md:text-right">
-                <p class="font-bold text-white text-lg">9414711702</p>
-                <p class="text-blue-400 font-bold text-xs uppercase">50 Paisa Per Side Printing</p>
+                <p class="text-xl font-bold text-white">9414711702</p>
+                <p class="text-xs text-blue-500 font-bold">50 Paisa Per Side Printing</p>
             </div>
         </div>
     </footer>
 
-    <div id="loader" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
-        <h2 class="text-white text-3xl font-black mb-4">Merging Documents...</h2>
-        <div class="w-80 bg-slate-800 h-2 rounded-full overflow-hidden border border-slate-700">
+    <div id="loader" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center">
+        <div class="text-white text-2xl font-black mb-4">Processing Document...</div>
+        <div class="w-64 bg-slate-800 h-2 rounded-full overflow-hidden">
             <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all"></div>
         </div>
-        <p id="stats" class="text-blue-400 text-xs font-bold mt-4 uppercase tracking-widest">0 / 0 Ready</p>
+        <p id="stats" class="text-blue-400 text-xs font-bold mt-4 uppercase tracking-widest">Initializing...</p>
     </div>
 
     <script>
-        const { PDFDocument, rgb, StandardFonts } = PDFLib;
-        const fileListContainer = document.getElementById('fileList');
-        const fileInput = document.getElementById('fileInput');
-        const loader = document.getElementById('loader');
-        const bar = document.getElementById('progressBar');
-        const resultHub = document.getElementById('resultHub');
-        const toolInterface = document.getElementById('toolInterface');
-
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        const { PDFDocument, rgb, StandardFonts, degrees } = PDFLib;
+        
         let pdfQueue = [];
         let mergedPdfBytes = null;
+        let totalPageCounter = 1;
+        let fontRegular, fontItalic;
+
+        const fileInput = document.getElementById('fileInput');
+        const fileListContainer = document.getElementById('fileList');
+        const loader = document.getElementById('loader');
+        const bar = document.getElementById('progressBar');
+        const stats = document.getElementById('stats');
 
         new Sortable(fileListContainer, {
             animation: 150,
@@ -146,98 +156,155 @@
         async function handleFiles(files) {
             for (let file of files) {
                 if (file.type !== 'application/pdf') continue;
-                pdfQueue.push({ id: Date.now() + Math.random(), file });
+                const id = Date.now() + Math.random();
+                const fileData = { id, file, rotation: 0 };
+                pdfQueue.push(fileData);
+                renderFileItem(fileData);
+                generateThumbnail(fileData);
             }
-            renderFileList();
         }
 
-        function renderFileList() {
-            fileListContainer.innerHTML = '';
-            pdfQueue.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'file-item p-4 rounded-xl flex justify-between items-center cursor-move';
-                div.dataset.id = item.id;
-                div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-file-pdf text-red-500"></i>
-                        <span class="text-sm font-bold truncate max-w-[200px]">${item.file.name}</span>
-                    </div>
-                    <button onclick="removeFile('${item.id}')" class="text-slate-500 hover:text-red-500"><i class="fas fa-times"></i></button>
-                `;
-                fileListContainer.appendChild(div);
-            });
+        async function generateThumbnail(fileData) {
+            const arrayBuffer = await fileData.file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            const page = await pdf.getPage(1);
+            const viewport = page.getViewport({ scale: 0.3 });
+            const canvas = document.querySelector(`[data-canvas-id="${fileData.id}"]`);
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            await page.render({ canvasContext: context, viewport: viewport }).promise;
+        }
+
+        function renderFileItem(item) {
+            const div = document.createElement('div');
+            div.className = 'file-item p-4 rounded-xl flex items-center gap-4 cursor-move';
+            div.dataset.id = item.id;
+            div.innerHTML = `
+                <div class="thumb-box">
+                    <canvas data-canvas-id="${item.id}" id="canvas-${item.id}"></canvas>
+                </div>
+                <div class="flex-grow min-w-0">
+                    <p class="text-sm font-bold truncate text-white">${item.file.name}</p>
+                    <p class="text-[10px] text-slate-500 uppercase font-bold mt-1">First Page Preview</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="rotateItem('${item.id}')" class="p-2 bg-slate-900 rounded-lg hover:text-blue-400 transition" title="Rotate 90°">
+                        <i class="fas fa-rotate-right"></i>
+                    </button>
+                    <button onclick="removeFile('${item.id}')" class="p-2 text-slate-500 hover:text-red-500 transition">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            fileListContainer.appendChild(div);
+        }
+
+        function rotateItem(id) {
+            const item = pdfQueue.find(p => p.id == id);
+            item.rotation = (item.rotation + 90) % 360;
+            const canvas = document.getElementById(`canvas-${id}`);
+            canvas.style.transform = `rotate(${item.rotation}deg)`;
         }
 
         function removeFile(id) {
             pdfQueue = pdfQueue.filter(p => p.id != id);
-            renderFileList();
+            document.querySelector(`[data-id="${id}"]`).remove();
         }
 
         async function mergeFiles() {
-            if (pdfQueue.length < 1) return alert("Select at least one PDF.");
+            if (pdfQueue.length < 1) return alert("Upload files first.");
             loader.classList.remove('hidden');
+            totalPageCounter = 1;
 
             const mergedPdf = await PDFDocument.create();
-            const helveticaFont = await mergedPdf.embedFont(StandardFonts.Helvetica);
-            const helveticaItalic = await mergedPdf.embedFont(StandardFonts.HelveticaOblique);
+            fontRegular = await mergedPdf.embedFont(StandardFonts.HelveticaBold);
+            fontItalic = await mergedPdf.embedFont(StandardFonts.HelveticaOblique);
             
-            let totalPageCounter = 1;
+            // 1cm margin approx 28.35 points
+            const margin = 28.35;
+            const useMargin = document.getElementById('bindingMargin').checked;
+            const usePageNum = document.getElementById('pageNum').checked;
 
             for (let i = 0; i < pdfQueue.length; i++) {
+                const item = pdfQueue[i];
                 bar.style.width = Math.round(((i + 1) / pdfQueue.length) * 100) + '%';
+                stats.innerText = `Processing File ${i + 1} / ${pdfQueue.length}`;
                 
-                const arrayBuffer = await pdfQueue[i].file.arrayBuffer();
+                const arrayBuffer = await item.file.arrayBuffer();
                 const pdfDoc = await PDFDocument.load(arrayBuffer);
-                const copiedPages = await mergedPdf.copyPages(pdfDoc, pdfDoc.getPageIndices());
-                
-                copiedPages.forEach((page) => {
-                    const { width, height } = page.getSize();
-                    
-                    // Add Page Numbers
-                    if (document.getElementById('pageNum').checked) {
-                        page.drawText(`${totalPageCounter}`, {
-                            x: width - 20, y: 15, size: 12, font: helveticaFont, color: rgb(0.4, 0.4, 0.4)
+                const pageIndices = pdfDoc.getPageIndices();
+
+                if (useMargin) {
+                    // --- MARGIN LOGIC (Shrink & Center) ---
+                    const embeddedPages = await mergedPdf.embedPages(pageIndices.map(idx => pdfDoc.getPage(idx)));
+                    embeddedPages.forEach((embeddedPage, idx) => {
+                        const originalPage = pdfDoc.getPage(pageIndices[idx]);
+                        const { width, height } = originalPage.getSize();
+                        
+                        // Create blank page of original size
+                        const newPage = mergedPdf.addPage([width, height]);
+                        
+                        // Calculate scaled dimensions for content
+                        const scaledWidth = width - (margin * 2);
+                        const scaledHeight = height - (margin * 2);
+
+                        // Draw embedded content scaled and centered
+                        newPage.drawPage(embeddedPage, {
+                            x: margin,
+                            y: margin,
+                            width: scaledWidth,
+                            height: scaledHeight,
+                            rotation: degrees(item.rotation)
                         });
-                    }
-
-                    // Add Watermark
-                    page.drawText("Pdf created on Shriramstationers.in", {
-                        x: 20, y: 15, size: 10, font: helveticaItalic, color: rgb(0.6, 0.6, 0.6)
+                        applyBranding(newPage, width, height, usePageNum);
                     });
-
-                    mergedPdf.addPage(page);
-                    totalPageCounter++;
-                });
-
-                // BLANK PAGE FOR ODD LOGIC
-                if (document.getElementById('oddPageFix').checked && copiedPages.length % 2 !== 0) {
-                    const blankPage = mergedPdf.addPage([mergedPdf.getPage(0).getWidth(), mergedPdf.getPage(0).getHeight()]);
-                    
-                    // Watermark still printed on blank page
-                    blankPage.drawText("Pdf created on Shriramstationers.in", {
-                        x: 20, y: 15, size: 10, font: helveticaItalic, color: rgb(0.6, 0.6, 0.6)
+                } else {
+                    // --- NORMAL LOGIC (Direct Copy) ---
+                    const copiedPages = await mergedPdf.copyPages(pdfDoc, pageIndices);
+                    copiedPages.forEach((page) => {
+                        if (item.rotation !== 0) page.setRotation(degrees(item.rotation));
+                        mergedPdf.addPage(page);
+                        const { width, height } = page.getSize();
+                        applyBranding(page, width, height, usePageNum);
                     });
-                    
-                    if (document.getElementById('pageNum').checked) {
-                        blankPage.drawText(`${totalPageCounter}`, {
-                            x: blankPage.getWidth() - 20, y: 15, size: 12, font: helveticaFont, color: rgb(0.4, 0.4, 0.4)
-                        });
-                    }
-                    totalPageCounter++;
+                }
+
+                // Add Blank Page for Odd Counts
+                if (document.getElementById('oddPageFix').checked && pageIndices.length % 2 !== 0) {
+                    const lastPage = mergedPdf.getPage(mergedPdf.getPageCount() - 1);
+                    const blank = mergedPdf.addPage([lastPage.getWidth(), lastPage.getHeight()]);
+                    applyBranding(blank, lastPage.getWidth(), lastPage.getHeight(), usePageNum);
                 }
             }
 
             mergedPdfBytes = await mergedPdf.save();
             loader.classList.add('hidden');
-            toolInterface.classList.add('hidden');
-            resultHub.classList.remove('hidden');
+            document.getElementById('toolInterface').classList.add('hidden');
+            document.getElementById('resultHub').classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+
+        // Helper function to apply watermark and page numbers
+        function applyBranding(page, width, height, usePageNum) {
+            // Watermark (bottom left)
+            page.drawText("Pdf created on Shriramstationers.in", {
+                x: 20, y: 15, size: 9, font: fontItalic, color: rgb(0.6, 0.6, 0.6)
+            });
+            // Page Number (bottom right)
+            if (usePageNum) {
+                page.drawText(`${totalPageCounter}`, {
+                    x: width - 30, y: 15, size: 12, font: fontRegular, color: rgb(0.4, 0.4, 0.4)
+                });
+            }
+            totalPageCounter++;
         }
 
         function downloadMergedPDF() {
             const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `Shriram_Merged_${Date.now()}.pdf`;
+            link.download = `Shriram_Merged_BindingReady_${Date.now()}.pdf`;
             link.click();
         }
 
