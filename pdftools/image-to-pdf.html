@@ -115,4 +115,56 @@
         }
 
         document.getElementById('dropZone').onclick = () => fileInput.click();
-        fileInput.onchange = (e) => handleFiles(e.target.files
+        fileInput.onchange = (e) => handleFiles(e.target.files);
+
+        async function handleFiles(files) {
+            emptyMsg.style.display = 'none';
+            for (let file of files) {
+                if (!file.type.startsWith('image/')) continue;
+                const data = await getBase64(file);
+                imageList.push({ id: Date.now() + Math.random(), name: file.name, data });
+            }
+            renderPreview();
+        }
+
+        function renderPreview() {
+            previewGrid.innerHTML = '';
+            imageList.forEach((img, index) => {
+                const div = document.createElement('div');
+                div.className = 'img-container bg-slate-900 rounded-lg overflow-hidden border border-slate-700 aspect-[3/4]';
+                div.dataset.id = img.id;
+                div.innerHTML = `<div class="page-badge">${index + 1}</div><div class="remove-btn" onclick="removeItem('${img.id}')">×</div><img src="${img.data}" class="w-full h-full object-cover">`;
+                previewGrid.appendChild(div);
+            });
+        }
+
+        function sortImagesByName() {
+            imageList.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
+            renderPreview();
+        }
+
+        function removeItem(id) { imageList = imageList.filter(img => img.id != id); renderPreview(); }
+
+        async function processImages() {
+            if (!imageList.length) return alert("Select images!");
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            for (let i = 0; i < imageList.length; i++) {
+                if (i > 0) pdf.addPage();
+                pdf.addImage(imageList[i].data, 'JPEG', 0, 0, 210, 297, undefined, 'FAST');
+                if (document.getElementById('pageNum').checked) {
+                    pdf.setFontSize(12); pdf.text(`${i + 1}`, 195, 287);
+                }
+                pdf.setFontSize(10); pdf.text("Pdf created on Shriramstationers.in", 10, 287);
+            }
+            finalPDF = pdf;
+            document.getElementById('toolInterface').classList.add('hidden');
+            document.getElementById('resultHub').classList.remove('hidden');
+        }
+
+        function getBase64(file) { return new Promise(res => { const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(file); }); }
+        function downloadPDF() { finalPDF.save(`Shriram_Images_${Date.now()}.pdf`); }
+        function previewPDF() { window.open(URL.createObjectURL(finalPDF.output('blob')), '_blank'); }
+    </script>
+</body>
+</html>
