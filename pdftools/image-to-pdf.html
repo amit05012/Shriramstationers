@@ -17,30 +17,41 @@
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
 
-        /* Preview Gallery Styles */
         #previewGrid .sortable-ghost { opacity: 0.4; border: 2px solid #3b82f6; }
         .img-container { position: relative; cursor: grab; }
         .img-container:active { cursor: grabbing; }
         .page-badge { position: absolute; top: 4px; left: 4px; background: #3b82f6; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
         .remove-btn { position: absolute; top: 4px; right: 4px; background: #ef4444; color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; }
+
+        .social-icon { transition: all 0.4s ease; color: #475569; }
+        .fa-facebook-f:hover { color: #1877F2; filter: drop-shadow(0 0 10px #1877F2); }
+        .fa-instagram:hover { color: #E1306C; filter: drop-shadow(0 0 10px #E1306C); }
+        .fa-telegram-plane:hover { color: #0088cc; filter: drop-shadow(0 0 10px #0088cc); }
+        .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
 
-    <nav class="bg-slate-900/95 backdrop-blur-md py-4 px-8 flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
-        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='https://www.shriramstationers.in'">
-            <img src="../logo.jpg" alt="Logo" class="h-12 rounded-md border border-slate-700">
-            <span class="text-xl font-extrabold tracking-tight text-white">Shriram Stationers</span>
+    <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
+        <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='https://www.shriramstationers.in'">
+            <img src="../logo.jpg" alt="Shriram Stationers Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
+            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100">Shriram Stationers</span>
         </div>
-        <div class="text-xs text-slate-500 font-bold uppercase tracking-tighter text-right hidden lg:block">
-            Est. Sept 2024 <br> <span class="text-blue-500">Dausa, Rajasthan</span>
+        <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
+            <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
+            <a href="https://www.shriramstationers.in#about" class="hover:text-white transition">About Us</a>
+            <a href="index.html" class="hover:text-white transition">PDF Tools</a>
         </div>
     </nav>
 
     <main class="flex-grow max-w-6xl mx-auto w-full px-6 py-12">
         <div class="text-center mb-10">
-            <h1 class="text-4xl font-extrabold text-white mb-3 tracking-tight">Advanced Image to PDF</h1>
-            <p class="text-slate-400">Rearrange pages manually. Bulk processing for Dausa's students.</p>
+            <h1 class="text-4xl font-extrabold text-white mb-3 tracking-tight">Image to PDF Converter</h1>
+            <p class="text-slate-400">Rearrange your coaching notes manually before printing.</p>
         </div>
 
         <div class="grid lg:grid-cols-3 gap-8">
@@ -48,18 +59,17 @@
                 <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-xl">
                     <div id="dropZone" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6">
                         <i class="fas fa-plus-circle text-4xl text-blue-500 mb-2"></i>
-                        <p class="text-sm font-bold text-white">Add Images</p>
+                        <p class="text-sm font-bold text-white text-center px-4">Click or Drag Images</p>
                         <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
                     </div>
 
                     <div class="space-y-4 mb-6">
                         <label class="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer">
                             <input type="checkbox" id="pageNum" checked class="w-4 h-4 accent-blue-500">
-                            <span class="text-xs font-bold text-slate-300">Auto Page Numbers</span>
+                            <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
                         </label>
-                        <div class="p-3 bg-slate-900/20 rounded-xl border border-slate-800 flex items-center gap-2">
-                            <i class="fas fa-stamp text-slate-600 text-xs"></i>
-                            <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">Watermark: Shriramstationers.in</span>
+                        <div class="p-3 bg-slate-900/20 rounded-xl border border-slate-800 flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">
+                            <i class="fas fa-stamp"></i> Watermark: Shriramstationers.in
                         </div>
                     </div>
 
@@ -73,10 +83,9 @@
             <div class="lg:col-span-2">
                 <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 min-h-[400px]">
                     <h3 class="text-slate-100 font-bold mb-4 flex items-center gap-2">
-                        <i class="fas fa-th-large text-blue-500"></i> Page Preview & Reorder
+                        <i class="fas fa-th-large text-blue-500"></i> Rearrange Pages
                     </h3>
-                    <div id="previewGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-                        </div>
+                    <div id="previewGrid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3"></div>
                     <div id="emptyMsg" class="h-64 flex flex-col items-center justify-center text-slate-600">
                         <i class="fas fa-images text-4xl mb-2"></i>
                         <p class="text-sm">No images selected</p>
@@ -86,10 +95,59 @@
         </div>
     </main>
 
-    <footer class="bg-slate-950 text-slate-500 py-10 px-6 text-center border-t border-slate-900">
-        <p class="text-sm font-bold text-slate-400">Shriram Stationers</p>
-        <p class="text-xs mt-1 uppercase tracking-widest">Opposite SBI Bank, Agra Road, Dausa</p>
-        <p class="text-xs mt-4">© 2026. High-Speed Printing at 50 Paisa Per Side.</p>
+    <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 mb-12 text-left">
+            <div>
+                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-white">
+                    <img src="../logo.jpg" alt="Logo" class="h-8 rounded-sm"> Shriram Stationers
+                </h3>
+                <p class="text-slate-500 mb-6 text-sm leading-relaxed">
+                    Dausa's trusted hub for affordable student printing and quality stationery.
+                </p>
+                <div class="flex gap-4">
+                    <a href="https://www.facebook.com/Shriramstationers5/" target="_blank" class="social-icon text-xl"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/shriramstationers" target="_blank" class="social-icon text-xl"><i class="fab fa-instagram"></i></a>
+                    <a href="https://telegram.me/ShriramStationers" target="_blank" class="social-icon text-xl"><i class="fab fa-telegram-plane text-lg"></i></a>
+                    <a href="https://wa.me/919414711702" target="_blank" class="social-icon text-xl"><i class="fab fa-whatsapp text-lg"></i></a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Visit Our Shop</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-red-500"></i>
+                        <a href="https://share.google/fATJWy2Udk4xxdVbc" target="_blank" class="hover:text-blue-400 transition cursor-pointer">
+                            <span>Opposite S.B.I. Bank<br>Agra Road, Dausa<br>Rajasthan</span><br>
+                            <span class="text-xs text-blue-500 font-semibold mt-1 inline-block">Open in Google Maps →</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-lg font-bold mb-6 text-slate-100 uppercase tracking-wider text-sm">Contact Us</h4>
+                <ul class="space-y-4 text-slate-400">
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-phone-alt text-slate-500"></i>
+                        <span class="font-bold text-lg text-white">9414711702</span>
+                    </li>
+                    <li class="flex items-center gap-3 text-sm">
+                        <i class="fas fa-envelope text-slate-500"></i>
+                        shriramstationers05@gmail.com
+                    </li>
+                    <li class="pt-2">
+                        <a href="https://wa.me/919414711702" target="_blank" class="inline-flex items-center gap-2 text-green-500 hover:text-green-400 font-medium transition">
+                            <i class="fab fa-whatsapp text-lg"></i> Message us on WhatsApp
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="max-w-6xl mx-auto pt-8 border-t border-slate-800 text-center text-slate-600 text-sm">
+            © 2026 Shriram Stationers. Established Sept 5, 2024. All Rights Reserved.
+        </div>
     </footer>
 
     <div id="loader" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
@@ -110,11 +168,14 @@
 
         let imageList = [];
 
-        // Initialize Sortable
-        const sortable = new Sortable(previewGrid, {
+        new Sortable(previewGrid, {
             animation: 150,
             ghostClass: 'sortable-ghost',
-            onEnd: updateListOrder
+            onEnd: () => {
+                const newOrder = Array.from(previewGrid.children).map(child => child.dataset.id);
+                imageList = newOrder.map(id => imageList.find(img => img.id == id));
+                renderPreview();
+            }
         });
 
         document.getElementById('dropZone').onclick = () => fileInput.click();
@@ -123,16 +184,18 @@
         async function handleFiles(files) {
             for (let file of files) {
                 if (!file.type.startsWith('image/')) continue;
-                const dataUrl = await getBase64(file);
-                imageList.push({ id: Date.now() + Math.random(), data: dataUrl });
+                const r = new FileReader();
+                r.onload = e => {
+                    imageList.push({ id: Date.now() + Math.random(), data: e.target.result });
+                    renderPreview();
+                };
+                r.readAsDataURL(file);
             }
-            renderPreview();
         }
 
         function renderPreview() {
             previewGrid.innerHTML = '';
             emptyMsg.style.display = imageList.length ? 'none' : 'flex';
-            
             imageList.forEach((img, index) => {
                 const div = document.createElement('div');
                 div.className = 'img-container bg-slate-900 rounded-lg overflow-hidden border border-slate-700 aspect-[3/4]';
@@ -146,26 +209,16 @@
             });
         }
 
-        function updateListOrder() {
-            const newOrder = Array.from(previewGrid.children).map(child => child.dataset.id);
-            imageList = newOrder.map(id => imageList.find(img => img.id == id));
-            renderPreview();
-        }
-
         function removeItem(id) {
             imageList = imageList.filter(img => img.id != id);
             renderPreview();
         }
 
-        function clearAll() {
-            imageList = [];
-            renderPreview();
-        }
+        function clearAll() { imageList = []; renderPreview(); }
 
         async function processImages() {
-            if (imageList.length === 0) return alert("Add images first!");
+            if (!imageList.length) return alert("Add images first!");
             loader.classList.remove('hidden');
-            
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF('p', 'mm', 'a4');
             const w = pdf.internal.pageSize.getWidth();
@@ -174,36 +227,17 @@
             for (let i = 0; i < imageList.length; i++) {
                 bar.style.width = Math.round(((i + 1) / imageList.length) * 100) + '%';
                 stats.innerText = `${i + 1} / ${imageList.length} Processed`;
-
                 if (i > 0) pdf.addPage();
                 pdf.addImage(imageList[i].data, 'JPEG', 0, 0, w, h, undefined, 'FAST');
-
-                // PAGE NUMBERS
                 if (document.getElementById('pageNum').checked) {
-                    pdf.setFont("helvetica", "bold");
-                    pdf.setFontSize(12);
-                    pdf.setTextColor(100);
+                    pdf.setFont("helvetica", "bold"); pdf.setFontSize(12); pdf.setTextColor(100);
                     pdf.text(`${i + 1}`, w - 15, h - 10);
                 }
-
-                // WATERMARK
-                pdf.setFont("helvetica", "italic");
-                pdf.setFontSize(10);
-                pdf.setTextColor(150);
+                pdf.setFont("helvetica", "italic"); pdf.setFontSize(10); pdf.setTextColor(150);
                 pdf.text("Pdf created on Shriramstationers.in", 10, h - 10);
             }
-
-            pdf.save(`Shriram_Stationers_${Date.now()}.pdf`);
+            pdf.save(`Shriram_Stationers_Notes_${Date.now()}.pdf`);
             loader.classList.add('hidden');
-            alert("Massive PDF Created Successfully!");
-        }
-
-        function getBase64(file) {
-            return new Promise(res => {
-                const r = new FileReader();
-                r.onload = e => res(e.target.result);
-                r.readAsDataURL(file);
-            });
         }
     </script>
 </body>
