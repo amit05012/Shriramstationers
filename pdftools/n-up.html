@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-Up PDF (Multi-Slide) | Shriram Stationers Dausa</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+        body { font-family: 'Poppins', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        
+        .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
+        .drop-zone.drag-over { border-color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
+        
+        /* Social Glows */
+        .social-icon { transition: 0.4s; color: #475569; }
+        .fa-facebook-f:hover { color: #1877F2; filter: drop-shadow(0 0 10px #1877F2); }
+        .fa-instagram:hover { color: #E1306C; filter: drop-shadow(0 0 10px #E1306C); }
+        .fa-telegram-plane:hover { color: #0088cc; filter: drop-shadow(0 0 10px #0088cc); }
+        .fa-whatsapp:hover { color: #25D366; filter: drop-shadow(0 0 10px #25D366); }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
+        <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='https://www.shriramstationers.in'">
+            <img src="../logo.jpg" alt="Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
+            <span class="text-2xl font-bold tracking-tight text-slate-100">Shriram Stationers</span>
+        </div>
+        <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
+            <a href="https://www.shriramstationers.in" class="hover:text-white transition">Home</a>
+            <a href="index.html" class="text-blue-400">PDF Tools</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-4xl mx-auto w-full px-6 py-12">
+        
+        <section id="resultHub" class="hidden mb-12 p-10 rounded-3xl bg-slate-800/60 border-2 border-blue-500/30 text-center animate-in fade-in duration-500">
+            <div class="mb-8">
+                <i class="fas fa-table-cells text-6xl text-blue-400 mb-4"></i>
+                <h2 class="text-3xl font-extrabold text-white">N-Up PDF Ready!</h2>
+                <p class="text-slate-400 mt-2">Slides have been arranged. Ready for 50 paisa printing.</p>
+            </div>
+            <div class="flex justify-center gap-4">
+                <button onclick="previewPDF()" class="bg-slate-700 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-600 transition">Preview</button>
+                <button onclick="downloadPDF()" class="bg-white text-slate-900 px-8 py-4 rounded-xl font-bold hover:bg-slate-200 transition">Download</button>
+            </div>
+        </section>
+
+        <div id="toolInterface">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-extrabold text-white mb-2 tracking-tight">Multi-Slide (N-Up) Tool</h1>
+                <p class="text-slate-400 text-sm italic">Print 2, 4, or 6 pages on a single side to save money.</p>
+            </div>
+
+            <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-8 shadow-2xl">
+                <div id="dropZone" class="drop-zone rounded-2xl py-14 flex flex-col items-center justify-center cursor-pointer mb-8">
+                    <i class="fas fa-file-invoice text-5xl text-blue-500 mb-3"></i>
+                    <p class="text-lg font-bold text-white uppercase tracking-wider">Upload Slide PDF</p>
+                    <input type="file" id="fileInput" accept="application/pdf" class="hidden">
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4 mb-8">
+                    <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
+                        <label class="text-[10px] uppercase font-bold text-slate-500 block mb-2">Slides Per Page</label>
+                        <select id="nupValue" class="w-full bg-slate-800 text-white text-sm font-bold p-2 rounded-lg border border-slate-600 outline-none">
+                            <option value="2">2 Pages per Side</option>
+                            <option value="4" selected>4 Pages per Side</option>
+                            <option value="6">6 Pages per Side</option>
+                        </select>
+                    </div>
+                    <label class="flex items-center justify-between p-4 bg-slate-900/50 rounded-xl border border-slate-700 cursor-pointer">
+                        <span class="text-xs font-bold text-slate-300">Balance for Double-Sided</span>
+                        <input type="checkbox" id="oddPageFix" checked class="w-5 h-5 accent-blue-500">
+                    </label>
+                </div>
+
+                <button id="mainBtn" onclick="processNUp()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xl shadow-lg transition transform active:scale-95 disabled:opacity-50">
+                    ARRANGE SLIDES
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer id="contact" class="bg-slate-950 text-slate-300 pt-16 pb-8 px-6 border-t border-slate-800">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12 text-left">
+            <div>
+                <h3 class="text-xl font-bold mb-4 text-white flex items-center gap-2">
+                    <img src="../logo.jpg" alt="Logo" class="h-6 rounded-sm"> Shriram Stationers
+                </h3>
+                <p class="text-slate-500 text-sm leading-relaxed">Dausa's trusted hub for students since Sept 5, 2024.</p>
+                <div class="flex gap-4 mt-6">
+                    <a href="https://wa.me/919414711702" class="social-icon text-2xl"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/ShriramStationers" class="social-icon text-2xl"><i class="fab fa-telegram-plane"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold mb-4 text-slate-500 uppercase tracking-widest">Shop Address</h4>
+                <p class="text-sm">Opposite S.B.I. Bank, Agra Road, Dausa</p>
+            </div>
+            <div class="md:text-right">
+                <p class="text-xl font-bold text-white">9414711702</p>
+                <p class="text-xs text-blue-500 font-bold uppercase tracking-tighter">50 Paisa Per Side Printing</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="loader" class="hidden fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
+        <div class="text-white text-2xl font-black mb-4">Re-arranging Pages...</div>
+        <div class="w-64 bg-slate-800 h-2 rounded-full overflow-hidden">
+            <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all"></div>
+        </div>
+    </div>
+
+    <script>
+        const { PDFDocument, rgb, StandardFonts } = PDFLib;
+        let finalPdfBytes = null;
+        const fileInput = document.getElementById('fileInput');
+
+        document.getElementById('dropZone').onclick = () => fileInput.click();
+
+        async function processNUp() {
+            const files = fileInput.files;
+            if (!files.length) return alert("Please upload a PDF first!");
+            
+            document.getElementById('loader').classList.remove('hidden');
+            const n = parseInt(document.getElementById('nupValue').value);
+            
+            const mergedPdf = await PDFDocument.create();
+            const font = await mergedPdf.embedFont(StandardFonts.HelveticaBold);
+            const italic = await mergedPdf.embedFont(StandardFonts.HelveticaOblique);
+
+            const arrayBuffer = await files[0].arrayBuffer();
+            const srcDoc = await PDFDocument.load(arrayBuffer);
+            let srcPages = await mergedPdf.copyPages(srcDoc, srcDoc.getPageIndices());
+
+            // Balance Logic for Double-Sided Printing
+            const multiplier = n * 2; // e.g., 4 slides per side needs 8 slides per sheet for balance
+            if (document.getElementById('oddPageFix').checked) {
+                while (srcPages.length % multiplier !== 0) {
+                    const emptyPage = mergedPdf.addPage([595, 842]); // Temp empty
+                    srcPages.push(emptyPage);
+                }
+            }
+
+            const rows = n === 2 ? 2 : n === 4 ? 2 : n === 6 ? 3 : 1;
+            const cols = n === 2 ? 1 : n === 4 ? 2 : n === 6 ? 2 : 1;
+
+            for (let i = 0; i < srcPages.length; i += n) {
+                const newPage = mergedPdf.addPage([595, 842]);
+                const cellW = 595 / cols;
+                const cellH = 842 / rows;
+
+                for (let j = 0; j < n; j++) {
+                    const idx = i + j;
+                    if (idx >= srcPages.length) break;
+
+                    const embedded = await mergedPdf.embedPage(srcPages[idx]);
+                    const colIdx = j % cols;
+                    const rowIdx = rows - 1 - Math.floor(j / cols);
+
+                    newPage.drawPage(embedded, {
+                        x: colIdx * cellW + 10,
+                        y: rowIdx * cellH + 10,
+                        width: cellW - 20,
+                        height: cellH - 20
+                    });
+                }
+
+                // Branding & Page Numbering
+                newPage.drawText(`${Math.floor(i / n) + 1}`, { x: 560, y: 15, size: 10, font });
+                newPage.drawText("Pdf created on Shriramstationers.in", { x: 20, y: 15, size: 8, font: italic, color: rgb(0.5, 0.5, 0.5) });
+            }
+
+            finalPdfBytes = await mergedPdf.save();
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('toolInterface').classList.add('hidden');
+            document.getElementById('resultHub').classList.remove('hidden');
+        }
+
+        function downloadPDF() {
+            const blob = new Blob([finalPdfBytes], { type: 'application/pdf' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Shriram_NUp_${Date.now()}.pdf`;
+            link.click();
+        }
+
+        function previewPDF() {
+            const blob = new Blob([finalPdfBytes], { type: 'application/pdf' });
+            window.open(URL.createObjectURL(blob), '_blank');
+        }
+    </script>
+</body>
+</html>
