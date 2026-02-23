@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Scanner Hub | Shriram Stationers Dausa</title>
+    <title>Module Scanner | Shriram Stationers Dausa</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,21 +13,15 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
         body { font-family: 'Poppins', sans-serif; background-color: #0f172a; color: #f8fafc; overflow-x: hidden; }
-        
         .drop-zone { border: 2px dashed #334155; background: rgba(30, 41, 59, 0.5); transition: 0.3s; }
         .drop-zone.drag-over { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
-        
         #previewGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 1rem; }
         .img-container { position: relative; background: #1e293b; padding: 6px; border-radius: 12px; border: 1px solid #334155; cursor: grab; }
-        .img-container:active { cursor: grabbing; }
-
         .img-wrapper { width: 100%; height: 160px; overflow: hidden; border-radius: 8px; background: #000; }
         .img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
-
         .action-btns { position: absolute; top: 10px; right: 10px; display: flex; gap: 4px; z-index: 20; }
         .icon-btn { background: #3b82f6; color: white; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; border: 1px solid #1e293b; }
         .icon-btn.remove { background: #ef4444; }
-
         #cropCanvas { max-width: 100%; max-height: 65vh; touch-action: none; cursor: crosshair; }
     </style>
 </head>
@@ -51,25 +45,29 @@
                     <div class="bg-slate-800/40 rounded-3xl border border-slate-700 p-6 shadow-2xl">
                         <div id="dropZone" onclick="document.getElementById('fileInput').click()" class="drop-zone rounded-2xl py-12 flex flex-col items-center justify-center cursor-pointer mb-6 text-center">
                             <i class="fas fa-camera text-4xl text-blue-500 mb-2"></i>
-                            <p class="text-[10px] font-bold text-white uppercase">Upload Notes</p>
+                            <p class="text-[10px] font-bold text-white uppercase">Upload Photos</p>
                             <input type="file" id="fileInput" multiple accept="image/*" class="hidden">
                         </div>
 
                         <div class="space-y-4 mb-6">
+                            <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
+                                <span class="text-xs font-bold text-slate-300">Binding Margin (12mm)</span>
+                                <input type="checkbox" id="marginFix" checked class="w-5 h-5 accent-blue-500">
+                            </label>
                             <label class="flex items-center justify-between p-3 bg-slate-900/40 rounded-xl border border-slate-700 cursor-pointer">
                                 <span class="text-xs font-bold text-slate-300">Add Page Numbers</span>
                                 <input type="checkbox" id="pageNum" checked class="w-5 h-5 accent-blue-500">
                             </label>
                         </div>
 
-                        <button onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black uppercase shadow-lg text-sm">Generate Final PDF</button>
+                        <button onclick="processImages()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black uppercase shadow-lg text-sm">Convert to PDF</button>
                     </div>
                 </div>
 
                 <div class="lg:col-span-2 bg-slate-800/40 rounded-3xl border border-slate-700 p-6 min-h-[400px]">
                     <div class="flex justify-between items-center mb-6 border-b border-slate-800 pb-4">
-                        <h3 class="text-white font-bold text-[10px] uppercase tracking-widest">Sequence Manager</h3>
-                        <button onclick="sortImagesByName()" class="text-[10px] font-bold uppercase bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Natural Sort</button>
+                        <h3 class="text-white font-bold text-[10px] uppercase tracking-widest leading-none">Sorting Grid</h3>
+                        <button onclick="sortImagesByName()" class="text-[10px] font-bold uppercase bg-slate-700 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition">Sort by Name</button>
                     </div>
                     <div id="previewGrid"></div>
                 </div>
@@ -77,30 +75,30 @@
         </div>
         
         <section id="resultHub" class="hidden text-center py-20 bg-slate-800/60 rounded-3xl border-2 border-blue-500/30">
-            <h2 class="text-3xl font-extrabold mb-6 uppercase tracking-tighter">Document Ready</h2>
-            <button onclick="downloadPDF()" class="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold uppercase text-sm shadow-xl">Download Now</button>
+            <h2 class="text-3xl font-extrabold mb-6 uppercase tracking-tighter">PDF Generated</h2>
+            <button onclick="downloadPDF()" class="bg-white text-slate-900 px-12 py-4 rounded-xl font-bold uppercase text-sm shadow-xl hover:bg-slate-100 transition">Download Now</button>
         </section>
     </main>
 
     <div id="cropModal" class="hidden fixed inset-0 bg-slate-950/98 z-[200] flex flex-col items-center justify-center p-2">
         <div class="bg-slate-900 border border-slate-700 rounded-3xl w-full max-w-5xl overflow-hidden flex flex-col h-[90vh]">
             <div class="p-4 border-b border-slate-800 flex justify-between items-center">
-                <span class="text-[10px] font-black uppercase text-blue-400 tracking-widest">Perspective Crop</span>
+                <span class="text-[10px] font-black uppercase text-blue-400 tracking-widest">Adjust Corners</span>
                 <button onclick="closeCropModal()" class="text-white text-2xl px-2">&times;</button>
             </div>
             <div class="flex-grow bg-black flex items-center justify-center overflow-hidden"><canvas id="cropCanvas"></canvas></div>
             <div class="p-6 border-t border-slate-800 flex justify-center">
-                <button onclick="applyWarp()" class="w-full sm:w-auto px-12 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs shadow-lg">Save Changes</button>
+                <button onclick="applyWarp()" class="w-full sm:w-auto px-12 py-4 bg-blue-600 text-white rounded-2xl font-black uppercase text-xs tracking-tighter">Apply Crop</button>
             </div>
         </div>
     </div>
 
     <div id="loader" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-10">
-        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest text-center">Finalizing PDF...</h2>
+        <h2 class="text-white text-3xl font-black mb-6 animate-pulse uppercase tracking-widest">Generating...</h2>
         <div class="w-80 bg-slate-800 h-3 rounded-full overflow-hidden border border-slate-700">
             <div id="progressBar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
         </div>
-        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-4 uppercase tracking-[0.2em]">Safe Bottom Margin Enabled</p>
+        <p id="stats" class="text-blue-400 text-[10px] font-bold mt-4 uppercase tracking-[0.2em]">Safe-Print Active</p>
     </div>
 
     <div id="footer-placeholder"></div>
@@ -117,7 +115,6 @@
 
         fetch('../footer.html').then(r => r.text()).then(d => document.getElementById('footer-placeholder').innerHTML = d);
 
-        // DRAG AND DROP SORTING INTEGRATION [cite: 2026-02-23]
         new Sortable(document.getElementById('previewGrid'), { 
             animation: 150, 
             onEnd: () => { 
@@ -152,13 +149,9 @@
             });
         }
 
-        // SORT BY NAME LOGIC [cite: 2026-02-23]
-        function sortImagesByName() {
-            imageList.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true}));
-            renderPreview();
-        }
+        function sortImagesByName() { imageList.sort((a, b) => a.name.localeCompare(b.name, undefined, {numeric: true})); renderPreview(); }
+        function removeItem(id) { imageList = imageList.filter(img => img.id != id); renderPreview(); }
 
-        // PERSPECTIVE ENGINE (Mobile + Desktop)
         function openCropModal(id) {
             cropItemId = id;
             const item = imageList.find(i => i.id == id);
@@ -232,14 +225,14 @@
         }
 
         function closeCropModal() { document.getElementById('cropModal').classList.add('hidden'); }
-        function removeItem(id) { imageList = imageList.filter(img => img.id != id); renderPreview(); }
 
-        // PDF GENERATION WITH PAGE NUMBERS [cite: 2026-02-23]
+        // --- NEW: BINDING MARGIN DUPLEX LOGIC ---
         async function processImages() {
             if (!imageList.length) return alert("Select photos!");
             document.getElementById('loader').classList.remove('hidden');
             const bar = document.getElementById('progressBar');
             const usePageNum = document.getElementById('pageNum').checked;
+            const useMargin = document.getElementById('marginFix').checked;
 
             const { jsPDF } = window.jspdf;
             const pdf = new jsPDF('p', 'mm', 'a4');
@@ -251,25 +244,33 @@
 
                 if (i > 0) pdf.addPage();
                 
-                // Safe 15mm Footer Margin [cite: 2026-02-23]
-                pdf.addImage(imageList[i].data, 'JPEG', 0, 0, 210, 282);
+                // Binding Margin Logic (12mm)
+                // Odd pages: Margin on left. Even pages: Margin on right.
+                const isOdd = (i + 1) % 2 !== 0;
+                let xPos = 0;
+                let imgW = 210;
                 
-                // Solid Black Text [cite: 2026-02-23]
+                if (useMargin) {
+                    imgW = 210 - 12; // A4 is 210mm wide
+                    xPos = isOdd ? 12 : 0;
+                }
+
+                // 15mm Safe Footer Margin maintained
+                pdf.addImage(imageList[i].data, 'JPEG', xPos, 0, imgW, 282);
+                
                 pdf.setTextColor(0,0,0);
                 pdf.setFontSize(10);
-                
-                if (usePageNum) {
-                    pdf.text(`${i + 1}`, 195, 292);
-                }
+                if (usePageNum) pdf.text(`${i + 1}`, 195, 292);
                 pdf.text("Pdf created on Shriramstationers.in", 10, 292);
             }
             finalPDF = pdf;
             document.getElementById('loader').classList.add('hidden');
             document.getElementById('toolInterface').classList.add('hidden');
             document.getElementById('resultHub').classList.remove('hidden');
+            window.scrollTo(0,0);
         }
 
-        function downloadPDF() { finalPDF.save('Shriram_Module.pdf'); }
+        function downloadPDF() { finalPDF.save(`Shriram_Module_${Date.now()}.pdf`); }
     </script>
 </body>
 </html>
