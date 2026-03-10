@@ -4,9 +4,9 @@
 const siteConfig = {
     // Contact Info
     phone: "9414711702",
-    phoneLink: "tel:+919414711702", // Added for clickable call
+    phoneLink: "tel:+919414711702", // Link for calling
     email: "shriramstationers05@gmail.com",
-    emailLink: "mailto:shriramstationers05@gmail.com", // Added for clickable email
+    emailLink: "mailto:shriramstationers05@gmail.com", // Link for emailing
     
     // WhatsApp with Pre-filled Message!
     whatsappLink: "https://wa.me/919414711702?text=Hello%20Shriram%20Stationers!%20I%20have%20a%20printing%20requirement.",
