@@ -4,9 +4,11 @@
 const siteConfig = {
     // Contact Info
     phone: "9414711702",
+    phoneLink: "tel:+919414711702", // Added for clickable call
     email: "shriramstationers05@gmail.com",
+    emailLink: "mailto:shriramstationers05@gmail.com", // Added for clickable email
     
-    // WhatsApp with Pre-filled Message! (Use %20 for spaces)
+    // WhatsApp with Pre-filled Message!
     whatsappLink: "https://wa.me/919414711702?text=Hello%20Shriram%20Stationers!%20I%20have%20a%20printing%20requirement.",
     
     // Social & Messaging Links
@@ -55,8 +57,8 @@ function highlightActiveNav() {
     document.querySelectorAll('nav a').forEach(link => {
         const linkPath = link.getAttribute('href');
         
-        // If the link matches the current page URL, make it bright white!
-        if (currentPath === linkPath || currentPath === linkPath + '/') {
+        // Match link to current URL
+        if (currentPath === linkPath || currentPath === linkPath + '/' || (linkPath !== '/' && currentPath.startsWith(linkPath))) {
             link.classList.add('text-white', 'border-b-2', 'border-blue-500');
             link.classList.remove('text-slate-300');
         }
@@ -89,6 +91,7 @@ function loadComponent(id, file) {
 // 5. RUN EVERYTHING WHEN PAGE LOADS
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
+    // Check if we are in a subfolder like /pdftools/
     const isSubfolder = window.location.pathname.includes('/pdftools/');
     const prefix = isSubfolder ? '../' : '';
 
