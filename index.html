@@ -7,6 +7,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="antialiased">
@@ -19,6 +20,7 @@
         </div>
         
         <div class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
             <div class="relative mx-auto w-full max-w-md order-1 lg:order-2">
                 <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-3xl blur opacity-25"></div>
                 
@@ -41,6 +43,10 @@
                             <div class="w-10 h-10 rounded-full bg-slate-700 border border-slate-600 text-blue-400 flex items-center justify-center shrink-0"><i class="fas fa-bolt"></i></div>
                             High-Speed Laser Quality
                         </li>
+                        <li class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-slate-700 border border-slate-600 text-blue-400 flex items-center justify-center shrink-0"><i class="fas fa-check-circle"></i></div>
+                            Ready for Competitive Exams
+                        </li>
                     </ul>
 
                     <div class="mt-8 pt-6 border-t border-slate-700 text-center">
@@ -53,34 +59,61 @@
                 </div>
             </div>
 
-            <div class="text-center lg:text-left order-2 lg:order-1">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6">
+            <div class="text-center lg:text-left order-2 lg:order-1 mt-4 lg:mt-0">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-blue-400 text-sm font-semibold mb-6 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    Dausa's Trusted Printing Partner
+                </div>
+                
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 tracking-tight">
                     Professional Printing.<br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Unbeatable Prices.</span>
                 </h1>
-                <p class="text-lg text-slate-400 mb-10 max-w-xl mx-auto lg:mx-0">
-                    Laser-sharp quality for Board Exams and Coaching Notes. Manage your PDFs directly on our website before printing.
+                
+                <p class="text-lg text-slate-400 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                    Laser-sharp quality for Board Exams and Coaching Notes using our high-capacity Canon systems. Merge, rotate, or clean your PDFs directly on our website before sending them to us for printing.
                 </p>
+
                 <div class="flex justify-center lg:justify-start">
-                    <a href="pdftools/index.html" class="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:bg-blue-500 transition flex items-center">
+                    <a href="pdftools/index.html" class="bg-blue-600 text-white border border-blue-500 px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-500/20 hover:bg-blue-500 transition transform hover:-translate-y-1 flex items-center">
                         <i class="fas fa-file-pdf mr-3 text-xl"></i> Use Free PDF Tools
                     </a>
                 </div>
             </div>
+
         </div>
     </header>
 
     <section id="about" class="max-w-6xl mx-auto py-20 px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-white mb-4">Welcome to Shriram Stationers</h2>
+            <p class="text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                Proudly serving the students since our inauguration on <strong>September 5, 2024</strong>. We are committed to providing top-quality stationery and lightning-fast printing services at the lowest prices.
+            </p>
+        </div>
+
         <div class="grid md:grid-cols-3 gap-8">
             <div class="service-card p-8 rounded-2xl text-center">
                 <div class="w-16 h-16 bg-slate-800 border border-slate-700 text-slate-300 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-print text-2xl"></i></div>
                 <h3 class="text-xl font-bold mb-3 text-white">Bulk Notes Printing</h3>
                 <p class="text-slate-400 text-sm">
-                    <span data-text="doubleSidedPricing">...</span> per sheet 
-                    (<span data-text="pdfPricing">...</span> per side).
+                    <span data-text="doubleSidedPricing">...</span> per sheet (<span data-text=="pdfPricing">...</span> per side). Perfect for reading long coaching materials.
                 </p>
             </div>
+            
+            <div class="service-card p-8 rounded-2xl text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-4 py-1 rounded-bl-lg">100% Free</div>
+                <div class="w-16 h-16 bg-slate-800 border border-slate-700 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-magic text-2xl"></i></div>
+                <h3 class="text-xl font-bold mb-3 text-white">Online PDF Tools</h3>
+                <p class="text-slate-400 text-sm">Merge, rotate, or clean your PDFs directly on our website before sending them to us for printing.</p>
             </div>
+
+            <div class="service-card p-8 rounded-2xl text-center">
+                <div class="w-16 h-16 bg-slate-800 border border-slate-700 text-yellow-500 rounded-full flex items-center justify-center mx-auto mb-6"><i class="fas fa-pen-nib text-2xl"></i></div>
+                <h3 class="text-xl font-bold mb-3 text-white">Student Stationery</h3>
+                <p class="text-slate-400 text-sm">From premium registers to pens for competitive exams, we stock everything a student needs to succeed.</p>
+            </div>
+        </div>
     </section>
 
     <div id="footer-placeholder"></div>
