@@ -4,11 +4,11 @@
 const siteConfig = {
     // Contact Info
     phone: "9414711702",
-    phoneLink: "tel:+919414711702", // Link for calling
+    phoneLink: "tel:+919414711702",
     email: "shriramstationers05@gmail.com",
-    emailLink: "mailto:shriramstationers05@gmail.com", // Link for emailing
+    emailLink: "mailto:shriramstationers05@gmail.com",
     
-    // WhatsApp with Pre-filled Message!
+    // WhatsApp (With auto-message)
     whatsappLink: "https://wa.me/919414711702?text=Hello%20Shriram%20Stationers!%20I%20have%20a%20printing%20requirement.",
     
     // Social & Messaging Links
@@ -16,10 +16,9 @@ const siteConfig = {
     facebook: "https://www.facebook.com/Shriramstationers5/",
     telegram: "https://telegram.me/ShriramStationers",
     
-    // Location & Hours
+    // Location
     address: "Opposite S.B.I. Bank, Agra Road, Dausa Rajasthan",
     mapsLink: "https://share.google/fATJWy2Udk4xxdVbc",
-    workingHours: "Mon - Sun: 9:00 AM - 8:00 PM",
     
     // Pricing
     pdfPricing: "50 paise",
@@ -27,16 +26,16 @@ const siteConfig = {
 };
 
 // ==========================================
-// 2. INJECT VARIABLES INTO THE WEBSITE
+// 2. INJECT VARIABLES & AUTO-YEAR
 // ==========================================
 function applyConfig() {
-    // Inject Text
+    // Inject Text (Updates any tag with data-text="key")
     document.querySelectorAll('[data-text]').forEach(el => {
         const key = el.getAttribute('data-text');
         if(siteConfig[key]) el.textContent = siteConfig[key];
     });
 
-    // Inject Links
+    // Inject Links (Updates any tag with data-link="key")
     document.querySelectorAll('[data-link]').forEach(el => {
         const key = el.getAttribute('data-link');
         if(siteConfig[key]) el.href = siteConfig[key];
@@ -56,9 +55,8 @@ function highlightActiveNav() {
     
     document.querySelectorAll('nav a').forEach(link => {
         const linkPath = link.getAttribute('href');
-        
-        // Match link to current URL
-        if (currentPath === linkPath || currentPath === linkPath + '/' || (linkPath !== '/' && currentPath.startsWith(linkPath))) {
+        // This checks if the link matches the current URL or folder
+        if (currentPath === linkPath || currentPath === linkPath + '/' || (linkPath !== '/' && currentPath.includes(linkPath))) {
             link.classList.add('text-white', 'border-b-2', 'border-blue-500');
             link.classList.remove('text-slate-300');
         }
@@ -79,7 +77,6 @@ function loadComponent(id, file) {
         })
         .then(data => {
             element.innerHTML = data;
-            
             // Apply config AND highlight nav after header/footer load
             applyConfig(); 
             if (id === 'header-placeholder') highlightActiveNav();
@@ -91,14 +88,11 @@ function loadComponent(id, file) {
 // 5. RUN EVERYTHING WHEN PAGE LOADS
 // ==========================================
 document.addEventListener("DOMContentLoaded", () => {
-    // Check if we are in a subfolder like /pdftools/
     const isSubfolder = window.location.pathname.includes('/pdftools/');
     const prefix = isSubfolder ? '../' : '';
 
-    // Load Header and Footer
     loadComponent('header-placeholder', prefix + 'header.html');
     loadComponent('footer-placeholder', prefix + 'footer.html');
     
-    // Apply variables to main page immediately
-    applyConfig();
+    applyConfig(); // Apply to main page content
 });
