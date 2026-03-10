@@ -21,7 +21,7 @@
             </div>
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4 tracking-tight uppercase">PDF Utility Hub</h1>
             <p class="text-slate-400 max-w-2xl mx-auto leading-relaxed text-sm">
-                Organize and optimize your files for professional high-speed printing at **50 paisa per side**.
+                Organize and optimize your files for professional high-speed printing at <strong class="text-blue-400"><span data-text="pdfPricing">...</span> per side</strong>.
             </p>
         </div>
     </header>
@@ -106,28 +106,7 @@
 
     <div id="footer-placeholder"></div>
 
-    <script>
-        // Use ../ assuming this pdftools file is in a subfolder and header/footer are in root
-        fetch('../header.html')
-            .then(response => {
-                if (!response.ok) throw new Error('Header file missing');
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading header:', error));
-
-        fetch('../footer.html')
-            .then(response => {
-                if (!response.ok) throw new Error('Footer file missing');
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading footer:', error));
-    </script>
+    <script src="../script.js"></script>
 
 </body>
 </html>
