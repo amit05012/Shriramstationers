@@ -24,19 +24,7 @@
 </head>
 <body class="antialiased">
 
-    <nav class="bg-slate-900/95 backdrop-blur-md py-3 px-6 shadow-lg flex justify-between items-center sticky top-0 z-50 border-b border-slate-800">
-        <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='https://www.shriramstationers.in'">
-            <img src="../logo.jpg" alt="Shriram Stationers Logo" class="h-12 md:h-14 object-contain rounded-md border border-slate-700">
-            <span class="text-2xl font-bold tracking-tight hidden sm:block text-slate-100 uppercase">Shriram Stationers</span>
-        </div>
-        
-        <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center">
-            <a href="https://www.shriramstationers.in" class="hover:text-white transition text-sm">Home</a>
-            <a href="https://www.shriramstationers.in#about" class="hover:text-white transition text-sm">About Us</a>
-            <span class="text-blue-400 border-b-2 border-blue-500 pb-1 text-sm">PDF Tools</span>
-            <a href="#contact" class="hover:text-white transition text-sm">Contact</a>
-        </div>
-    </nav>
+     <div id="header-placeholder"></div>
 
     <header class="relative bg-slate-900 pt-20 pb-12 overflow-hidden border-b border-slate-800 text-center">
         <div class="relative max-w-7xl mx-auto px-6">
@@ -128,9 +116,29 @@
         </div>
     </main>
 
+        // Fetch Header
+    fetch('header.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('header-placeholder').innerHTML = data;
+        });
+
+    <div id="footer-placeholder"></div>
+
     <div id="footer-placeholder"></div>
 
     <script>
+        // Use ../ assuming this pdftools file is in a subfolder and header/footer are in root
+        fetch('../header.html')
+            .then(response => {
+                if (!response.ok) throw new Error('Header file missing');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            })
+            .catch(error => console.error('Error loading header:', error));
+
         fetch('../footer.html')
             .then(response => {
                 if (!response.ok) throw new Error('Footer file missing');
@@ -142,22 +150,5 @@
             .catch(error => console.error('Error loading footer:', error));
     </script>
 
-    <div id="footer-placeholder"></div>
-
-    <script>
-        // Use ../ because this file is inside the pdftools folder
-        fetch('../footer.html')
-            .then(response => {
-                if (!response.ok) throw new Error('Footer file missing');
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            })
-            .catch(error => console.error('Error loading footer:', error));
-    </script>
-
-</body>
-</html>
 </body>
 </html>
