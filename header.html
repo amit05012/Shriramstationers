@@ -1,9 +1,20 @@
 <div class="relative sticky top-0 z-50">
     <nav class="bg-[#0b1120] backdrop-blur-md py-4 px-6 flex justify-between items-center border-b border-slate-800">
         
-        <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='/'">
-            <img src="/logo.jpg" alt="Shriram Stationers" class="h-10 md:h-12 object-contain rounded-md border border-slate-700">
-            <span class="hidden md:block text-xl md:text-2xl font-bold tracking-tight text-white">Shriram Stationers</span>
+        <div class="flex items-center gap-4">
+            
+            <button class="md:hidden text-slate-100 hover:text-white focus:outline-none transition mt-1" aria-label="Toggle Menu" 
+                    onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); 
+                             this.querySelector('i').classList.toggle('fa-bars'); 
+                             this.querySelector('i').classList.toggle('fa-times');">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+
+            <div class="cursor-pointer flex items-center gap-3" onclick="window.location.href='/'">
+                <img src="/logo.jpg" alt="Shriram Stationers" class="hidden md:block h-10 md:h-12 object-contain rounded-md border border-slate-700">
+                <span class="text-xl md:text-2xl font-bold tracking-tight text-white">Shriram Stationers</span>
+            </div>
+            
         </div>
         
         <div class="hidden md:flex space-x-8 font-semibold text-slate-300 items-center text-sm md:text-base">
@@ -15,12 +26,6 @@
             <a href="#contact" class="hover:text-white transition">Contact</a>
         </div>
         
-        <button class="md:hidden text-slate-100 hover:text-white focus:outline-none transition" aria-label="Toggle Menu" 
-                onclick="document.getElementById('mobile-menu').classList.toggle('hidden'); 
-                         this.querySelector('i').classList.toggle('fa-bars'); 
-                         this.querySelector('i').classList.toggle('fa-times');">
-            <i class="fas fa-bars text-3xl"></i>
-        </button>
     </nav>
 
     <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-[#0b1120] border-b border-slate-800 shadow-2xl">
