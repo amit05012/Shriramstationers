@@ -15,7 +15,7 @@ const siteConfig = {
     whatsappLink: "https://wa.me/919414711702?text=Hello%20Shriram%20Stationers!",
     
     // Shop Details
-    address: "Opposite S.B.I. Bank, Agra Road, Dausa Rajasthan",
+    address: "Opposite S.B.I. Bank, Near BG Mart Agra Road, Dausa Rajasthan",
     mapsLink: "https://share.google/fATJWy2Udk4xxdVbc"
 };
 
