@@ -1,0 +1,46 @@
+/* style.css */
+
+/* Global Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+body { 
+    font-family: 'Poppins', sans-serif; 
+    scroll-behavior: smooth; 
+    background-color: #0f172a; /* Main slate-900 background */
+    color: #f8fafc; 
+}
+
+/* Custom Text Classes */
+.hindi-font { 
+    font-weight: 800; 
+    letter-spacing: -0.5px; 
+}
+
+/* Smooth hover effect for service/tool cards */
+.service-card, .tool-card { 
+    transition: all 0.3s ease; 
+    background-color: #1e293b; 
+    border: 1px solid #334155; 
+    cursor: pointer;
+}
+
+.service-card:hover, .tool-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); 
+    border-color: #94a3b8; 
+}
+
+.tool-card i { 
+    transition: transform 0.3s ease; 
+}
+
+.tool-card:hover i { 
+    transform: scale(1.2); 
+    color: #60a5fa; 
+}
+
+/* Premium Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0f172a; }
+::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
