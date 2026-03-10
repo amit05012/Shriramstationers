@@ -6,7 +6,7 @@ const siteConfig = {
     phoneLink: "tel:+919414711702",
     email: "shriramstationers05@gmail.com",
     emailLink: "mailto:shriramstationers05@gmail.com",
-    facebook: "https://www.facebook.com/Shriramstationers5/",
+    facebook: "https://www.facebook.com/Shriramstationers5",
     instagram: "https://www.instagram.com/shriramstationers",
     telegram: "https://telegram.me/ShriramStationers",
     whatsappLink: "https://wa.me/919414711702?text=Hello%20Shriram%20Stationers!",
