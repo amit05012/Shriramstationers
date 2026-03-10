@@ -4,19 +4,19 @@
 const siteConfig = {
     // Contact Info
     phone: "9414711702",
-    email: "contact@shriramstationers.in",
+    email: "shriramstationers05@gmail.com",
     
     // WhatsApp with Pre-filled Message! (Use %20 for spaces)
     whatsappLink: "https://wa.me/919414711702?text=Hello%20Shriram%20Stationers!%20I%20have%20a%20printing%20requirement.",
     
     // Social & Messaging Links
-    instagram: "https://instagram.com/yourhandle",
-    facebook: "https://facebook.com/yourhandle",
-    telegram: "https://t.me/yourhandle",
+    instagram: "https://www.instagram.com/shriramstationers",
+    facebook: "https://www.facebook.com/Shriramstationers5/",
+    telegram: "https://telegram.me/ShriramStationers",
     
     // Location & Hours
-    address: "Agra Road, Dausa, Rajasthan",
-    mapsLink: "https://maps.google.com/?q=Shriram+Stationers+Dausa",
+    address: "Opposite S.B.I. Bank, Agra Road, Dausa Rajasthan",
+    mapsLink: "https://share.google/fATJWy2Udk4xxdVbc",
     workingHours: "Mon - Sun: 9:00 AM - 8:00 PM",
     
     // Pricing
