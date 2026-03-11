@@ -1,0 +1,13 @@
+# Allow all search engines to crawl Shriram Stationers
+User-agent: *
+Allow: /
+
+# Specifically block AI training bots
+User-agent: GPTBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+# Link to your sitemap for better SEO
+Sitemap: https://www.shriramstationers.in/sitemap.xml
