@@ -17,7 +17,10 @@
     
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-    <script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/opencv.js@1.2.1/opencv.min.js" 
+        onload="onOpenCvReady();" 
+        onerror="document.getElementById('cv-status').innerHTML='<i class=\'fas fa-exclamation-triangle mr-1\'></i> Engine failed to load. Check connection.';" 
+        type="text/javascript"></script>
     
     <link rel="stylesheet" href="../style.css">
 
