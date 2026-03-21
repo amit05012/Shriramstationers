@@ -13,25 +13,25 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
-    
     <script src="https://cdn.tailwindcss.com" defer></script>
     
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script async src="https://docs.opencv.org/4.8.0/opencv.js" onload="onOpenCvReady();" type="text/javascript"></script>
     
     <link rel="stylesheet" href="../style.css">
 
     <style>
-        /* Custom styles to make the Cropper "Pin Points" much larger and easier to touch on mobile */
-        .cropper-point { width: 20px !important; height: 20px !important; background-color: #3b82f6 !important; opacity: 0.9 !important; border-radius: 50%; }
-        .cropper-point.point-nw { top: -10px !important; left: -10px !important; }
-        .cropper-point.point-ne { top: -10px !important; right: -10px !important; }
-        .cropper-point.point-sw { bottom: -10px !important; left: -10px !important; }
-        .cropper-point.point-se { bottom: -10px !important; right: -10px !important; }
-        .cropper-line { background-color: #3b82f6 !important; }
-        .cropper-view-box { outline: 2px solid #3b82f6 !important; outline-color: rgba(59, 130, 246, 0.75) !important; }
+        /* Touch-friendly styling for the custom perspective crop points */
+        .crop-point {
+            transition: r 0.2s, fill 0.2s;
+        }
+        .crop-point:hover, .crop-point.active {
+            r: 25;
+            fill: #60a5fa;
+            stroke: #ffffff;
+            stroke-width: 3;
+        }
     </style>
 </head>
 <body class="antialiased bg-slate-900 text-slate-300">
@@ -46,8 +46,11 @@
             </a>
             <h1 class="text-3xl md:text-4xl font-extrabold text-white mb-4 uppercase tracking-tight">Image to PDF</h1>
             <p class="text-slate-400 text-sm max-w-lg mx-auto leading-relaxed">
-                Upload your notes, crop out the background, and add print-ready margins. Processed 100% locally on your device.
+                Upload your notes, fix perspective angles, and add print-ready margins. Processed 100% locally on your device.
             </p>
+            <div id="cv-status" class="text-xs text-yellow-500 font-bold mt-3 animate-pulse">
+                <i class="fas fa-spinner fa-spin mr-1"></i> Loading Scanner Engine...
+            </div>
         </div>
 
         <div id="drop-zone" class="border-4 border-dashed border-slate-700 bg-slate-800/30 rounded-[2.5rem] p-12 text-center hover:border-blue-500 hover:bg-slate-800/80 transition-all cursor-pointer group mb-8">
@@ -121,16 +124,33 @@
     </main>
 
     <div id="cropper-modal" class="hidden fixed inset-0 z-[300] bg-black/95 flex flex-col">
-        <div class="flex justify-between items-center p-4 border-b border-slate-800 bg-slate-900">
-            <h3 class="text-white font-bold">Crop Image (Drag Corners)</h3>
-            <button onclick="closeCropper()" class="text-slate-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+        <div class="flex justify-between items-center p-4 border-b border-slate-800 bg-slate-900 shadow-xl z-20">
+            <div>
+                <h3 class="text-white font-bold text-lg">Perspective Crop</h3>
+                <p class="text-xs text-slate-400">Drag corners to match paper edges</p>
+            </div>
+            <button onclick="closeCropper()" class="text-slate-400 hover:text-white"><i class="fas fa-times text-2xl"></i></button>
         </div>
-        <div class="flex-1 min-h-0 relative bg-black p-4">
-            <img id="cropper-image" class="max-w-full max-h-full block">
+        
+        <div class="flex-1 relative flex items-center justify-center bg-black overflow-hidden select-none touch-none" id="crop-container">
+            <div class="relative inline-block" id="svg-wrapper">
+                <img id="cropper-image" class="block max-w-full max-h-[75vh] object-contain pointer-events-none shadow-2xl" draggable="false">
+                
+                <svg id="crop-svg" class="absolute top-0 left-0 w-full h-full z-10 overflow-visible" style="touch-action: none;">
+                    <polygon id="crop-polygon" fill="rgba(59, 130, 246, 0.2)" stroke="#3b82f6" stroke-width="3" stroke-dasharray="6,4" />
+                    <circle id="pt-tl" cx="0" cy="0" r="15" fill="#2563eb" class="crop-point cursor-pointer" />
+                    <circle id="pt-tr" cx="0" cy="0" r="15" fill="#2563eb" class="crop-point cursor-pointer" />
+                    <circle id="pt-br" cx="0" cy="0" r="15" fill="#2563eb" class="crop-point cursor-pointer" />
+                    <circle id="pt-bl" cx="0" cy="0" r="15" fill="#2563eb" class="crop-point cursor-pointer" />
+                </svg>
+            </div>
         </div>
-        <div class="p-4 bg-slate-900 border-t border-slate-800 flex justify-end gap-3">
-            <button onclick="closeCropper()" class="px-6 py-2 rounded-xl font-bold text-slate-300 hover:bg-slate-800 transition">Cancel</button>
-            <button onclick="saveCrop()" class="px-6 py-2 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-500 transition">Save Crop</button>
+
+        <div class="p-6 bg-slate-900 border-t border-slate-800 flex justify-end gap-4 z-20">
+            <button onclick="closeCropper()" class="px-6 py-3 rounded-xl font-bold text-slate-300 hover:bg-slate-800 transition">Cancel</button>
+            <button id="save-crop-btn" onclick="applyPerspectiveCrop()" class="px-8 py-3 rounded-xl font-bold bg-blue-600 text-white hover:bg-blue-500 transition shadow-lg shadow-blue-500/20 flex items-center">
+                <i class="fas fa-check mr-2"></i> Apply Crop
+            </button>
         </div>
     </div>
 
@@ -138,6 +158,17 @@
 
     <script src="../script.js"></script>
     <script>
+        // System State
+        let isCvReady = false;
+        function onOpenCvReady() {
+            isCvReady = true;
+            const status = document.getElementById('cv-status');
+            status.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Scanner Engine Ready';
+            status.classList.replace('text-yellow-500', 'text-green-500');
+            status.classList.remove('animate-pulse');
+            setTimeout(() => status.classList.add('hidden'), 3000);
+        }
+
         const fileInput = document.getElementById('file-input');
         const dropZone = document.getElementById('drop-zone');
         const editorArea = document.getElementById('editor-area');
@@ -145,12 +176,12 @@
         const generateBtn = document.getElementById('generate-btn');
         const cropperModal = document.getElementById('cropper-modal');
         const cropperImage = document.getElementById('cropper-image');
+        const svgWrapper = document.getElementById('svg-wrapper');
         
         let images = [];
-        let cropperInstance = null;
         let currentCropId = null;
 
-        // Initialize Touch-Friendly Drag and Drop
+        // Sortable Initialization
         new Sortable(sortableList, {
             animation: 150,
             ghostClass: 'opacity-30',
@@ -158,17 +189,16 @@
             onEnd: function (evt) {
                 const item = images.splice(evt.oldIndex, 1)[0];
                 images.splice(evt.newIndex, 0, item);
-                renderList(); // Re-render to update page numbers visually
+                renderList(); 
             }
         });
 
-        // File Input Handling
+        // File Selection
         dropZone.onclick = () => fileInput.click();
         document.getElementById('add-more-btn').onclick = () => fileInput.click();
         
         fileInput.onchange = async (e) => {
             if (!e.target.files.length) return;
-            
             const newFiles = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
             
             for (let file of newFiles) {
@@ -192,7 +222,7 @@
             });
         }
 
-        // UI Rendering
+        // Render UI
         function updateUI() {
             document.getElementById('file-count').innerText = images.length;
             if (images.length > 0) {
@@ -209,63 +239,200 @@
             sortableList.innerHTML = '';
             images.forEach((img, index) => {
                 const li = document.createElement('li');
-                li.className = "bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden shadow-sm flex flex-col group";
+                li.className = "bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden shadow-sm flex flex-col group relative";
                 
                 li.innerHTML = `
                     <div class="relative w-full aspect-[3/4] bg-slate-900 border-b border-slate-700 drag-handle cursor-grab active:cursor-grabbing">
-                        <img src="${img.displayData}" class="w-full h-full object-contain p-2" alt="page">
-                        <div class="absolute top-2 left-2 bg-slate-900/80 text-white text-[10px] px-2 py-1 rounded font-bold">Pg ${index + 1}</div>
+                        <img src="${img.displayData}" class="w-full h-full object-contain p-2 pointer-events-none">
+                        <div class="absolute top-2 left-2 bg-slate-900/90 text-white text-[10px] px-2 py-1 rounded font-bold shadow-md">Pg ${index + 1}</div>
                     </div>
                     <div class="flex justify-between items-center p-2 bg-slate-800">
-                        <button onclick="openCropper('${img.id}')" class="text-blue-400 hover:text-blue-300 text-xs font-bold px-2 py-1"><i class="fas fa-crop-alt mr-1"></i> Crop</button>
-                        <button onclick="removeImage('${img.id}')" class="text-slate-500 hover:text-red-400 p-1"><i class="fas fa-trash-alt"></i></button>
+                        <button onclick="openCustomCropper('${img.id}')" class="text-blue-400 hover:text-blue-300 text-xs font-bold px-2 py-1 rounded hover:bg-slate-700 transition"><i class="fas fa-crop-alt mr-1"></i> Scan Crop</button>
+                        <button onclick="removeImage('${img.id}')" class="text-slate-500 hover:text-red-400 p-1 transition"><i class="fas fa-trash-alt"></i></button>
                     </div>
                 `;
                 sortableList.appendChild(li);
             });
         }
 
-        // Cropper Logic
+        // Action Handlers
         window.removeImage = (id) => { images = images.filter(img => img.id !== id); updateUI(); };
         document.getElementById('clear-btn').onclick = () => { images = []; updateUI(); };
         document.getElementById('start-over-btn').onclick = () => { images = []; document.getElementById('success-area').classList.add('hidden'); updateUI(); };
 
-        window.openCropper = (id) => {
-            const imgObj = images.find(i => i.id === id);
+        // ----------------------------------------------------------------------
+        // CUSTOM 4-POINT PERSPECTIVE CROPPER LOGIC
+        // ----------------------------------------------------------------------
+        
+        const ptIds = ['pt-tl', 'pt-tr', 'pt-br', 'pt-bl'];
+        const points = { tl: {x:0, y:0}, tr: {x:0, y:0}, br: {x:0, y:0}, bl: {x:0, y:0} };
+        let activePoint = null;
+
+        window.openCustomCropper = (id) => {
+            if(!isCvReady) return alert("Please wait a moment for the scanner engine to finish loading.");
             currentCropId = id;
-            cropperImage.src = imgObj.originalData; 
-            cropperModal.classList.remove('hidden');
+            const imgObj = images.find(i => i.id === id);
             
-            if (cropperInstance) cropperInstance.destroy();
-            cropperInstance = new Cropper(cropperImage, {
-                viewMode: 2,
-                dragMode: 'crop',
-                autoCropArea: 0.9,
-                background: false,
-                guides: true,
-                center: true,
-                highlight: false,
+            // Load original image to canvas
+            cropperImage.src = imgObj.originalData;
+            cropperModal.classList.remove('hidden');
+
+            // Wait for image to render to get physical dimensions
+            setTimeout(initCropPoints, 50); 
+        };
+
+        window.closeCropper = () => { cropperModal.classList.add('hidden'); };
+
+        function initCropPoints() {
+            const rect = cropperImage.getBoundingClientRect();
+            const w = rect.width;
+            const h = rect.height;
+
+            // Start points at 10% padding
+            const padX = w * 0.1;
+            const padY = h * 0.1;
+
+            points.tl = { x: padX, y: padY };
+            points.tr = { x: w - padX, y: padY };
+            points.br = { x: w - padX, y: h - padY };
+            points.bl = { x: padX, y: h - padY };
+
+            drawCropPolygon();
+        }
+
+        function drawCropPolygon() {
+            document.getElementById('crop-polygon').setAttribute('points', 
+                `${points.tl.x},${points.tl.y} ${points.tr.x},${points.tr.y} ${points.br.x},${points.br.y} ${points.bl.x},${points.bl.y}`
+            );
+            ptIds.forEach(id => {
+                const key = id.split('-')[1];
+                const circle = document.getElementById(id);
+                circle.setAttribute('cx', points[key].x);
+                circle.setAttribute('cy', points[key].y);
             });
+        }
+
+        // Setup Dragging Logic for the 4 corners
+        const svgArea = document.getElementById('crop-svg');
+        
+        function getMousePos(e) {
+            const rect = svgArea.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: Math.max(0, Math.min(clientX - rect.left, rect.width)),
+                y: Math.max(0, Math.min(clientY - rect.top, rect.height))
+            };
+        }
+
+        function handleDragStart(e) {
+            if(e.target.tagName === 'circle') {
+                e.preventDefault();
+                activePoint = e.target.id.split('-')[1];
+                e.target.classList.add('active');
+            }
+        }
+
+        function handleDragMove(e) {
+            if (!activePoint) return;
+            e.preventDefault();
+            const pos = getMousePos(e);
+            points[activePoint].x = pos.x;
+            points[activePoint].y = pos.y;
+            drawCropPolygon();
+        }
+
+        function handleDragEnd(e) {
+            if (activePoint) {
+                document.getElementById('pt-' + activePoint).classList.remove('active');
+                activePoint = null;
+            }
+        }
+
+        // Mouse Events
+        svgArea.addEventListener('mousedown', handleDragStart);
+        window.addEventListener('mousemove', handleDragMove);
+        window.addEventListener('mouseup', handleDragEnd);
+        // Touch Events
+        svgArea.addEventListener('touchstart', handleDragStart, {passive: false});
+        window.addEventListener('touchmove', handleDragMove, {passive: false});
+        window.addEventListener('touchend', handleDragEnd);
+
+
+        // OpenCV Transformation
+        window.applyPerspectiveCrop = () => {
+            const btn = document.getElementById('save-crop-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
+            
+            setTimeout(() => {
+                try {
+                    // 1. Get scaling ratio between physical DOM size and actual Image Pixels
+                    const nw = cropperImage.naturalWidth;
+                    const nh = cropperImage.naturalHeight;
+                    const rect = cropperImage.getBoundingClientRect();
+                    const scaleX = nw / rect.width;
+                    const scaleY = nh / rect.height;
+
+                    // 2. Map coordinates
+                    const srcCoords = [
+                        points.tl.x * scaleX, points.tl.y * scaleY,
+                        points.tr.x * scaleX, points.tr.y * scaleY,
+                        points.br.x * scaleX, points.br.y * scaleY,
+                        points.bl.x * scaleX, points.bl.y * scaleY
+                    ];
+
+                    // 3. Calculate optimal output dimensions
+                    const widthA = Math.hypot(srcCoords[4] - srcCoords[6], srcCoords[5] - srcCoords[7]);
+                    const widthB = Math.hypot(srcCoords[2] - srcCoords[0], srcCoords[3] - srcCoords[1]);
+                    const maxWidth = Math.max(widthA, widthB);
+
+                    const heightA = Math.hypot(srcCoords[2] - srcCoords[4], srcCoords[3] - srcCoords[5]);
+                    const heightB = Math.hypot(srcCoords[0] - srcCoords[6], srcCoords[1] - srcCoords[7]);
+                    const maxHeight = Math.max(heightA, heightB);
+
+                    const dstCoords = [
+                        0, 0,
+                        maxWidth, 0,
+                        maxWidth, maxHeight,
+                        0, maxHeight
+                    ];
+
+                    // 4. OpenCV Magic
+                    let src = cv.imread(cropperImage);
+                    let dst = new cv.Mat();
+                    let dsize = new cv.Size(maxWidth, maxHeight);
+                    let srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, srcCoords);
+                    let dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, dstCoords);
+                    let M = cv.getPerspectiveTransform(srcTri, dstTri);
+
+                    cv.warpPerspective(src, dst, M, dsize, cv.INTER_LINEAR, cv.BORDER_CONSTANT, new cv.Scalar());
+
+                    // 5. Extract to hidden canvas
+                    const canvas = document.createElement('canvas');
+                    cv.imshow(canvas, dst);
+                    
+                    // 6. Save and Cleanup
+                    const resultDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+                    const index = images.findIndex(i => i.id === currentCropId);
+                    images[index].displayData = resultDataUrl;
+
+                    src.delete(); dst.delete(); srcTri.delete(); dstTri.delete(); M.delete();
+
+                    closeCropper();
+                    renderList();
+                } catch(err) {
+                    alert("Crop failed. Ensure the corners form a valid shape.");
+                    console.error(err);
+                } finally {
+                    btn.innerHTML = '<i class="fas fa-check mr-2"></i> Apply Crop';
+                }
+            }, 50); // Small timeout allows UI to update to loading state
         };
 
-        window.closeCropper = () => {
-            cropperModal.classList.add('hidden');
-            if (cropperInstance) cropperInstance.destroy();
-        };
-
-        window.saveCrop = () => {
-            if (!cropperInstance) return;
-            const canvas = cropperInstance.getCroppedCanvas({
-                maxWidth: 2000,
-                maxHeight: 2000,
-            });
-            const index = images.findIndex(i => i.id === currentCropId);
-            images[index].displayData = canvas.toDataURL('image/jpeg', 0.85); 
-            closeCropper();
-            renderList();
-        };
-
-        // PDF Generation with Print-Shop Specific Formatting
+        // ----------------------------------------------------------------------
+        // PDF GENERATION (WITH MARGINS & WATERMARKS)
+        // ----------------------------------------------------------------------
+        
         generateBtn.onclick = async function() {
             if (images.length === 0) return;
             
@@ -279,12 +446,9 @@
             try {
                 const { PDFDocument, StandardFonts, rgb } = PDFLib;
                 const pdfDoc = await PDFDocument.create();
-                
-                // Embed Helvetica to use for Footer Text
                 const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-                const blackColor = rgb(0, 0, 0); // Solid Black
+                const blackColor = rgb(0, 0, 0); 
 
-                // Standard A4 Dimensions in points
                 const A4_WIDTH = 595.28; 
                 const A4_HEIGHT = 841.89;
 
@@ -300,74 +464,51 @@
 
                     const page = pdfDoc.addPage([A4_WIDTH, A4_HEIGHT]);
                     
-                    // --- 1. CALCULATE MARGINS ---
+                    // --- Margins Logic ---
                     let leftMargin = 20;
                     let rightMargin = 20;
                     
                     if (addAlternatingMargin) {
-                        // i = 0 is Page 1 (Odd), i = 1 is Page 2 (Even)
                         const isOddPage = (i % 2 === 0); 
                         if (isOddPage) {
-                            leftMargin = 60; // Left binding for Page 1, 3, 5...
+                            leftMargin = 60; 
                             rightMargin = 20;
                         } else {
                             leftMargin = 20;
-                            rightMargin = 60; // Right binding for Page 2, 4, 6...
+                            rightMargin = 60; 
                         }
                     }
 
                     const topMargin = 20;
-                    // Provide a generous 50pt bottom margin to hold the text cleanly off the image
                     const bottomMargin = 50; 
 
-                    // --- 2. PLACE IMAGE ---
                     const usableWidth = A4_WIDTH - leftMargin - rightMargin;
                     const usableHeight = A4_HEIGHT - topMargin - bottomMargin;
 
-                    // Scale image to fit inside usable area
                     const imgDims = pdfImg.scaleToFit(usableWidth, usableHeight);
-                    
-                    // Center the image within the restricted usable area
                     const drawX = leftMargin + (usableWidth - imgDims.width) / 2;
                     const drawY = bottomMargin + (usableHeight - imgDims.height) / 2;
 
                     page.drawImage(pdfImg, {
-                        x: drawX,
-                        y: drawY,
-                        width: imgDims.width,
-                        height: imgDims.height
+                        x: drawX, y: drawY, width: imgDims.width, height: imgDims.height
                     });
 
-                    // --- 3. PLACE FOOTER TEXT (Solid Black) ---
-                    const footerY = 20; // 20 points from the very bottom edge
-
-                    // Permanent Shop Watermark (Bottom Left of the safe margin)
+                    // --- Branding and Page Numbers ---
+                    const footerY = 20; 
                     page.drawText("PDF created on shriramstationers.in", {
-                        x: leftMargin,
-                        y: footerY,
-                        size: 9,
-                        font: font,
-                        color: blackColor
+                        x: leftMargin, y: footerY, size: 9, font: font, color: blackColor
                     });
 
-                    // Optional Page Number (Bottom Right of the safe margin)
                     if (addPageNums) {
                         const pageString = `Page ${i + 1}`;
                         const textWidth = font.widthOfTextAtSize(pageString, 10);
-                        
                         page.drawText(pageString, {
-                            x: A4_WIDTH - rightMargin - textWidth,
-                            y: footerY,
-                            size: 10,
-                            font: font,
-                            color: blackColor
+                            x: A4_WIDTH - rightMargin - textWidth, y: footerY, size: 10, font: font, color: blackColor
                         });
                     }
                 }
 
                 const pdfBytes = await pdfDoc.save();
-                
-                // Trigger Download
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
@@ -379,7 +520,6 @@
                 link.download = finalName;
                 link.click();
 
-                // Show Success Screen
                 document.getElementById('editor-area').classList.add('hidden');
                 document.getElementById('success-area').classList.remove('hidden');
 
